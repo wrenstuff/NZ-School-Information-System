@@ -1,12 +1,14 @@
 #include <iostream>
 using namespace std;
 
-//Fumction 
+// Function decleration
+
+// -------- Menu Functions --------
 
 void menuTeacher();
 void menuAdmin();
-//void menuParent();
-//void menuRecord();
+void menuParent();
+void menuRecord();
 
 int main()
 {
@@ -15,7 +17,9 @@ int main()
 
 }
 
-//Functions. If creating a new function, make sure you add it to the top of the code as well.
+// Functions. If creating a new function, make sure you add it to the top of the code as well.
+
+// -------- Menu Functions --------
 
 void menuTeacher() {
 
@@ -46,9 +50,6 @@ void menuAdmin() {
 
 		cout << endl;
 		cout << "list students" << endl;
-		cout << "create student record" << endl;
-		cout << "view student record" << endl;
-		cout << "delete student record" << endl;
 		cout << "create parent record" << endl;
 		cout << "view parent record" << endl;
 		cout << "delete parent record" << endl;
@@ -58,10 +59,43 @@ void menuAdmin() {
 		cout << ": ";
 		cin >> menu;
 
-	} while (menu > 0 && menu <= 9);
+	} while (menu > 0 && menu <= 7);
 
 }
 
-//void menuParent() {}
+void menuParent() {
 
-//void menuRecord() {}
+	int menu;
+
+	do
+	{
+
+		cout << endl;
+		cout << "school news/notices" << endl;
+		cout << "view student record" << endl;
+
+		cout << ": ";
+		cin >> menu;
+
+	} while (menu > 0 && menu <= 2);
+
+}
+
+void menuRecord() {
+
+	int menu;
+
+	do
+	{
+
+		cout << endl;
+		cout << "create student record" << endl;
+		cout << "view student record" << endl;
+		cout << "delete student record" << endl;
+
+		cout << ": ";
+		cin >> menu;
+
+	} while (menu > 0 && menu <= 3);
+
+}
