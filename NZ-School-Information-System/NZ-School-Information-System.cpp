@@ -1,9 +1,9 @@
 #include <iostream>
 using namespace std;
 
-// Function decleration
+// Function decleration //
 
-// -------- Menu Functions --------
+// -------- Menu Functions -------- //
 
 void menuTeacher();
 void menuAdmin();
@@ -19,83 +19,102 @@ int main()
 
 // Functions. If creating a new function, make sure you add it to the top of the code as well.
 
-// -------- Menu Functions --------
+// -------- Menu Functions -------- //
 
-void menuTeacher() {
+/*void menuTemplate() {
 
-	int menu;
+	int menu = 0;
 
 	do
 	{
 
 		cout << endl;
-		cout << "list students" << endl;
-		cout << "create student record" << endl;
-		cout << "view student record" << endl;
-		cout << "delete student record" << endl;
+		cout << "1 - {name}" << endl;
+		cout << "2 - {name}" << endl;
+		cout << "3 - {name}" << endl;
 
-		cout << ": ";
+		cout << "> ";
 		cin >> menu;
 
-	} while (menu > 0 && menu <= 4);
+	} while (menu <= 0 || menu > [number of options]);
+
+}*/
+
+void menuTeacher() {
+
+	int menu = 0;
+
+	do
+	{
+
+		cout << endl;
+		cout << "1 - list students" << endl;
+		cout << "2 - create student record" << endl;
+		cout << "3 - view student record" << endl;
+		cout << "4 - delete student record" << endl;
+
+		cout << "> "; // I've made this an arrow because I thought it looked better than a colon. We can use a colon if you think it looks better though. My reasoning was that because the input is without and other text, it looked cleaner.
+		cin >> menu;
+
+	} while (menu <= 0 || menu > 4);
 
 }
 
 void menuAdmin() {
 
-	int menu;
+	int menu = 0;
 
 	do
 	{
 
 		cout << endl;
-		cout << "list students" << endl;
-		cout << "create parent record" << endl;
-		cout << "view parent record" << endl;
-		cout << "delete parent record" << endl;
-		cout << "view 'help needed' students" << endl; //Can be renamed. Couldn't think of anything else at the time of writing
-		cout << "view 'progressing' students" << endl;
+		cout << "1 - list students" << endl;
+		cout << "2 - create parent record" << endl;
+		cout << "3 - view parent record" << endl;
+		cout << "4 - delete parent record" << endl;
+		cout << "5 - view 'help needed' students" << endl; //Can be renamed. Couldn't think of anything else at the time of writing
+		cout << "6 - view 'progressing' students" << endl;
 
-		cout << ": ";
+		cout << "> ";
 		cin >> menu;
 
-	} while (menu > 0 && menu <= 7);
+	} while (menu <= 0 || menu > 6);
 
 }
 
 void menuParent() {
 
-	int menu;
+	int menu = 0;
 
 	do
 	{
 
 		cout << endl;
-		cout << "school news/notices" << endl;
-		cout << "view student record" << endl;
+		cout << "1 - school news/notices" << endl;
+		cout << "2 - view student record" << endl;
 
-		cout << ": ";
+		cout << "> ";
 		cin >> menu;
 
-	} while (menu > 0 && menu <= 2);
+	} while (menu <= 0 || menu > 2);
 
 }
 
 void menuRecord() {
 
-	int menu;
+	int menu = 0;
 
 	do
 	{
 
 		cout << endl;
-		cout << "create student record" << endl;
-		cout << "view student record" << endl;
-		cout << "delete student record" << endl;
+		cout << "1 - create student record" << endl;
+		cout << "2 - view student record" << endl;
+		cout << "3 - delete student record" << endl;
 
-		cout << ": ";
+		cout << "> ";
 		cin >> menu;
 
-	} while (menu > 0 && menu <= 3);
+	} while (menu <= 0 || menu > 3);
 
 }
