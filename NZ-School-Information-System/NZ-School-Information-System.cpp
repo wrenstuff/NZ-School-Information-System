@@ -139,3 +139,39 @@ void menuRecord() {
 	} while (menu <= 0 || menu > 3);
 
 }
+
+//void parentCreate() {
+//
+//	int firstName, lastName, Gender, DOB, PH, email, username, password;
+//
+//	do
+//	{
+//		cout << "Create New Account" << endl;
+//		
+//		cout << "First Name:\n";
+//		cin >> firstName;
+//
+//		cout << "Last Name:\n";
+//		cin >> lastName;
+//
+//		cout << "Gender:\n";
+//		cin >> Gender;
+//
+//		cout << "Date Of Birth:\n";
+//		cin >> DOB;
+//
+//		cout << "Phone Number:\n";
+//		cin >> PH;
+//
+//		cout << "email:\n";
+//		cin >> email;
+//
+//		cout << "username\n";
+//		cin >> username;
+//
+//		cout << "password\n";
+//		cin >> password;
+//
+//	} while ()
+//
+//}
