@@ -15,6 +15,27 @@ int main()
 
     cout << "NZ School Information System" << endl;
 
+
+
+	cout << "______    _____                  __                   _____                " << endl;
+	cout << "|     \\  /            /\\        |  \\    |\\      /|   /     \\  |  /        " << endl;
+	cout << "|     |  |           /  \\       |   \\   | \\    / |   |     |  | /   _____ " << endl;
+	cout << "|_____/  |          /    \\      |    \\  |  \\  /  |   |     |  |/   /     \\" << endl;
+	cout << "|        |-----    /------\\     |    |  |   \\/   |   |     |  |   |______/" << endl;
+	cout << "|\\       |        /        \\    |    /  |        |   |     |  |   |       " << endl;
+	cout << "| \\      |       /          \\   |   /   |        |   |     |  |    \\_____ " << endl;
+	cout << "|  \\     \\_____ /            \\  |__/    |        |   \\_____/  |     __________" << endl;
+	cout << "___________________________________________________________________/" << endl;
+	cout << "___                                                                      " << endl;
+	cout << "|  \\  | /  .  |\\    /|      /\\      | /  \\    /     ___     ____ |       ___    ___   |" << endl;
+	cout << "|  |  |/   |  | \\  / |     /  \\     |/    \\  /     /       /     |___   /   \\  /   \\  |" << endl;
+	cout << "|__/  |    |  |  \\/  |    /----\\    |      \\/      \\___   |      |   \\ |     ||     | |" << endl;
+	cout << "|     |    |  |      |   /      \\   |      ||          \\  |      |   | |     ||     | |" << endl;
+	cout << "|     |    |  |      |  /        \\  |      ||       ___/   \\____ |   |  \\___/  \\___/  |____" << endl;
+
+
+
+
 }
 
 // Functions. If creating a new function, make sure you add it to the top of the code as well.
@@ -118,3 +139,39 @@ void menuRecord() {
 	} while (menu <= 0 || menu > 3);
 
 }
+
+//void parentCreate() {
+//
+//	int firstName, lastName, Gender, DOB, PH, email, username, password;
+//
+//	do
+//	{
+//		cout << "Create New Account" << endl;
+//		
+//		cout << "First Name:\n";
+//		cin >> firstName;
+//
+//		cout << "Last Name:\n";
+//		cin >> lastName;
+//
+//		cout << "Gender:\n";
+//		cin >> Gender;
+//
+//		cout << "Date Of Birth:\n";
+//		cin >> DOB;
+//
+//		cout << "Phone Number:\n";
+//		cin >> PH;
+//
+//		cout << "email:\n";
+//		cin >> email;
+//
+//		cout << "username\n";
+//		cin >> username;
+//
+//		cout << "password\n";
+//		cin >> password;
+//
+//	} while ()
+//
+//}
