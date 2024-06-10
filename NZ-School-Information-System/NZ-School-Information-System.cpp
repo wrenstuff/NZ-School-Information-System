@@ -1,17 +1,26 @@
 #include <iostream>
+#include <fstream>
+#include <string>
 using namespace std;
 
 // Function decleration //
 
 // -------- Menu Functions -------- //
 
+void menuMain();
 void menuTeacher();
 void menuAdmin();
 void menuParent();
 void menuRecord();
 
+void login();
+
 int main()
 {
+
+	// Variables //
+
+	
 
     cout << "NZ School Information System" << endl;
 
@@ -33,8 +42,9 @@ int main()
 	cout << "|     |    |  |      |   /      \\   |      ||          \\  |      |   | |     ||     | |" << endl;
 	cout << "|     |    |  |      |  /        \\  |      ||       ___/   \\____ |   |  \\___/  \\___/  |____" << endl;
 
+	ofstream newUserFile("users/testUser1.txt");
 
-
+	menuMain();
 
 }
 
@@ -60,6 +70,31 @@ int main()
 	} while (menu <= 0 || menu > [number of options]);
 
 }*/
+
+void menuMain() {
+
+	int menu = 0;
+
+	do
+	{
+
+		cout << endl;
+		cout << "1 - Login" << endl;
+
+		cout << "> ";
+		cin >> menu;
+
+	} while (menu <= 0 || menu > 1);
+
+	switch (menu)
+	{
+	case 1:
+		login();
+	default:
+		break;
+	}
+
+}
 
 void menuTeacher() {
 
@@ -137,6 +172,92 @@ void menuRecord() {
 		cin >> menu;
 
 	} while (menu <= 0 || menu > 3);
+
+}
+
+// ------------ Login / Sign Up ------------ //
+
+void login() {
+
+	string userLogin;
+	string userPass;
+	string userName = "";
+
+	cout << "Enter username" << endl << "> ";
+	cin >> userLogin;
+
+	//add something to get the hash of userLogin variable
+
+	ifstream userFile("users/" + userLogin + ".txt");
+	if (userFile) {
+		cout << "Enter password" << endl << "> ";
+		cin >> userPass;
+
+		string line;
+		int currentLine = 0;
+
+		while (getline(userFile, line)) 
+		{
+
+			currentLine++;
+
+			if (currentLine == 1) 
+			{
+
+				if (userPass == line) 
+				{
+
+					//Maybe there could be a function called here which accesses everything in the users file and adds it to let's say a structure, so that the file doesn't have to keep being accessed
+
+					while (getline(userFile, line))
+					{
+
+						currentLine++;
+
+						if (currentLine == 2)
+						{
+
+							userName += line;
+
+						}
+						else if (currentLine == 3)
+						{
+
+							userName += " " + line;
+
+						}
+						else
+						{
+							break;
+						}
+
+					}
+
+					cout << "Welcome " << userName;
+
+				}
+				else
+				{
+
+					cout << "Incorrect Password";
+					break;
+
+				}
+
+			}
+
+			else
+			{
+				cout << "next";
+			}
+
+		}
+
+	}
+	else 
+	{
+		cout << "User does not exist." << endl;
+	}
 
 }
 
