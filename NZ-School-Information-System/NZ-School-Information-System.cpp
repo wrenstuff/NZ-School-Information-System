@@ -1,23 +1,34 @@
 #include <iostream>
+#include <vector>
+#include <string>
+#include<fstream>
 using namespace std;
-
+//structure definition
+struct newSR {
+	string password;
+	string firstname;
+	string lastname;
+}newrecord;
 // Function decleration //
 
 // -------- Menu Functions -------- //
-
+void stars();
 void menuTeacher();
 void menuAdmin();
 void menuParent();
 void menuRecord();
+void createSR(vector <newSR>& records);
+//structure for student record creation
+
 
 int main()
 {
-
+	
     cout << "NZ School Information System" << endl;
 
 
 
-	cout << "______    _____                  __                   _____                " << endl;
+	cout << "______    _____                  __                   _____       ___   " << endl;
 	cout << "|     \\  /            /\\        |  \\    |\\      /|   /     \\  |  /        " << endl;
 	cout << "|     |  |           /  \\       |   \\   | \\    / |   |     |  | /   _____ " << endl;
 	cout << "|_____/  |          /    \\      |    \\  |  \\  /  |   |     |  |/   /     \\" << endl;
@@ -27,15 +38,15 @@ int main()
 	cout << "|  \\     \\_____ /            \\  |__/    |        |   \\_____/  |     __________" << endl;
 	cout << "___________________________________________________________________/" << endl;
 	cout << "___                                                                      " << endl;
-	cout << "|  \\  | /  .  |\\    /|      /\\      | /  \\    /     ___     ____ |       ___    ___   |" << endl;
+	cout << "|  \\  | /  .  |\\    /|      /\\      | __ \\    /     ___     ____ |       ___    ___   |" << endl;
 	cout << "|  |  |/   |  | \\  / |     /  \\     |/    \\  /     /       /     |___   /   \\  /   \\  |" << endl;
 	cout << "|__/  |    |  |  \\/  |    /----\\    |      \\/      \\___   |      |   \\ |     ||     | |" << endl;
 	cout << "|     |    |  |      |   /      \\   |      ||          \\  |      |   | |     ||     | |" << endl;
 	cout << "|     |    |  |      |  /        \\  |      ||       ___/   \\____ |   |  \\___/  \\___/  |____" << endl;
 
-
-
-
+	
+	menuRecord();
+	return 0;
 }
 
 // Functions. If creating a new function, make sure you add it to the top of the code as well.
@@ -120,11 +131,42 @@ void menuParent() {
 	} while (menu <= 0 || menu > 2);
 
 }
+//function for making the student record and calling the structure
+void createSR(vector <newSR>& records) {
+	// new variable for holding the data for student record
+	
 
+	//user inputs.
+	cout << "Create The student record." << endl;
+	stars();
+	cout << "Enter the students Password: ";
+	cin >> newrecord.password;
+	cout << "Enter the Students First name: ";
+	cin >> newrecord.firstname;
+	cout << "Enter the Students Last name: ";
+	cin >> newrecord.lastname;
+	
+	// adding newrecord to vector
+	records.push_back(newrecord);
+
+	ofstream filecreate("Student_record.txt", ios::app);// appennding rather than overwrite
+	if (filecreate.is_open()) {
+		filecreate << newrecord.password << " " << newrecord.firstname << " " << newrecord.lastname << endl;
+		filecreate.close(); // function is complete close the file
+		
+		cout << "You have created the record sucessfully" << endl;
+		stars();
+	}
+	else {
+		cout << "cannot open the file" << endl;
+	}
+	
+}
 void menuRecord() {
-
+	
 	int menu = 0;
-
+	//vector for holding the information from the function
+	vector<newSR> records;
 	do
 	{
 
@@ -135,9 +177,41 @@ void menuRecord() {
 
 		cout << "> ";
 		cin >> menu;
+		// Making switch cases for the menu options
+		switch (menu) 
+		{
+		 case 1:
+			 cout << endl;
+			
+			 //Records is using the create SR function to make student records
+			 createSR(records);
 
+			
+
+			break;
+
+		 case 2:
+			cout << "Which student would you like to view? Enter the name: " << endl;
+			
+			
+		
+			break;
+
+		 case 3:
+			 cout << "Which student record would you like to delete?" << endl;
+
+			 break;
+		}
+		
+	
 	} while (menu <= 0 || menu > 3);
-
+	
+}
+void stars() {
+	for (int i = 0; i < 100; i++) {
+		cout << "*";
+	}
+	cout << endl;
 }
 
 //void parentCreate() {
