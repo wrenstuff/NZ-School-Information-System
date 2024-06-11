@@ -1,10 +1,13 @@
 {
   "Version": 1,
-  "WorkspaceRootPath": "C:\\Users\\User\\OneDrive\\Documents\\NZ-School-Information-System\\",
+  "WorkspaceRootPath": "C:\\Users\\GGPC\\Pictures\\GROUP  PROJECT 2\\NZ-School-Information-System\\",
   "Documents": [
     {
-      "AbsoluteMoniker": "D:0:0:{ECB0289D-1AEF-4571-BF21-7C1799BECDB0}|NZ-School-Information-System\\NZ-School-Information-System.vcxproj|C:\\Users\\User\\OneDrive\\Documents\\NZ-School-Information-System\\NZ-School-Information-System\\NZ-School-Information-System.cpp||{D0E1A5C6-B359-4E41-9B60-3365922C2A22}",
+      "AbsoluteMoniker": "D:0:0:{ECB0289D-1AEF-4571-BF21-7C1799BECDB0}|NZ-School-Information-System\\NZ-School-Information-System.vcxproj|C:\\Users\\GGPC\\Pictures\\GROUP  PROJECT 2\\NZ-School-Information-System\\NZ-School-Information-System\\NZ-School-Information-System.cpp||{D0E1A5C6-B359-4E41-9B60-3365922C2A22}",
       "RelativeMoniker": "D:0:0:{ECB0289D-1AEF-4571-BF21-7C1799BECDB0}|NZ-School-Information-System\\NZ-School-Information-System.vcxproj|solutionrelative:NZ-School-Information-System\\NZ-School-Information-System.cpp||{D0E1A5C6-B359-4E41-9B60-3365922C2A22}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{ECB0289D-1AEF-4571-BF21-7C1799BECDB0}|NZ-School-Information-System\\NZ-School-Information-System.vcxproj|C:\\PROGRAM FILES\\MICROSOFT VISUAL STUDIO\\2022\\COMMUNITY\\VC\\TOOLS\\MSVC\\14.39.33519\\INCLUDE\\FILESYSTEM||{3B902123-F8A7-4915-9F01-361F908088D0}"
     }
   ],
   "DocumentGroupContainers": [
@@ -14,19 +17,36 @@
       "DocumentGroups": [
         {
           "DockedWidth": 200,
-          "SelectedChildIndex": 0,
+          "SelectedChildIndex": 2,
           "Children": [
+            {
+              "$type": "Bookmark",
+              "Name": "ST:0:0:{cce594b6-0c39-4442-ba28-10c64ac7e89f}"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 1,
+              "Title": "filesystem",
+              "DocumentMoniker": "C:\\Program Files\\Microsoft Visual Studio\\2022\\Community\\VC\\Tools\\MSVC\\14.39.33519\\include\\filesystem",
+              "RelativeDocumentMoniker": "..\\..\\..\\..\\..\\Program Files\\Microsoft Visual Studio\\2022\\Community\\VC\\Tools\\MSVC\\14.39.33519\\include\\filesystem",
+              "ToolTip": "C:\\Program Files\\Microsoft Visual Studio\\2022\\Community\\VC\\Tools\\MSVC\\14.39.33519\\include\\filesystem",
+              "RelativeToolTip": "..\\..\\..\\..\\..\\Program Files\\Microsoft Visual Studio\\2022\\Community\\VC\\Tools\\MSVC\\14.39.33519\\include\\filesystem",
+              "ViewState": "AQIAAAAAAAAAAAAAAAAAAAsAAAAAAAAA",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.001001|",
+              "WhenOpened": "2024-06-11T06:59:06.48Z",
+              "EditorCaption": ""
+            },
             {
               "$type": "Document",
               "DocumentIndex": 0,
               "Title": "NZ-School-Information-System.cpp",
-              "DocumentMoniker": "C:\\Users\\User\\OneDrive\\Documents\\NZ-School-Information-System\\NZ-School-Information-System\\NZ-School-Information-System.cpp",
+              "DocumentMoniker": "C:\\Users\\GGPC\\Pictures\\GROUP  PROJECT 2\\NZ-School-Information-System\\NZ-School-Information-System\\NZ-School-Information-System.cpp",
               "RelativeDocumentMoniker": "NZ-School-Information-System\\NZ-School-Information-System.cpp",
-              "ToolTip": "C:\\Users\\User\\OneDrive\\Documents\\NZ-School-Information-System\\NZ-School-Information-System\\NZ-School-Information-System.cpp",
+              "ToolTip": "C:\\Users\\GGPC\\Pictures\\GROUP  PROJECT 2\\NZ-School-Information-System\\NZ-School-Information-System\\NZ-School-Information-System.cpp",
               "RelativeToolTip": "NZ-School-Information-System\\NZ-School-Information-System.cpp",
-              "ViewState": "AQIAAP8AAAAAAAAAAAAowBcBAAAEAAAA",
+              "ViewState": "AQIAAFsAAAAAAAAAAAAAAG0AAAAAAAAA",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000677|",
-              "WhenOpened": "2024-05-31T06:29:25.524Z",
+              "WhenOpened": "2024-06-11T06:41:14.839Z",
               "EditorCaption": ""
             }
           ]
