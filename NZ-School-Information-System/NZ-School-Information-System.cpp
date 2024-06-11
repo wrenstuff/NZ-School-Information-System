@@ -2,11 +2,14 @@
 #include <vector>
 #include <string>
 #include<fstream>
+#include<filesystem>
 using namespace std;
+
 //structure definition
 struct newSR {
 	string password;
 	string firstname;
+	string middlename;
 	string lastname;
 }newrecord;
 
@@ -135,7 +138,7 @@ void menuParent() {
 void createSR(vector <newSR>& records) {
 	// new variable for holding the data for student record
 	
-
+	
 	//user inputs.
 	cout << "Create The student record." << endl;
 	stars();
@@ -143,18 +146,27 @@ void createSR(vector <newSR>& records) {
 	cin >> newrecord.password;
 	cout << "Enter the Students First name: ";
 	cin >> newrecord.firstname;
+	cout << "enter the Students Middle name: ";
+	cin >> newrecord.middlename;
 	cout << "Enter the Students Last name: ";
 	cin >> newrecord.lastname;
 	
 	// adding newrecord to vector
 	records.push_back(newrecord);
 
-	ofstream filecreate("Student_record.txt", ios::app);// appennding rather than overwrite
+	
+	//creating a string to make file names of the first + last names of the student and makign it a record of the .txt
+	string childrecord = newrecord.firstname + "-"+ newrecord.middlename+"-" + newrecord.lastname + "-record.txt";
+
+	ofstream filecreate;
+
+	filecreate.open("Students/"+childrecord, ios::app);
+
 	if (filecreate.is_open()) {
-		filecreate << newrecord.password << " " << newrecord.firstname << " " << newrecord.lastname << endl;
+		filecreate  << newrecord.password << endl<< newrecord.firstname << endl << newrecord.middlename << endl << newrecord.lastname << endl;
 		filecreate.close(); // function is complete close the file
 		
-		cout << "You have created the record sucessfully" << endl;
+		cout << "You have created the record sucessfully" << endl;//feed back to user
 		stars();
 	}
 	else {
