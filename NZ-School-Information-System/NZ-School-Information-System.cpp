@@ -11,6 +11,7 @@ struct newSR {
 	string firstname;
 	string middlename;
 	string lastname;
+	char gender;
 }newrecord;
 
 // Function decleration //
@@ -150,6 +151,8 @@ void createSR(vector <newSR>& records) {
 	cin >> newrecord.middlename;
 	cout << "Enter the Students Last name: ";
 	cin >> newrecord.lastname;
+	cout << "Enter the Students Gender M/F/X: ";
+	cin >> newrecord.gender;
 	
 	// adding newrecord to vector
 	records.push_back(newrecord);
@@ -163,7 +166,7 @@ void createSR(vector <newSR>& records) {
 	filecreate.open("Students/"+childrecord, ios::app);
 
 	if (filecreate.is_open()) {
-		filecreate  << newrecord.password << endl<< newrecord.firstname << endl << newrecord.middlename << endl << newrecord.lastname << endl;
+		filecreate  << newrecord.password << endl<< newrecord.firstname << endl << newrecord.middlename << endl << newrecord.lastname << endl << newrecord.gender << endl;
 		filecreate.close(); // function is complete close the file
 		
 		cout << "You have created the record sucessfully" << endl;//feed back to user
