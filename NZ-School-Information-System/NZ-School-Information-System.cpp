@@ -12,6 +12,7 @@ struct newSR {
 	string middlename;
 	string lastname;
 	char gender;
+	string parentname;
 }newrecord;
 
 // Function decleration //
@@ -21,7 +22,8 @@ void stars();
 void menuTeacher();
 void menuAdmin();
 void menuParent();
-void menuRecord();
+void menuRecordAdmin();
+void menuRecordTeacher();
 //structure for student record creation
 
 
@@ -47,9 +49,10 @@ int main()
 	cout << "|__/  |    |  |  \\/  |    /----\\    |      \\/      \\___   |      |   \\ |     ||     | |" << endl;
 	cout << "|     |    |  |      |   /      \\   |      ||          \\  |      |   | |     ||     | |" << endl;
 	cout << "|     |    |  |      |  /        \\  |      ||       ___/   \\____ |   |  \\___/  \\___/  |____" << endl;
-
+	cout << endl;
+	stars();
 	
-	menuRecord();
+	menuRecordAdmin();
 	return 0;
 }
 
@@ -141,18 +144,22 @@ void createSR(vector <newSR>& records) {
 	
 	
 	//user inputs.
+	stars();
 	cout << "Create The student record." << endl;
 	stars();
 	cout << "Enter the students Password: ";
 	cin >> newrecord.password;
 	cout << "Enter the Students First name: ";
 	cin >> newrecord.firstname;
-	cout << "enter the Students Middle name: ";
+	cout << "Enter the Students Middle name: ";
 	cin >> newrecord.middlename;
-	cout << "Enter the Students Last name: ";
+	cout <<  "Enter the Students Last name : ";
 	cin >> newrecord.lastname;
 	cout << "Enter the Students Gender M/F/X: ";
 	cin >> newrecord.gender;
+	cout << "Enter the Parents Full name: ";
+	cin.ignore();
+	getline(cin, newrecord.parentname);
 	
 	// adding newrecord to vector
 	records.push_back(newrecord);
@@ -163,10 +170,11 @@ void createSR(vector <newSR>& records) {
 
 	ofstream filecreate;
 
-	filecreate.open("Students/"+childrecord, ios::app);
+	filecreate.open("Students/"+childrecord, ios::app); // change to check if any other files exist with same name rather than append
 
 	if (filecreate.is_open()) {
-		filecreate  << newrecord.password << endl<< newrecord.firstname << endl << newrecord.middlename << endl << newrecord.lastname << endl << newrecord.gender << endl;
+		filecreate << newrecord.password << endl << newrecord.firstname << endl << newrecord.middlename << endl << newrecord.lastname << endl << newrecord.gender << endl << newrecord.parentname << endl;
+		
 		filecreate.close(); // function is complete close the file
 		
 		cout << "You have created the record sucessfully" << endl;//feed back to user
@@ -177,7 +185,7 @@ void createSR(vector <newSR>& records) {
 	}
 	
 }
-void menuRecord() {
+void menuRecordAdmin() {
 	
 	int menu = 0;
 	//vector for holding the information from the function
@@ -186,9 +194,9 @@ void menuRecord() {
 	{
 
 		cout << endl;
-		cout << "1 - create student record" << endl;
-		cout << "2 - view student record" << endl;
-		cout << "3 - delete student record" << endl;
+		cout << "1 - Create student record" << endl;
+		cout << "2 - View student record" << endl;
+		cout << "3 - Delete student record" << endl;
 
 		cout << "> ";
 		cin >> menu;
@@ -222,8 +230,54 @@ void menuRecord() {
 	} while (menu <= 0 || menu > 3);
 	
 }
+/*void menuRecordTeacher() {
+
+	int menu = 0;
+	//vector for holding the information from the function
+	vector<newSR> records;
+	do
+	{
+
+		cout << endl;
+		cout << "1 - create student record" << endl;
+		cout << "2 - view student record" << endl;
+		cout << "3 - delete student record" << endl;
+
+		cout << "> ";
+		cin >> menu;
+		// Making switch cases for the menu options
+		switch (menu)
+		{
+		case 1:
+			cout << endl;
+
+			//Records is using the create SR function to make student records
+			createSR(records);
+
+
+
+			break;
+
+		case 2:
+			cout << "Which student would you like to view? Enter the name: " << endl;
+
+
+
+			break;
+
+		case 3:
+			cout << "Which student record would you like to delete?" << endl;
+
+			break;
+		}
+
+
+	} while (menu <= 0 || menu > 3);
+
+}
+*/
 void stars() {
-	for (int i = 0; i < 100; i++) {
+	for (int i = 0; i < 92; i++) {
 		cout << "*";
 	}
 	cout << endl;
