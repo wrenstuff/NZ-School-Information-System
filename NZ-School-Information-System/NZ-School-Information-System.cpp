@@ -5,6 +5,8 @@ using namespace std;
 
 // Function decleration //
 
+void login();
+
 // -------- Menu Functions -------- //
 
 void menuMain();
@@ -12,8 +14,6 @@ void menuTeacher();
 void menuAdmin();
 void menuParent();
 void menuRecord();
-
-void login();
 
 int main()
 {
@@ -134,12 +134,20 @@ void menuAdmin() {
 		cout << "4 - delete parent record" << endl;
 		cout << "5 - view 'help needed' students" << endl; //Can be renamed. Couldn't think of anything else at the time of writing
 		cout << "6 - view 'progressing' students" << endl;
+		cout << "7 - Exit Program" << endl;
 		cout << endl;
 		cout << "> ";
 		cin >> menu;
 		cout << endl;
 
-	} while (menu <= 0 || menu > 6);
+		if (menu == 7)
+		{
+
+			break;
+
+		}
+
+	} while (menu <= 0 || menu > 7);
 
 }
 
@@ -203,94 +211,111 @@ void login() {
 	if (userFile) 
 	{
 
-		cout << "Enter password" << endl << "> ";
-		cin >> userPass;
-
 		string line;
 		int currentLine = 0;
 
-		do
+		while (true)
 		{
 
 			getline(userFile, line);
 
-
 			currentLine++;
 
-			if (currentLine == 1) 
+			if (currentLine == 1)
 			{
 
-				if (userPass == line) 
+				do
 				{
 
-					//Maybe there could be a function called here which accesses everything in the users file and adds it to let's say a structure, so that the file doesn't have to keep being accessed
-
-					while (getline(userFile, line))
+					if (currentLine != 1)
 					{
 
-						currentLine++;
-
-						switch (currentLine)
-						{
-						case 2:
-
-							userName += line;
-							break;
-
-						case 3:
-
-							userName += " " + line;
-							cout << "Welcome, " << userName;
-							break;
-
-						case 4:
-
-							if (line == "Admin")
-							{
-
-								menuAdmin();
-
-							}
-							else if (line == "Teacher")
-							{
-
-								menuTeacher();
-
-							}
-							else if (line == "Parent")
-							{
-								
-								menuParent();
-
-							}
-							else
-							{
-
-								cout << "ERROR: Not a valid user type" << endl;
-								break;
-
-							}
-
-						default:
-							break;
-						}
+						break;
 
 					}
 
-				}
-				else
-				{
+					cout << currentLine << endl;
+					cout << "Enter password" << endl << "> ";
+					cin >> userPass;
 
-					cout << "Incorrect Password. ";
-					tries--;
-					cout << tries << " tries remaining" << endl;
-					userFile.close();
+					if (userPass == line)
+					{
 
-				}
+						//Maybe there could be a function called here which accesses everything in the users file and adds it to let's say a structure, so that the file doesn't have to keep being accessed
+
+						while (getline(userFile, line))
+						{
+
+							currentLine++;
+
+							switch (currentLine)
+							{
+							case 2:
+
+								userName += line;
+								break;
+
+							case 3:
+
+								userName += " " + line;
+								cout << "Welcome, " << userName;
+								break;
+
+							case 4:
+
+								if (line == "Admin")
+								{
+
+									menuAdmin();
+									break;
+
+								}
+								else if (line == "Teacher")
+								{
+
+									menuTeacher();
+									break;
+
+								}
+								else if (line == "Parent")
+								{
+
+									menuParent();
+									break;
+
+								}
+								else
+								{
+
+									cout << "ERROR: Not a valid user type" << endl;
+									break;
+
+								}
+
+							default:
+								break;
+							}
+
+						}
+
+					}
+					else
+					{
+
+						cout << "Incorrect Password. ";
+						tries--;
+						cout << tries << " tries remaining" << endl;
+
+					}
+
+				} while (tries > 0);
 
 			}
 
-		} while (tries > 0);
+			userFile.close();
+			break;
+
+		}
 
 	}
 	else 
