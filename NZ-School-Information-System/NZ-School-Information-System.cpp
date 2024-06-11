@@ -9,15 +9,15 @@ struct newSR {
 	string firstname;
 	string lastname;
 }newrecord;
-// Function decleration //
 
-// -------- Menu Functions -------- //
+// Function decleration //
+void createSR(vector <newSR>& records);
 void stars();
+// -------- Menu Functions -------- //
 void menuTeacher();
 void menuAdmin();
 void menuParent();
 void menuRecord();
-void createSR(vector <newSR>& records);
 //structure for student record creation
 
 
