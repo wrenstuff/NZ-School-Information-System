@@ -1,6 +1,7 @@
 #include <iostream>
 #include <fstream>
 #include <string>
+#include <ctime>
 using namespace std;
 
 // Function decleration //
@@ -266,6 +267,7 @@ void login() {
 								if (line == "Admin")
 								{
 
+									// Opens the Admin menu if the user type is "Admin"
 									menuAdmin();
 									break;
 
@@ -273,6 +275,7 @@ void login() {
 								else if (line == "Teacher")
 								{
 
+									// Opens the Teacher menu if the user type is "Teacher"
 									menuTeacher();
 									break;
 
@@ -280,6 +283,7 @@ void login() {
 								else if (line == "Parent")
 								{
 
+									// Opens the Parent menu if user type is "Parent"
 									menuParent();
 									break;
 
@@ -287,7 +291,11 @@ void login() {
 								else
 								{
 
+									//
 									cout << "ERROR: Not a valid user type" << endl;
+									ofstream errorFile;
+									errorFile.open(time(NULL) + "error.txt");
+									errorFile << "ERROR: Not a valid user type" << endl << line;
 									break;
 
 								}
