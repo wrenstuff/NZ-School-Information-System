@@ -18,8 +18,9 @@ void menuRecord();
 
 // ----- Error File Creation ----- //
 
-void errorFileCreate(string, string);
-string errorType; // 
+void errorFileCreate(string, string, string);
+string errorType;
+string errorDesc;
 
 int main()
 {
@@ -296,7 +297,8 @@ void login() {
 								{
 
 									errorType = "TypeUser";
-									errorFileCreate(errorType, line);
+									errorDesc = "Invalid user type";
+									errorFileCreate(errorType, line, errorDesc);
 
 									break;
 
@@ -335,10 +337,9 @@ void login() {
 
 }
 
-void errorFileCreate(string x, string line) {
+void errorFileCreate(string x, string line, string y) {
 
-	errorType = "Type[error type]"; //e.g. errorType = "TypeUser";
-	cout << "ERROR: " << x << " [Describe error]" << endl;
+	cout << "ERROR: " << x << " " << y << endl;
 	ofstream errorFile;
 	string errorFileName;
 
@@ -347,7 +348,7 @@ void errorFileCreate(string x, string line) {
 	errorFileName += to_string(errorTime);
 	errorFileName += "error" + x + ".txt";
 	errorFile.open(errorFileName);
-	errorFile << "ERROR: " << x << " [Describe error]" << endl << line; //  Same as cout // cout << "ERROR: " << errorType << " [Describe error]" << endl;
+	errorFile << "ERROR: " << x << " " << y << endl << line;
 	errorFile.close();
 
 }
