@@ -5,7 +5,8 @@
 #include <vector>
 using namespace std;
 
-//structure definition
+// ----- structure definition ----- //
+
 struct newSR {
 	string password;
 	string firstname;
@@ -15,7 +16,9 @@ struct newSR {
 	string parentname1;
 	string parentname2;
 }newrecord;
-// Function decleration //
+
+// ----- Function decleration ----- //
+
 void createSR(vector <newSR>& records);
 void stars();
 
@@ -30,6 +33,12 @@ void menuParent();
 void menuRecord();
 void menuRecordAdmin();
 void menuRecordTeacher();
+
+// ----- Error File Creation ----- //
+
+void errorFileCreate(string, string, string);
+string errorType;
+string errorDesc;
 
 int main()
 {
@@ -58,8 +67,7 @@ int main()
 	cout << "|     |    |  |      |   /      \\   |      ||          \\  |      |   | |     ||     | |" << endl;
 	cout << "|     |    |  |      |  /        \\  |      ||       ___/   \\____ |   |  \\___/  \\___/  |____" << endl;
 	cout << endl;
-	stars();
-	menuRecordAdmin();
+
 	menuMain();
 
 }
@@ -95,6 +103,8 @@ void menuMain() {
 	do
 	{
 
+		stars();
+
 		cout << endl;
 		cout << "1 - Login" << endl;
 		cout << "2 - Exit" << endl;
@@ -124,6 +134,8 @@ void menuTeacher() {
 	do
 	{
 
+		stars();
+
 		cout << endl;
 		cout << "1 - list students" << endl;
 		cout << "2 - create student record" << endl;
@@ -145,20 +157,31 @@ void menuAdmin() {
 	do
 	{
 
+		stars();
+
 		cout << endl;
-		cout << "1 - list students" << endl;
-		cout << "2 - create parent record" << endl;
-		cout << "3 - view parent record" << endl;
-		cout << "4 - delete parent record" << endl;
-		cout << "5 - view 'help needed' students" << endl; //Can be renamed. Couldn't think of anything else at the time of writing
-		cout << "6 - view 'progressing' students" << endl;
-		cout << "7 - Exit Program" << endl;
+		cout << "1 - List Students" << endl;
+		cout << "2 - Parent Records" << endl;
+		cout << "3 - Student Records" << endl;
+		cout << "4 - view 'help needed' students" << endl; //Can be renamed. Couldn't think of anything else at the time of writing
+		cout << "5 - view 'progressing' students" << endl;
+		cout << "6 - Exit Program" << endl;
 		cout << endl;
 		cout << "> ";
 		cin >> menu;
 		cout << endl;
 
-		if (menu == 7)
+		if (menu == 1) {}
+		else if (menu == 2) {}
+		else if (menu == 3)
+		{
+
+			menuRecordAdmin();
+
+		}
+		else if (menu == 4) {}
+		else if (menu == 5) {}
+		else if (menu == 6)
 		{
 
 			break;
@@ -175,6 +198,8 @@ void menuParent() {
 
 	do
 	{
+
+		stars();
 
 		cout << endl;
 		cout << "1 - school news/notices" << endl;
@@ -195,6 +220,8 @@ void menuRecord() {
 	do
 	{
 
+		stars();
+
 		cout << endl;
 		cout << "1 - create student record" << endl;
 		cout << "2 - view student record" << endl;
@@ -214,6 +241,8 @@ void menuRecordTeacher() {
 
 	do
 	{
+
+		stars();
 
 		cout << endl;
 		cout << "1 - create student record" << endl;
@@ -240,11 +269,12 @@ void createSR(vector <newSR>& records) {
 	cout << "Enter the students Password: ";
 	cin >> newrecord.password;
 	cout << "Enter the Students First name: ";
-	cin >> newrecord.firstname;
+	cin.ignore();
+	getline(cin, newrecord.firstname);
 	cout << "Enter the Students Middle name: ";
-	cin >> newrecord.middlename;
+	getline(cin, newrecord.middlename);
 	cout << "Enter the Students Last name : ";
-	cin >> newrecord.lastname;
+	getline(cin, newrecord.lastname);
 	cout << "Enter the Students Gender M/F/X: ";
 	cin >> newrecord.gender;
 
@@ -287,6 +317,8 @@ void menuRecordAdmin() {
 	do
 	{
 
+		stars();
+
 		cout << endl;
 		cout << "1 - create student record" << endl;
 		cout << "2 - view student record" << endl;
@@ -328,6 +360,8 @@ void menuRecordAdmin() {
 // ------------ Login / Sign Up ------------ //
 
 void login() {
+
+	stars();
 
 	string userLogin;
 	string userPass;
@@ -425,11 +459,10 @@ void login() {
 								else
 								{
 
-									//
-									cout << "ERROR: Not a valid user type" << endl;
-									ofstream errorFile;
-									errorFile.open(time(NULL) + "error.txt");
-									errorFile << "ERROR: Not a valid user type" << endl << line;
+									errorType = "TypeUser";
+
+									errorDesc = "Invalid user type";
+									errorFileCreate(errorType, line, errorDesc);
 									break;
 
 								}
@@ -474,38 +507,19 @@ void stars() {
 	cout << endl;
 }
 
-//void parentCreate() {
-//
-//	int firstName, lastName, Gender, DOB, PH, email, username, password;
-//
-//	do
-//	{
-//		cout << "Create New Account" << endl;
-//		
-//		cout << "First Name:\n";
-//		cin >> firstName;
-//
-//		cout << "Last Name:\n";
-//		cin >> lastName;
-//
-//		cout << "Gender:\n";
-//		cin >> Gender;
-//
-//		cout << "Date Of Birth:\n";
-//		cin >> DOB;
-//
-//		cout << "Phone Number:\n";
-//		cin >> PH;
-//
-//		cout << "email:\n";
-//		cin >> email;
-//
-//		cout << "username\n";
-//		cin >> username;
-//
-//		cout << "password\n";
-//		cin >> password;
-//
-//	} while ()
-//
-//}
+void errorFileCreate(string x, string line, string y) {
+
+	cout << endl;
+	cout << "ERROR: " << x << " " << y << endl;
+	ofstream errorFile;
+	string errorFileName;
+
+	int errorTime = time(NULL);
+	errorFileName = "errors/";
+	errorFileName += to_string(errorTime);
+	errorFileName += "error" + x + ".txt";
+	errorFile.open(errorFileName);
+	errorFile << "ERROR: " << x << " " << y << endl << line;
+	errorFile.close();
+
+}
