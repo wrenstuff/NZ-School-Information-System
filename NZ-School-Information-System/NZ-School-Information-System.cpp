@@ -16,6 +16,11 @@ void menuAdmin();
 void menuParent();
 void menuRecord();
 
+// ----- Error File Creation ----- //
+
+void errorFileCreate(string, string);
+string errorType; // 
+
 int main()
 {
 
@@ -235,7 +240,6 @@ void login() {
 
 					}
 
-					cout << currentLine << endl;
 					cout << "Enter password" << endl << "> ";
 					cin >> userPass;
 
@@ -291,11 +295,9 @@ void login() {
 								else
 								{
 
-									//
-									cout << "ERROR: Not a valid user type" << endl;
-									ofstream errorFile;
-									errorFile.open(time(NULL) + "error.txt");
-									errorFile << "ERROR: Not a valid user type" << endl << line;
+									errorType = "TypeUser";
+									errorFileCreate(errorType, line);
+
 									break;
 
 								}
@@ -333,38 +335,19 @@ void login() {
 
 }
 
-//void parentCreate() {
-//
-//	int firstName, lastName, Gender, DOB, PH, email, username, password;
-//
-//	do
-//	{
-//		cout << "Create New Account" << endl;
-//		
-//		cout << "First Name:\n";
-//		cin >> firstName;
-//
-//		cout << "Last Name:\n";
-//		cin >> lastName;
-//
-//		cout << "Gender:\n";
-//		cin >> Gender;
-//
-//		cout << "Date Of Birth:\n";
-//		cin >> DOB;
-//
-//		cout << "Phone Number:\n";
-//		cin >> PH;
-//
-//		cout << "email:\n";
-//		cin >> email;
-//
-//		cout << "username\n";
-//		cin >> username;
-//
-//		cout << "password\n";
-//		cin >> password;
-//
-//	} while ()
-//
-//}
+void errorFileCreate(string x, string line) {
+
+	errorType = "Type[error type]"; //e.g. errorType = "TypeUser";
+	cout << "ERROR: " << x << " [Describe error]" << endl;
+	ofstream errorFile;
+	string errorFileName;
+
+	int errorTime = time(NULL);
+	errorFileName = "errors/";
+	errorFileName += to_string(errorTime);
+	errorFileName += "error" + x + ".txt";
+	errorFile.open(errorFileName);
+	errorFile << "ERROR: " << x << " [Describe error]" << endl << line; //  Same as cout // cout << "ERROR: " << errorType << " [Describe error]" << endl;
+	errorFile.close();
+
+}
