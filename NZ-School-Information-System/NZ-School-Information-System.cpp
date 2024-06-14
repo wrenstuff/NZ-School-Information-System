@@ -99,8 +99,11 @@ int main()
 	cout << "|__/  |    |  |  \\/  |    /----\\    |      \\/      \\___   |      |   \\ |     ||     | |" << endl;
 	cout << "|     |    |  |      |   /      \\   |      ||          \\  |      |   | |     ||     | |" << endl;
 	cout << "|     |    |  |      |  /        \\  |      ||       ___/   \\____ |   |  \\___/  \\___/  |____" << endl;
-	cout << endl;
-
+	cout << endl; 
+    stars();
+	cout << "Phone number: 03 123 4567" << endl;
+	cout << "email: office@readmoreprimary.school.nz" << endl;
+	cout << "Address: 123 Oak Street, Readmore 1234" << endl;
 	
 	menuMain();
 
