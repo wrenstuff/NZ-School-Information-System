@@ -8,13 +8,15 @@ using namespace std;
 // ----- structure definition ----- //
 
 struct newSR {
-	string password;
-	string firstname;
-	string middlename;
-	string lastname;
-	char gender= ' ';
-	string parentname1;
-	string parentname2;
+
+	string password,
+		firstname,
+		middlename,
+		lastname,
+		parentname1,
+		parentname2;
+	char gender;
+
 }newrecord;
 
 struct NewParent
@@ -27,8 +29,8 @@ struct NewParent
 		password,
 		child;
 	char gender;
-	int DOB,
-		PH;
+	int DOB;
+	long int PH;
 
 }newparent;
 
@@ -42,9 +44,9 @@ struct NewTeacher
 		password;
 	char gender;
 	int DOB,
-		PH,
 		yearTeach,
 		classNo;
+	long int PH;
 
 }newteacher;
 
@@ -101,7 +103,6 @@ int main()
 	cout << "|     |    |  |      |  /        \\  |      ||       ___/   \\____ |   |  \\___/  \\___/  |____" << endl;
 	cout << endl;
 
-	
 	menuMain();
 
 }
@@ -154,58 +155,42 @@ void terms() {
 		cout << "Term Dates & Holidays\n";
 	
 	case 1:
-		cout << "Term 1\n";
-		cout << "\n" << endl;
-		cout << "Number of weeks: 10\n";
-		cout << "\n" << endl;
+		cout << "Term 1\n\n\n";
+		cout << "Number of weeks: 10\n\n\n";
 		cout << "Start & end dates: Starts between Monday 29 January (at the earliest & Wednesday 7 February (at the latest)\n";
-		cout << "Ends Friday 12 April\n";
-		cout << "\n" << endl;
+		cout << "Ends Friday 12 April\n\n\n";
 		cout << "Public Holidays: Waitangi Day - Tuesday 6 February\n";
-		cout << "Easter: Good Friday 29 March, Easter Monday 1 April, Easter Tuesday 2 April (a school holiday)\n";
-		cout << "\n" << endl;
+		cout << "Easter: Good Friday 29 March, Easter Monday 1 April, Easter Tuesday 2 April (a school holiday)\n\n\n";
 		cout << "School Holidays: Saturday 13 April to Sunday 28 April\n";
 		cout << "Includes: ANZAC Day - Thursday 25 April\n";
 		
 		break;
 
 	case 2: 
-		cout << "Term 2\n";
-		cout << "\n" << endl;
-		cout << "Number of weeks: 10\n";
-		cout << "\n" << endl;
-		cout << "Start & end dates: Starts Monday 29 April to Friday 5 July\n";
-		cout << "\n" << endl;
+		cout << "Term 2\n\n\n";
+		cout << "Number of weeks: 10\n\n\n";
+		cout << "Start & end dates: Starts Monday 29 April to Friday 5 July\n\n\n";
 		cout << "Public Holidays: Kings Birthday - Monday 3 June\n";
-		cout << "Matariki - Friday 28 June\n";
-		cout << "\n" << endl;
+		cout << "Matariki - Friday 28 June\n\n\n";
 		cout << "School Holidays: Saturday 6 July to Sunday 21 July\n";
 
 		break;
 
 	case 3:
-		cout << "Term 3\n";
-		cout << "\n" << endl;
-		cout << "Number of weeks: 10\n";
-		cout << "\n" << endl;
-		cout << "Start & end dates: Monday 22 July to Friday 27 September\n";
-		cout << "\n" << endl;
-		cout << "Public Holidays: None\n";
-		cout << "\n" << endl;
+		cout << "Term 3\n\n\n";
+		cout << "Number of weeks: 10\n\n\n";
+		cout << "Start & end dates: Monday 22 July to Friday 27 September\n\n\n";
+		cout << "Public Holidays: None\n\n\n";
 		cout << "School Holidays: Saturday 28 September to Sunday 13 October\n";
 
 		break;
 
 	case 4:
-		cout << "Term 4\n";
-		cout << "\n" << endl;
-		cout << "Number of weeks: 10\n";
-		cout << "\n" << endl;
+		cout << "Term 4\n\n\n";
+		cout << "Number of weeks: 10\n\n\n";
 		cout << "Start & end dates: Monday 14 October\n";
-		cout << "Ends no later than Friday 20 December\n";
-		cout << "\n" << endl;
-		cout << "Public Holidays: Labour Day - Monday 28 October\n";
-		cout << "\n" << endl;
+		cout << "Ends no later than Friday 20 December\n\n\n";
+		cout << "Public Holidays: Labour Day - Monday 28 October\n\n\n";
 		cout << "School Holidays: 5 to 6 Weeks (From school's closing day until the opening date the following year)\n";
 		cout << "Includes: Christmas Day - Wednesday 25 December\n";
 		cout << "Boxing Day - Thursday 26 December\n";
@@ -224,33 +209,35 @@ void teacherCreate() {
 	cout << "Create New Account" << endl;
 	//Display to the user
 	//Details for user to enter
-	cout << "First Name:\n";
-	cin >> newteacher.firstname;
+	cout << "First Name:\n> ";
+	cin.ignore();
+	getline(cin, newteacher.firstname);
 
-	cout << "Last Name:\n";
-	cin >> newteacher.lastname;
+	cout << "Last Name:\n> ";
+	getline(cin, newteacher.lastname);
 
-	cout << "Gender:\n";
+	cout << "Gender:\n> ";
 	cin >> newteacher.gender;
 
-	cout << "Date Of Birth:\n";
+	cout << "Date Of Birth:\n> ";
 	cin >> newteacher.DOB;
 
-	cout << "Phone Number:\n";
+	cout << "Phone Number:\n> ";
 	cin >> newteacher.PH;
 
-	cout << "email:\n";
-	cin >> newteacher.email;
+	cout << "email:\n> ";
+	cin.ignore();
+	getline(cin, newteacher.email);
 
-	cout << "username\n";
+	cout << "username\n> ";
 	getline(cin, newteacher.username);
 
-	cout << "password\n";
+	cout << "password\n> ";
 	cin >> newteacher.password;
 
-	cout << "Class Number\n";
+	cout << "Class Number\n> ";
 	cin >> newteacher.classNo;
-	cout << "Year Level Teaching\n";
+	cout << "Year Level Teaching\n> ";
 	cin >> newteacher.yearTeach;
 
 	//Saves the new created account
@@ -267,31 +254,33 @@ void parentCreate() {
 	cout << "Create New Account" << endl;
 	//Display to the user
 	//Details for user to enter
-	cout << "First Name:\n";
-	cin >> newparent.firstname;
-	cout << "Last Name:\n";
-	cin >> newparent.lastname;
+	cout << "First Name:\n> ";
+	cin.ignore();
+	getline(cin, newparent.firstname);
 
-	cout << "Gender:\n";
+	cout << "Last Name:\n> ";
+	getline(cin, newparent.lastname);
+
+	cout << "Gender:\n> ";
 	cin >> newparent.gender;
 
-	cout << "Date Of Birth:\n";
+	cout << "Date Of Birth:\n> ";
 	cin >> newparent.DOB;
 
-	cout << "Phone Number:\n";
+	cout << "Phone Number:\n> ";
 	cin >> newparent.PH;
 
-	cout << "email:\n";
-	cin >> newparent.email;
-
-	cout << "Child\n";
+	cout << "email:\n> ";
 	cin.ignore();
+	getline(cin, newparent.email);
+
+	cout << "Child\n> ";
 	getline(cin, newparent.child);
 
-	cout << "username\n";
+	cout << "username\n> ";
 	getline(cin, newparent.username);
 
-	cout << "password\n";
+	cout << "password\n> ";
 	cin >> newparent.password;
 	//Saves the new created account
 	newParent.open("users/" + newparent.username + ".txt");
@@ -472,23 +461,23 @@ void createSR(vector <newSR>& records) {
 	stars();
 	cout << "Create The student record." << endl;
 	stars();
-	cout << "Enter the students Password: ";
+	cout << "Enter the students Password:\n> ";
 	cin >> newrecord.password;
-	cout << "Enter the Students First name: ";
+	cout << "Enter the Students First name:\n> ";
 	cin.ignore();
 	getline(cin, newrecord.firstname);
-	cout << "Enter the Students Middle name: ";
+	cout << "Enter the Students Middle name:\n> ";
 	getline(cin, newrecord.middlename);
-	cout << "Enter the Students Last name : ";
+	cout << "Enter the Students Last name:\n> ";
 	getline(cin, newrecord.lastname);
-	cout << "Enter the Students Gender M/F/X: ";
+	cout << "Enter the Students Gender M/F/X:\n> ";
 	cin >> newrecord.gender;
 
-	cout << "Enter the Parents Full name: ";
+	cout << "Enter the Parents Full name:\n> ";
 	cin.ignore();
 	getline(cin, newrecord.parentname1);
 	
-	cout << "Enter the Parents Full name: ";
+	cout << "Enter the Parents Full name:\n> ";
 	
 	getline(cin, newrecord.parentname2);
 
@@ -501,7 +490,7 @@ void createSR(vector <newSR>& records) {
 
 	ofstream filecreate;
 
-	filecreate.open("Students/" + childrecord, ios::app); // change to check if any other files exist with same name rather than append
+	filecreate.open("students/" + childrecord, ios::app); // change to check if any other files exist with same name rather than append
 
 	if (filecreate.is_open()) {
 		filecreate << newrecord.password << endl << newrecord.firstname << endl << newrecord.middlename << endl << newrecord.lastname << endl << newrecord.gender << endl << newrecord.parentname1 << endl << newrecord.parentname2 << endl;
@@ -609,7 +598,6 @@ void login() {
 
 					}
 
-					cout << currentLine << endl;
 					cout << "Enter password" << endl << "> ";
 					cin >> userPass;
 
@@ -707,10 +695,11 @@ void login() {
 }
 //function definition for making stars for menus
 void stars() {
+	cout << endl;
 	for (int i = 0; i < 92; i++) {
 		cout << "*";
 	}
-	cout << endl;
+	cout << endl << endl;
 }
 
 void errorFileCreate(string x, string line, string y) {

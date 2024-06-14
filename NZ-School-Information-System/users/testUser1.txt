@@ -1,4 +1,0 @@
-testPassword
-Test
-User
-Admin
