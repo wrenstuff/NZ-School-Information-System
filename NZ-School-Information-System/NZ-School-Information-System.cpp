@@ -101,7 +101,7 @@ int main()
 	cout << "|     |    |  |      |  /        \\  |      ||       ___/   \\____ |   |  \\___/  \\___/  |____" << endl;
 	cout << endl;
 
-	terms();
+	
 	menuMain();
 
 }
@@ -406,12 +406,15 @@ void menuParent() {
 
 		cout << endl;
 		cout << "1 - school news/notices" << endl;
-		cout << "2 - view student record" << endl;
+		cout << "2 - term dates" << endl;
+		cout << "3 - view student record" << endl;
 		cout << endl;
 		cout << "> ";
 		cin >> menu;
 		cout << endl;
-
+		if (menu == 2) {
+			terms();
+		}
 	} while (menu <= 0 || menu > 2);
 
 }
