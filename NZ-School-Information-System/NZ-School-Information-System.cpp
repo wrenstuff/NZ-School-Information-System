@@ -17,12 +17,45 @@ struct newSR {
 	string parentname2;
 }newrecord;
 
+struct NewParent
+{
+
+	string firstname,
+		lastname,
+		email,
+		username,
+		password,
+		child;
+	char gender;
+	int DOB,
+		PH;
+
+}newparent;
+
+struct NewTeacher
+{
+
+	string firstname,
+		lastname,
+		email,
+		username,
+		password;
+	char gender;
+	int DOB,
+		PH,
+		yearTeach,
+		classNo;
+
+}newteacher;
+
 // ----- Function decleration ----- //
 
 void createSR(vector <newSR>& records);
 void stars();
 
 void login();
+void teacherCreate();
+void parentCreate();
 
 // -------- Menu Functions -------- //
 
@@ -95,6 +128,88 @@ int main()
 	} while (menu <= 0 || menu > [number of options]);
 
 }*/
+
+void teacherCreate() {
+
+	ofstream newTeacher;
+
+	cout << "Create New Account" << endl;
+	//Display to the user
+	//Details for user to enter
+	cout << "First Name:\n";
+	cin >> newteacher.firstname;
+
+	cout << "Last Name:\n";
+	cin >> newteacher.lastname;
+
+	cout << "Gender:\n";
+	cin >> newteacher.gender;
+
+	cout << "Date Of Birth:\n";
+	cin >> newteacher.DOB;
+
+	cout << "Phone Number:\n";
+	cin >> newteacher.PH;
+
+	cout << "email:\n";
+	cin >> newteacher.email;
+
+	cout << "username\n";
+	getline(cin, newteacher.username);
+
+	cout << "password\n";
+	cin >> newteacher.password;
+
+	cout << "Class Number\n";
+	cin >> newteacher.classNo;
+	cout << "Year Level Teaching\n";
+	cin >> newteacher.yearTeach;
+
+	//Saves the new created account
+
+	newTeacher.open("users/" + newteacher.username + ".txt");
+	newTeacher << newteacher.password << endl << newteacher.firstname << endl << newteacher.lastname << endl << "Teacher" << endl << newteacher.PH << endl << newteacher.email << endl << newteacher.gender << endl << newteacher.DOB << endl << newteacher.classNo << endl << newteacher.yearTeach << endl;
+	newTeacher.close();
+}
+
+void parentCreate() {
+
+	ofstream newParent;
+
+	cout << "Create New Account" << endl;
+	//Display to the user
+	//Details for user to enter
+	cout << "First Name:\n";
+	cin >> newparent.firstname;
+	cout << "Last Name:\n";
+	cin >> newparent.lastname;
+
+	cout << "Gender:\n";
+	cin >> newparent.gender;
+
+	cout << "Date Of Birth:\n";
+	cin >> newparent.DOB;
+
+	cout << "Phone Number:\n";
+	cin >> newparent.PH;
+
+	cout << "email:\n";
+	cin >> newparent.email;
+
+	cout << "Child\n";
+	cin.ignore();
+	getline(cin, newparent.child);
+
+	cout << "username\n";
+	getline(cin, newparent.username);
+
+	cout << "password\n";
+	cin >> newparent.password;
+	//Saves the new created account
+	newParent.open("users/" + newparent.username + ".txt");
+	newParent << newparent.password << endl << newparent.firstname << endl << newparent.lastname << endl << "Parent" << endl << newparent.PH << endl << newparent.email << endl << newparent.gender << endl << newparent.DOB << endl << newparent.child << endl;
+	newParent.close();
+}
 
 void menuMain() {
 
