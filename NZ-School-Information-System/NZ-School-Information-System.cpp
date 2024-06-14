@@ -58,7 +58,7 @@ void teacherCreate();
 void parentCreate();
 
 // -------- Menu Functions -------- //
-
+void terms();
 void menuMain();
 void menuTeacher();
 void menuAdmin();
@@ -101,6 +101,7 @@ int main()
 	cout << "|     |    |  |      |  /        \\  |      ||       ___/   \\____ |   |  \\___/  \\___/  |____" << endl;
 	cout << endl;
 
+	terms();
 	menuMain();
 
 }
@@ -128,6 +129,93 @@ int main()
 	} while (menu <= 0 || menu > [number of options]);
 
 }*/
+
+void terms() {
+
+	int menu = 0;
+
+	do
+	{
+
+		cout << endl;
+		cout << "1 - Term 1" << endl;
+		cout << "2 - Term 2" << endl;
+		cout << "3 - Term 3" << endl;
+		cout << "4 - Term 4" << endl;
+		cout << endl;
+		cout << "> ";
+		cin >> menu;
+		cout << endl;
+
+	} while (menu <= 0 || menu > 4 );
+
+	switch (menu)
+	{
+		cout << "Term Dates & Holidays\n";
+	
+	case 1:
+		cout << "Term 1\n";
+		cout << "\n" << endl;
+		cout << "Number of weeks: 10\n";
+		cout << "\n" << endl;
+		cout << "Start & end dates: Starts between Monday 29 January (at the earliest & Wednesday 7 February (at the latest)\n";
+		cout << "Ends Friday 12 April\n";
+		cout << "\n" << endl;
+		cout << "Public Holidays: Waitangi Day - Tuesday 6 February\n";
+		cout << "Easter: Good Friday 29 March, Easter Monday 1 April, Easter Tuesday 2 April (a school holiday)\n";
+		cout << "\n" << endl;
+		cout << "School Holidays: Saturday 13 April to Sunday 28 April\n";
+		cout << "Includes: ANZAC Day - Thursday 25 April\n";
+		
+		break;
+
+	case 2: 
+		cout << "Term 2\n";
+		cout << "\n" << endl;
+		cout << "Number of weeks: 10\n";
+		cout << "\n" << endl;
+		cout << "Start & end dates: Starts Monday 29 April to Friday 5 July\n";
+		cout << "\n" << endl;
+		cout << "Public Holidays: Kings Birthday - Monday 3 June\n";
+		cout << "Matariki - Friday 28 June\n";
+		cout << "\n" << endl;
+		cout << "School Holidays: Saturday 6 July to Sunday 21 July\n";
+
+		break;
+
+	case 3:
+		cout << "Term 3\n";
+		cout << "\n" << endl;
+		cout << "Number of weeks: 10\n";
+		cout << "\n" << endl;
+		cout << "Start & end dates: Monday 22 July to Friday 27 September\n";
+		cout << "\n" << endl;
+		cout << "Public Holidays: None\n";
+		cout << "\n" << endl;
+		cout << "School Holidays: Saturday 28 September to Sunday 13 October\n";
+
+		break;
+
+	case 4:
+		cout << "Term 4\n";
+		cout << "\n" << endl;
+		cout << "Number of weeks: 10\n";
+		cout << "\n" << endl;
+		cout << "Start & end dates: Monday 14 October\n";
+		cout << "Ends no later than Friday 20 December\n";
+		cout << "\n" << endl;
+		cout << "Public Holidays: Labour Day - Monday 28 October\n";
+		cout << "\n" << endl;
+		cout << "School Holidays: 5 to 6 Weeks (From school's closing day until the opening date the following year)\n";
+		cout << "Includes: Christmas Day - Wednesday 25 December\n";
+		cout << "Boxing Day - Thursday 26 December\n";
+		cout << "New Year's Day - Wednesday 1 January 2025\n";
+		cout << "Day after New Year's Day - Thursday 2 January 2025\n";
+
+		break;
+
+	}
+}
 
 void teacherCreate() {
 
