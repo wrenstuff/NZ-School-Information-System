@@ -54,7 +54,7 @@ struct NewTeacher
 
 void createSR(vector <newSR>& records);
 void stars();
-
+void events();
 void login();
 void teacherCreate();
 void parentCreate();
@@ -401,6 +401,9 @@ void menuParent() {
 		cout << "> ";
 		cin >> menu;
 		cout << endl;
+		if (menu == 1) {
+			events();
+		}
 		if (menu == 2) {
 			terms();
 		}
@@ -622,7 +625,7 @@ void login() {
 							case 3:
 
 								userName += " " + line;
-								cout << "Welcome, " << userName;
+								cout << "Welcome, " << userName<<endl;
 								break;
 
 							case 4:
@@ -700,6 +703,41 @@ void stars() {
 		cout << "*";
 	}
 	cout << endl;
+}
+void events() {
+	string lines;
+	int choice;
+
+
+
+	ifstream eventsfile("Events.txt"); // reading Events file
+	if (!eventsfile.is_open()) {
+		cout << "Error in opening the file" << endl;//error message for user if it cant read.
+		return;
+	}
+
+
+	stars();
+	while (getline(eventsfile, lines)) {
+		cout << lines << endl;//displaying text fromm the file
+	}
+	stars();//printing top stars
+
+	eventsfile.close();
+
+
+	cout << "1 - Return to Parents Menu" << endl;
+	cout << "2 - Exit program" << endl;
+	cout << "> ";
+	
+	cin >> choice;
+
+	if (choice == 1) {
+
+		return menuParent();
+	}
+	else exit(0);
+
 }
 
 void errorFileCreate(string x, string line, string y) {
