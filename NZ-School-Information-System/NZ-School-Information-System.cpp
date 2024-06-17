@@ -50,16 +50,31 @@ struct NewTeacher
 
 }newteacher;
 
+struct ActiveUser
+{
+
+	string firstname,
+		lastname,
+		email,
+		usertype;
+
+};
+
 // ----- Function decleration ----- //
 
 void createSR(vector <newSR>& records);
 void stars();
 
 void login();
+
+// ----- Creation Functions ----- //
+
 void teacherCreate();
 void parentCreate();
+void childCreate();
 
-// -------- Menu Functions -------- //
+// ----- Menu Functions ----- //
+
 void terms();
 void menuMain();
 void menuTeacher();
@@ -78,7 +93,7 @@ string errorDesc;
 int main()
 {
 
-	// Variables //
+	// ----- Variables ----- //
 
 	
 
@@ -113,7 +128,7 @@ int main()
 
 // Functions. If creating a new function, make sure you add it to the top of the code as well.
 
-// -------- Menu Functions -------- //
+// ----- Menu Functions ----- //
 
 /*void menuTemplate() {
 
@@ -139,6 +154,7 @@ void terms() {
 
 	int menu = 0;
 
+	// Prints out the menu for viewing term dates
 	do
 	{
 
@@ -154,6 +170,7 @@ void terms() {
 
 	} while (menu <= 0 || menu > 4 );
 
+	// Prints out whichever term dates that have been selected
 	switch (menu)
 	{
 		cout << "Term Dates & Holidays\n";
@@ -273,18 +290,19 @@ void parentCreate() {
 	cout << "email:\n> ";
 	cin >> newparent.email;
 
-	cout << "Child:\n> ";
+	/*cout << "Child:\n> ";
 	cin.ignore();
-	getline(cin, newparent.child);
+	getline(cin, newparent.child);*/
 
 	cout << "username:\n> ";
+	cin.ignore();
 	getline(cin, newparent.username);
 
 	cout << "password:\n> ";
 	cin >> newparent.password;
 	//Saves the new created account
 	newParent.open("users/" + newparent.username + ".txt");
-	newParent << newparent.password << endl << newparent.firstname << endl << newparent.lastname << endl << "Parent" << endl << newparent.PH << endl << newparent.email << endl << newparent.gender << endl << newparent.DOB << endl << newparent.child << endl;
+	newParent << newparent.password << endl << newparent.firstname << endl << newparent.lastname << endl << "Parent" << endl << newparent.PH << endl << newparent.email << endl << newparent.gender << endl << newparent.DOB << endl /*<< newparent.child << endl*/;
 	newParent.close();
 }
 
@@ -396,7 +414,8 @@ void menuParent() {
 		cout << endl;
 		cout << "1 - school news/notices" << endl;
 		cout << "2 - term dates" << endl;
-		cout << "3 - view student record" << endl;
+		cout << "3 - view child record" << endl;
+		cout << "4 - Add Child" << endl;
 		cout << endl;
 		cout << "> ";
 		cin >> menu;
@@ -404,7 +423,7 @@ void menuParent() {
 		if (menu == 2) {
 			terms();
 		}
-	} while (menu <= 0 || menu > 2);
+	} while (menu <= 0 || menu > 4);
 
 }
 /*
@@ -552,7 +571,7 @@ void menuRecordAdmin() {
 
 }
 
-// ------------ Login / Sign Up ------------ //
+// ----- Login / Sign Up ----- //
 
 void login() {
 
@@ -585,12 +604,14 @@ void login() {
 
 			currentLine++;
 
+			// If current line is the password
 			if (currentLine == 1)
 			{
 
 				do
 				{
 
+					// Do not delete!!!!! This is because when a menu function breaks, the current line IS NOT 1!!!
 					if (currentLine != 1)
 					{
 
@@ -602,6 +623,7 @@ void login() {
 					cout << "Enter password" << endl << "> ";
 					cin >> userPass;
 
+					// If the user has entered the correct password
 					if (userPass == line)
 					{
 
@@ -614,17 +636,20 @@ void login() {
 
 							switch (currentLine)
 							{
+							// User's first name
 							case 2:
 
 								userName += line;
 								break;
 
+							// User's last name
 							case 3:
 
 								userName += " " + line;
 								cout << "Welcome, " << userName;
 								break;
 
+							// User's type
 							case 4:
 
 								if (line == "Admin")
@@ -654,8 +679,8 @@ void login() {
 								else
 								{
 
+									// Creates error file if the user's type doesn't exist
 									errorType = "TypeUser";
-
 									errorDesc = "Invalid user type";
 									errorFileCreate(errorType, line, errorDesc);
 									break;
@@ -672,9 +697,12 @@ void login() {
 					else
 					{
 
+						// Removes 1 from the tries remaining
 						cout << "Incorrect Password. ";
 						tries--;
 						cout << tries << " tries remaining" << endl;
+
+						// Can maybe include a time stamp in the user's file later on if the attempts reach 0
 
 					}
 
@@ -694,6 +722,14 @@ void login() {
 	}
 
 }
+
+// Child creation
+void createChild() {
+
+	// Takes the 
+
+}
+
 //function definition for making stars for menus
 void stars() {
 	for (int i = 0; i < 92; i++) {
