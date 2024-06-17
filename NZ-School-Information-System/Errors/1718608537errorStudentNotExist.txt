@@ -1,0 +1,2 @@
+ERROR: StudentNotExist When creating a new child, the user has entered the name of a student that does not exist.
+TestMiddleChild
