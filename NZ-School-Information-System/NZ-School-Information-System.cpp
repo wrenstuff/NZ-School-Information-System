@@ -55,10 +55,10 @@ struct ActiveUser
 
 	string firstname,
 		lastname,
-		email,
+		username,
 		usertype;
 
-};
+}activeuser;
 
 // ----- Function decleration ----- //
 
@@ -69,9 +69,10 @@ void login();
 
 // ----- Creation Functions ----- //
 
-void teacherCreate();
-void parentCreate();
-void childCreate();
+void createTeacher();
+void createParent();
+void checkChild();
+void createChild();
 
 // ----- Menu Functions ----- //
 
@@ -223,7 +224,7 @@ void terms() {
 	}
 }
 
-void teacherCreate() {
+void createTeacher() {
 
 	ofstream newTeacher;
 
@@ -231,10 +232,10 @@ void teacherCreate() {
 	//Display to the user
 	//Details for user to enter
 	cout << "First Name:\n> ";
-	cin >> newteacher.firstname;
+	getline(cin, newteacher.firstname);
 
 	cout << "Last Name:\n> ";
-	cin >> newteacher.lastname;
+	getline(cin, newteacher.lastname);
 
 	cout << "Gender:\n> ";
 	cin >> newteacher.gender;
@@ -249,7 +250,7 @@ void teacherCreate() {
 	cin >> newteacher.email;
 
 	cout << "username:\n> ";
-	getline(cin, newteacher.username);
+	cin >> newteacher.username;
 
 	cout << "password:\n> ";
 	cin >> newteacher.password;
@@ -261,12 +262,12 @@ void teacherCreate() {
 
 	//Saves the new created account
 
-	newTeacher.open("users/" + newteacher.username + ".txt");
+	newTeacher.open("Users/" + newteacher.username + ".txt");
 	newTeacher << newteacher.password << endl << newteacher.firstname << endl << newteacher.lastname << endl << "Teacher" << endl << newteacher.PH << endl << newteacher.email << endl << newteacher.gender << endl << newteacher.DOB << endl << newteacher.classNo << endl << newteacher.yearTeach << endl;
 	newTeacher.close();
 }
 
-void parentCreate() {
+void createParent() {
 
 	ofstream newParent;
 
@@ -274,9 +275,10 @@ void parentCreate() {
 	//Display to the user
 	//Details for user to enter
 	cout << "First Name:\n> ";
-	cin >> newparent.firstname;
+	getline(cin, newparent.firstname);
+
 	cout << "Last Name:\n> ";
-	cin >> newparent.lastname;
+	getline(cin, newparent.lastname);
 
 	cout << "Gender:\n> ";
 	cin >> newparent.gender;
@@ -301,7 +303,7 @@ void parentCreate() {
 	cout << "password:\n> ";
 	cin >> newparent.password;
 	//Saves the new created account
-	newParent.open("users/" + newparent.username + ".txt");
+	newParent.open("Users/" + newparent.username + ".txt");
 	newParent << newparent.password << endl << newparent.firstname << endl << newparent.lastname << endl << "Parent" << endl << newparent.PH << endl << newparent.email << endl << newparent.gender << endl << newparent.DOB << endl /*<< newparent.child << endl*/;
 	newParent.close();
 }
@@ -420,9 +422,17 @@ void menuParent() {
 		cout << "> ";
 		cin >> menu;
 		cout << endl;
-		if (menu == 2) {
+
+		if (menu == 1) {}
+		else if (menu == 2) {
 			terms();
 		}
+		else if (menu == 3) {}
+		else if (menu == 4)
+		{
+			checkChild();
+		}
+
 	} while (menu <= 0 || menu > 4);
 
 }
@@ -589,7 +599,7 @@ void login() {
 	//add something to get the hash of userLogin variable
 
 	ifstream userFile;
-	userFile.open("users/" + userLogin + ".txt");
+	userFile.open("Users/" + userLogin + ".txt");
 
 	if (userFile) 
 	{
@@ -619,7 +629,6 @@ void login() {
 
 					}
 
-					cout << currentLine << endl;
 					cout << "Enter password" << endl << "> ";
 					cin >> userPass;
 
@@ -639,18 +648,23 @@ void login() {
 							// User's first name
 							case 2:
 
+								activeuser.firstname = line;
 								userName += line;
 								break;
 
 							// User's last name
 							case 3:
 
+								activeuser.lastname = line;
 								userName += " " + line;
-								cout << "Welcome, " << userName;
+								cout << "Welcome, " << userName << endl;
 								break;
 
 							// User's type
 							case 4:
+
+								activeuser.username = userLogin;
+								activeuser.usertype = line;
 
 								if (line == "Admin")
 								{
@@ -682,7 +696,7 @@ void login() {
 									// Creates error file if the user's type doesn't exist
 									errorType = "TypeUser";
 									errorDesc = "Invalid user type";
-									errorFileCreate(errorType, line, errorDesc);
+									errorFileCreate(errorType, errorDesc, line);
 									break;
 
 								}
@@ -724,9 +738,117 @@ void login() {
 }
 
 // Child creation
+void checkChild() {
+
+	// Opens the active user's file --- done
+	// Check to see if usertype is parent
+	// See if they have a child
+	// If no child, create child
+	// Repeat
+	// If child, ask to create new child
+	// If yes, create child
+	ifstream userFile;
+	userFile.open("Users/" + activeuser.username + ".txt");
+
+	if (userFile)
+	{
+
+		string line;
+		int currentline = 0;
+		while (getline(userFile, line))
+		{
+
+			currentline++;
+			if (currentline == 4)
+			{
+
+				if (line == "Parent")
+				{
+
+					for (int i = 5; i < 9; i++) {
+						if (!getline(userFile, line)) {
+							cout << "File too short" << endl;
+							break;
+						}
+					}
+
+					if (getline(userFile, line)) {
+						if (!line.empty()) {
+							cout << "You have child" << endl;
+						}
+						else {
+							cout << "You have no child" << endl;
+						}
+					}
+					else {
+						userFile.close();
+
+						createChild();
+
+					}
+
+					break;
+
+				}
+				else
+				{
+
+					cout << "Incorrect user type";
+					break;
+
+				}
+
+			}
+
+		}
+
+	}
+	else
+	{
+		
+		cout << "File doesn't exist";
+
+	}
+
+}
+
 void createChild() {
 
-	// Takes the 
+	string checkChild, firstName, middleName, lastName;
+
+	cout << "Child's first name\n> ";
+	cin.ignore();
+	getline(cin, firstName);
+	cout << "Child's middle name\n> ";
+	getline(cin, middleName);
+	cout << "Child's last name\n> ";
+	getline(cin, lastName);
+
+	checkChild = "Students/" + firstName + "-" + middleName + "-" + lastName + "-record.txt";
+
+	ifstream file;
+	file.open(checkChild);
+	if (file.is_open())
+	{
+
+		cout << "Student exists";
+		file.close();
+		ofstream userFile;
+		userFile.open("Users/" + activeuser.username + ".txt", ios::app);
+		userFile << firstName << " " << middleName << " " << lastName << endl;
+
+	}
+	else
+	{
+
+		cout << "StudentNotExist";
+		file.close();
+		errorType = "Student Does Not Exist";
+		errorDesc = "When creating a new child, the user has entered the name of a student that does not exist.";
+		string childNameForError = firstName + middleName + lastName;
+		errorFileCreate(errorType, errorDesc, childNameForError);
+
+	}
 
 }
 
@@ -738,7 +860,7 @@ void stars() {
 	cout << endl;
 }
 
-void errorFileCreate(string x, string line, string y) {
+void errorFileCreate(string x, string y, string extra) {
 
 	cout << endl;
 	cout << "ERROR: " << x << " " << y << endl;
@@ -746,11 +868,11 @@ void errorFileCreate(string x, string line, string y) {
 	string errorFileName;
 
 	int errorTime = time(NULL);
-	errorFileName = "errors/";
+	errorFileName = "Errors/";
 	errorFileName += to_string(errorTime);
 	errorFileName += "error" + x + ".txt";
 	errorFile.open(errorFileName);
-	errorFile << "ERROR: " << x << " " << y << endl << line;
+	errorFile << "ERROR: " << x << " " << y << endl << extra;
 	errorFile.close();
 
 }
