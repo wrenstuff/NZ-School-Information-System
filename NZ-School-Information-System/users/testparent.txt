@@ -1,4 +1,9 @@
 testPassword
 Test
-User
 Parent
+Parent
+123456789
+testParent@test.com
+X
+19990101
+Test Middle Student
