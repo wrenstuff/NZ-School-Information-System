@@ -484,9 +484,11 @@ void menuRecordParent() {
 		cin >> menu;
 		cout << endl;
 		
-
+		if (menu == 1) {
+			//This function will allow the user to select a parent record to view
+		}
 	} while (menu <= 0 || menu > 3);
-}/*
+}
 
 //function for making the student record and calling the structure
 void createSR(vector <newSR>& records) {
