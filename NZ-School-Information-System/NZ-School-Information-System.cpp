@@ -85,6 +85,7 @@ void menuParent();
 void menuRecord();
 void menuRecordAdmin();
 void menuRecordTeacher();
+void menuRecordParent();
 void menuEvents();
 
 // ----- Error File Creation ----- //
@@ -415,6 +416,9 @@ void menuAdmin() {
 
 		switch (menu)
 		{
+		case 2:
+			menuRecordParent();
+			break;
 		case 3:
 			menuRecordAdmin();
 			break;
@@ -515,6 +519,51 @@ void menuRecordTeacher() {
 	} while (menu <= 0 || menu > 3);
 
 }*/
+
+void menuRecordParent() {
+
+	int menu = 0;
+
+	string parentSelect;
+
+	do
+	{
+
+		stars();
+
+		cout << endl;
+		cout << "1 - view parent record" << endl;
+		cout << endl;
+		cout << "> ";
+		cin >> menu;
+		cout << endl;
+
+		if (menu == 1) {
+			//This function will allow the user to select a parent record to view`
+			cout << "Select a parent" << endl;
+			cin >> parentSelect;
+			ifstream parentFile;
+			parentFile.open("Users/" + parentSelect + ".txt");
+
+			if (parentFile.fail()) {
+				cout << "Error opening the file." << endl;
+				exit(0);
+			}
+			else
+			{
+				string line;
+				int currentLine = 0;
+				while (!parentFile.eof()) {
+					currentLine++;
+					if (currentLine != 1) {
+						getline(parentFile, line);
+						cout << line << endl;
+					}
+				}
+			}
+		}
+	} while (menu <= 0 || menu > 3);
+}
 
 //function for making the student record and calling the structure
 void createSR(vector <newSR>& records) {
