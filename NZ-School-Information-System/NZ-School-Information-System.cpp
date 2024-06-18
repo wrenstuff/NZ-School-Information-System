@@ -496,28 +496,7 @@ void menuRecord() {
 	} while (menu <= 0 || menu > 3);
 
 }
-
-void menuRecordTeacher() {
-
-	int menu = 0;
-
-	do
-	{
-
-		stars();
-
-		cout << endl;
-		cout << "1 - create student record" << endl;
-		cout << "2 - view student record" << endl;
-		cout << "3 - delete student record" << endl;
-		cout << endl;
-		cout << "> ";
-		cin >> menu;
-		cout << endl;
-
-	} while (menu <= 0 || menu > 3);
-
-}*/
+*/
 
 //function for making the student record and calling the structure
 void createSR(vector <newSR>& records) {
@@ -537,6 +516,7 @@ void createSR(vector <newSR>& records) {
 	getline(cin, newrecord.lastname);
 	cout << "Enter the Students Gender M/F/X:\n> ";
 	cin >> newrecord.gender;
+
 	cin.ignore(); // have to add this because of the change of data type
 	cout << "Enter maths level:\n> ";
 	getline(cin, newrecord.maths);
@@ -548,6 +528,8 @@ void createSR(vector <newSR>& records) {
 	getline(cin, newrecord.writing);
 	cout << "Learning Progress state:\n> ";
 	getline(cin, newrecord.learning);
+	cout << "Other activities / notes?\n";
+	getline(cin, newrecord.other);
 
 	// adding newrecord to vector
 	records.push_back(newrecord);
