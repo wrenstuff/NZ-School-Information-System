@@ -1,0 +1,9 @@
+Cody
+L
+Johns
+M
+SubjectsMaths: A
+Sience: B
+Writing: D
+Reading: A
+Other: 
