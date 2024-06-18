@@ -222,6 +222,9 @@ void menuTerms() {
 		break;
 
 	}
+
+	return menuParent();
+
 }
 
 void createTeacher() {
@@ -265,6 +268,9 @@ void createTeacher() {
 	newTeacher.open("Users/" + newteacher.username + ".txt");
 	newTeacher << newteacher.password << endl << newteacher.firstname << endl << newteacher.lastname << endl << "Teacher" << endl << newteacher.PH << endl << newteacher.email << endl << newteacher.gender << endl << newteacher.DOB << endl << newteacher.classNo << endl << newteacher.yearTeach << endl;
 	newTeacher.close();
+
+	return menuAdmin();
+
 }
 
 void createParent() {
@@ -306,6 +312,9 @@ void createParent() {
 	newParent.open("Users/" + newparent.username + ".txt");
 	newParent << newparent.password << endl << newparent.firstname << endl << newparent.lastname << endl << "Parent" << endl << newparent.PH << endl << newparent.email << endl << newparent.gender << endl << newparent.DOB << endl /*<< newparent.child << endl*/;
 	newParent.close();
+
+	return menuTeacher();
+
 }
 
 void menuMain() {
@@ -425,6 +434,7 @@ void menuParent() {
 		cout << "2 - term dates" << endl;
 		cout << "3 - view child record" << endl;
 		cout << "4 - Add Child" << endl;
+		cout << "5 - Exit" << endl;
 		cout << endl;
 		cout << "> ";
 		cin >> menu;
@@ -441,6 +451,10 @@ void menuParent() {
 		case 4:
 			checkChild();
 			break;
+		case 5:
+			exit(0);
+			break;
+
 		default:
 			break;
 		}
@@ -545,6 +559,8 @@ void createSR(vector <newSR>& records) {
 		cout << "cannot open the file" << endl;
 	}
 
+	return menuAdmin();
+
 }
 void menuRecordAdmin() {
 	vector<newSR> records;
@@ -559,6 +575,7 @@ void menuRecordAdmin() {
 		cout << "1 - create student record" << endl;
 		cout << "2 - view student record" << endl;
 		cout << "3 - delete student record" << endl;
+		cout << "4 - Exit" << endl;
 		cout << endl;
 		cout << "> ";
 		cin >> menu;
@@ -582,6 +599,9 @@ void menuRecordAdmin() {
 		case 3:
 			cout << "Which student record would you like to delete?" << endl;
 
+			break;
+		case 4:
+			exit(0);
 			break;
 		}
 
