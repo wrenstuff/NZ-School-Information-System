@@ -64,7 +64,6 @@ struct ActiveUser
 
 void createSR(vector <newSR>& records);
 void stars();
-void events();
 void login();
 
 // ----- Creation Functions ----- //
@@ -76,7 +75,7 @@ void createChild();
 
 // ----- Menu Functions ----- //
 
-void terms();
+void menuTerms();
 void menuMain();
 void menuTeacher();
 void menuAdmin();
@@ -84,6 +83,7 @@ void menuParent();
 void menuRecord();
 void menuRecordAdmin();
 void menuRecordTeacher();
+void menuEvents();
 
 // ----- Error File Creation ----- //
 
@@ -151,7 +151,7 @@ int main()
 
 }*/
 
-void terms() {
+void menuTerms() {
 
 	int menu = 0;
 
@@ -331,7 +331,9 @@ void menuMain() {
 	{
 	case 1:
 		login();
+		break;
 	case 2:
+		exit(0);
 		break;
 	default:
 		break;
@@ -353,12 +355,22 @@ void menuTeacher() {
 		cout << "2 - create student record" << endl;
 		cout << "3 - view student record" << endl;
 		cout << "4 - delete student record" << endl;
+		cout << "5 - Exit Program" << endl;
 		cout << endl;
 		cout << "> "; // I've made this an arrow because I thought it looked better than a colon. We can use a colon if you think it looks better though. My reasoning was that because the input is without and other text, it looked cleaner.
 		cin >> menu;
 		cout << endl;
 
-	} while (menu <= 0 || menu > 4);
+		switch (menu)
+		{
+		case 5:
+			exit(0);
+			break;
+		default:
+			break;
+		}
+
+	} while (menu <= 0 || menu > 5);
 
 }
 
@@ -383,21 +395,16 @@ void menuAdmin() {
 		cin >> menu;
 		cout << endl;
 
-		if (menu == 1) {}
-		else if (menu == 2) {}
-		else if (menu == 3)
+		switch (menu)
 		{
-
+		case 3:
 			menuRecordAdmin();
-
-		}
-		else if (menu == 4) {}
-		else if (menu == 5) {}
-		else if (menu == 6)
-		{
-
 			break;
-
+		case 6:
+			exit(0);
+			break;
+		default:
+			break;
 		}
 
 	} while (menu <= 0 || menu > 7);
@@ -422,16 +429,20 @@ void menuParent() {
 		cout << "> ";
 		cin >> menu;
 		cout << endl;
-		if (menu == 1) {
-			events();
-		}
-		else if (menu == 2) {
-			terms();
-		}
-		else if (menu == 3) {}
-		else if (menu == 4)
+
+		switch (menu)
 		{
+		case 1:
+			menuEvents();
+			break;
+		case 2:
+			menuTerms();
+			break;
+		case 4:
 			checkChild();
+			break;
+		default:
+			break;
 		}
 
 	} while (menu <= 0 || menu > 4);
@@ -561,14 +572,10 @@ void menuRecordAdmin() {
 			//Records is using the create SR function to make student records
 			createSR(records);
 
-
-
 			break;
 
 		case 2:
 			cout << "Which student would you like to view? Enter the name: " << endl;
-
-
 
 			break;
 
@@ -859,9 +866,9 @@ void stars() {
 	}
 	cout << endl;
 }
-void events() {
+void menuEvents() {
 	string lines;
-	int choice;
+	int menu;
 
 
 
@@ -885,13 +892,18 @@ void events() {
 	cout << "2 - Exit program" << endl;
 	cout << "> ";
 	
-	cin >> choice;
+	cin >> menu;
 
-	if (choice == 1) {
-
+	switch (menu)
+	{
+	case 1:
 		return menuParent();
+		break;
+	case 2:
+		exit(0);
+	default:
+		break;
 	}
-	else exit(0);
 
 }
 
