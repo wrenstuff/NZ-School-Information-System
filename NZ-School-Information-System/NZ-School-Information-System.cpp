@@ -106,6 +106,7 @@ int main()
 	cout << "email: office@readmoreprimary.school.nz" << endl;
 	cout << "Address: 123 Oak Street, Readmore 1234" << endl;
 	
+	menuRecordParent();
 	menuMain();
 
 }
@@ -471,6 +472,8 @@ void menuRecordParent() {
 
 	int menu = 0;
 
+	string parentSelect;
+
 	do
 	{
 
@@ -478,14 +481,30 @@ void menuRecordParent() {
 
 		cout << endl;
 		cout << "1 - view parent record" << endl;
-		cout << "Select a parent" << endl;
 		cout << endl;
 		cout << "> ";
 		cin >> menu;
 		cout << endl;
 		
 		if (menu == 1) {
-			//This function will allow the user to select a parent record to view
+			//This function will allow the user to select a parent record to view`
+			cout << "Select a parent" << endl;
+			cin >> parentSelect;
+			ifstream parentFile;
+			parentFile.open("Users/" + parentSelect + ".txt");
+
+			if (parentFile.fail()) {
+				cout << "Error opening the file." << endl;
+				exit(0);
+			}
+			else
+			{
+				string line;
+				while (!parentFile.eof()) {
+					getline(parentFile, line);
+					cout << line << endl;
+				}
+			}
 		}
 	} while (menu <= 0 || menu > 3);
 }
