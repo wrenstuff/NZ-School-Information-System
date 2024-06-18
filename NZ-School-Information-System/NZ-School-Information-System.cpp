@@ -17,6 +17,8 @@ struct newSR {
 		parentname2;
 	char gender;
 
+	// Add different classes (look at blackboard. I'm not gonna list them out because of my sanity
+
 }newrecord;
 
 struct NewParent
@@ -94,8 +96,8 @@ string errorDesc;
 int main()
 {
 
-	// ----- Variables ----- //
-
+	// ----- Introduction Screen ----- //
+	// Add events/notices
 	
 
     cout << "NZ School Information System" << endl;
@@ -260,6 +262,7 @@ void createTeacher() {
 
 	cout << "Class Number:\n> ";
 	cin >> newteacher.classNo;
+
 	cout << "Year Level Teaching:\n> ";
 	cin >> newteacher.yearTeach;
 
@@ -352,6 +355,8 @@ void menuMain() {
 
 void menuTeacher() {
 
+	// Create student records
+
 	int menu = 0;
 
 	do
@@ -385,6 +390,8 @@ void menuTeacher() {
 
 void menuAdmin() {
 
+	// Add class records
+
 	int menu = 0;
 
 	do
@@ -403,6 +410,8 @@ void menuAdmin() {
 		cout << "> ";
 		cin >> menu;
 		cout << endl;
+
+		// The report should include, classroom number, student full name, learning progress of each subject, teacher name and their parents contact number.
 
 		switch (menu)
 		{
@@ -432,7 +441,7 @@ void menuParent() {
 		cout << endl;
 		cout << "1 - school news/notices" << endl;
 		cout << "2 - term dates" << endl;
-		cout << "3 - view child record" << endl;
+		cout << "3 - view child report" << endl; // access info from record
 		cout << "4 - Add Child" << endl;
 		cout << "5 - Exit" << endl;
 		cout << endl;
@@ -563,6 +572,11 @@ void createSR(vector <newSR>& records) {
 
 }
 void menuRecordAdmin() {
+
+	// Add edit record
+
+	// Update records (different to edit) - Teacher
+
 	vector<newSR> records;
 	int menu = 0;
 
@@ -744,6 +758,7 @@ void login() {
 						cout << tries << " tries remaining" << endl;
 
 						// Can maybe include a time stamp in the user's file later on if the attempts reach 0
+						// use __DATE__ and __TIME__
 
 					}
 
