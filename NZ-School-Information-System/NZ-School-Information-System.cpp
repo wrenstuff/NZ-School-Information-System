@@ -19,11 +19,7 @@ struct newSR {
 		writing,
 		learning,
 	    other;
-		
 	char gender;
-
-	// Add different classes (look at blackboard. I'm not gonna list them out because of my sanity
-
 }newrecord;
 
 struct NewParent
@@ -87,7 +83,6 @@ void menuMain();
 void menuTeacher();
 void menuAdmin();
 void menuParent();
-void menuRecord();
 void menuRecordAdmin();
 void menuEvents();
 
@@ -542,7 +537,7 @@ void createSR(vector <newSR>& records) {
 	getline(cin, newrecord.lastname);
 	cout << "Enter the Students Gender M/F/X:\n> ";
 	cin >> newrecord.gender;
-	cin.ignore();
+	cin.ignore(); // have to add this because of the change of data type
 	cout << "Enter maths level:\n> ";
 	getline(cin, newrecord.maths);
 	cout << "Enter the Science level:\n> ";
