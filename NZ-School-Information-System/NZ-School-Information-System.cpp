@@ -3,22 +3,24 @@
 #include <string>
 #include <ctime>
 #include <vector>
+#include <cstdio>
 using namespace std;
 
 // ----- structure definition ----- //
 
 struct newSR {
 
-	string password,
+	string
 		firstname,
 		middlename,
 		lastname,
-		parentname1,
-		parentname2;
+		maths,
+		science,
+		reading,
+		writing,
+		learning,
+		other;
 	char gender;
-
-	// Add different classes (look at blackboard. I'm not gonna list them out because of my sanity
-
 }newrecord;
 
 struct NewParent
@@ -69,7 +71,7 @@ void stars();
 void login();
 
 // ----- Creation Functions ----- //
-
+void deleteSR();
 void createTeacher();
 void createParent();
 void checkChild();
@@ -82,9 +84,7 @@ void menuMain();
 void menuTeacher();
 void menuAdmin();
 void menuParent();
-void menuRecord();
 void menuRecordAdmin();
-void menuRecordTeacher();
 void menuEvents();
 
 // ----- Error File Creation ----- //
@@ -356,7 +356,7 @@ void menuMain() {
 void menuTeacher() {
 
 	// Create student records
-
+	vector<newSR> records;
 	int menu = 0;
 
 	do
@@ -365,11 +365,13 @@ void menuTeacher() {
 		stars();
 
 		cout << endl;
+		cout << "Teacher Menu options\n";
 		cout << "1 - list students" << endl;
 		cout << "2 - create student record" << endl;
-		cout << "3 - view student record" << endl;
-		cout << "4 - delete student record" << endl;
-		cout << "5 - Exit Program" << endl;
+		cout << "3 - edit student record" << endl;
+		cout << "4 - view student record" << endl;
+		cout << "5 - delete student record" << endl;
+		cout << "6 - Exit Program" << endl;
 		cout << endl;
 		cout << "> "; // I've made this an arrow because I thought it looked better than a colon. We can use a colon if you think it looks better though. My reasoning was that because the input is without and other text, it looked cleaner.
 		cin >> menu;
@@ -377,14 +379,19 @@ void menuTeacher() {
 
 		switch (menu)
 		{
-		case 5:
+		case 2: createSR(records);
+			return menuTeacher();
+			
+		case 5:  deleteSR();
+			return menuTeacher();
+		case 6:
 			exit(0);
 			break;
 		default:
 			break;
 		}
 
-	} while (menu <= 0 || menu > 5);
+	} while (menu <= 0 || menu > 6);
 
 }
 
@@ -518,15 +525,13 @@ void menuRecordTeacher() {
 
 //function for making the student record and calling the structure
 void createSR(vector <newSR>& records) {
-	
+
 
 
 	//user inputs.
 	stars();
 	cout << "Create The student record." << endl;
 	stars();
-	cout << "Enter the students Password:\n> ";
-	cin >> newrecord.password;
 	cout << "Enter the Students First name:\n> ";
 	cin.ignore();
 	getline(cin, newrecord.firstname);
@@ -537,13 +542,19 @@ void createSR(vector <newSR>& records) {
 	cout << "Enter the Students Gender M/F/X:\n> ";
 	cin >> newrecord.gender;
 
-	cout << "Enter the Parents Full name:\n> ";
-	cin.ignore();
-	getline(cin, newrecord.parentname1);
-	
-	cout << "Enter the Parents Full name:\n> ";
-	
-	getline(cin, newrecord.parentname2);
+	cin.ignore(); // have to add this because of the change of data type
+	cout << "Enter maths level:\n> ";
+	getline(cin, newrecord.maths);
+	cout << "Enter the Science level:\n> ";
+	getline(cin, newrecord.science);
+	cout << "Enter the Reading level:\n> ";
+	getline(cin, newrecord.reading);
+	cout << "Enter the Writing level:\n> ";
+	getline(cin, newrecord.writing);
+	cout << "Learning Progress state:\n> ";
+	getline(cin, newrecord.learning);
+	cout << "Other activities / notes?\n";
+	getline(cin, newrecord.other);
 
 	// adding newrecord to vector
 	records.push_back(newrecord);
@@ -557,19 +568,46 @@ void createSR(vector <newSR>& records) {
 	filecreate.open("Students/" + childrecord, ios::app); // change to check if any other files exist with same name rather than append
 
 	if (filecreate.is_open()) {
-		filecreate << newrecord.password << endl << newrecord.firstname << endl << newrecord.middlename << endl << newrecord.lastname << endl << newrecord.gender << endl << newrecord.parentname1 << endl << newrecord.parentname2 << endl;
+		filecreate << newrecord.firstname << endl << newrecord.middlename << endl << newrecord.lastname << endl << newrecord.gender << endl;
+		filecreate << "Subjects\n";
+		filecreate << "Maths: " << newrecord.maths << endl << "Science: " << newrecord.science << endl << "Writing: " << newrecord.writing << endl << "Reading: " << newrecord.maths << endl;
+		filecreate << "Other: " << newrecord.other << endl;
 
 		filecreate.close(); // function is complete close the file
 
 		cout << "You have created the record sucessfully" << endl;//feed back to user
-		stars();
 	}
 	else {
 		cout << "cannot open the file" << endl;
 	}
 
-	return menuAdmin();
+	
 
+}
+void deleteSR() {
+	int deletefile;
+
+
+	cout << "Enter the child's full name you wish to delete\n";
+	cout << "Enter the Students First name:\n> ";
+	cin.ignore();
+	getline(cin, newrecord.firstname);
+	cout << "Enter the Students Middle name:\n> ";
+	getline(cin, newrecord.middlename);
+	cout << "Enter the Students Last name:\n> ";
+	getline(cin, newrecord.lastname);
+
+	string childrecord = newrecord.firstname + "-" + newrecord.middlename + "-" + newrecord.lastname + "-record.txt";
+
+	deletefile = remove(("Students/" + childrecord).c_str());
+
+	if (deletefile == 0) {
+		cout << "File '" << childrecord << "' successfully deleted.\n";
+	}
+	else {
+		cout << "Error deleting file '" << childrecord << "'.\n";
+	}
+	return menuTeacher();
 }
 void menuRecordAdmin() {
 
