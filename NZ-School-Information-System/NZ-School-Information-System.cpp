@@ -16,6 +16,7 @@ struct newSR {
 		parentname1,
 		parentname2;
 	char gender;
+	int classNo;
 
 	// Add different classes (look at blackboard. I'm not gonna list them out because of my sanity
 
@@ -59,6 +60,7 @@ struct ActiveUser
 		lastname,
 		username,
 		usertype;
+	int classNo;
 
 }activeuser;
 
@@ -86,6 +88,10 @@ void menuRecord();
 void menuRecordAdmin();
 void menuRecordTeacher();
 void menuEvents();
+
+// ----- Class Records ----- //
+
+void classView();
 
 // ----- Error File Creation ----- //
 
@@ -365,18 +371,21 @@ void menuTeacher() {
 		stars();
 
 		cout << endl;
-		cout << "1 - list students" << endl;
-		cout << "2 - create student record" << endl;
-		cout << "3 - view student record" << endl;
-		cout << "4 - delete student record" << endl;
+		cout << "1 - List Class" << endl;
+		cout << "2 - View Student" << endl;
+		cout << "3 - Add Student" << endl;
+		cout << "4 - Delete Student" << endl;
 		cout << "5 - Exit Program" << endl;
 		cout << endl;
-		cout << "> "; // I've made this an arrow because I thought it looked better than a colon. We can use a colon if you think it looks better though. My reasoning was that because the input is without and other text, it looked cleaner.
+		cout << "> ";
 		cin >> menu;
 		cout << endl;
 
 		switch (menu)
 		{
+		case 1:
+			classView();
+			break;
 		case 5:
 			exit(0);
 			break;
@@ -492,7 +501,7 @@ void menuRecord() {
 
 	} while (menu <= 0 || menu > 3);
 
-}
+}*/
 
 void menuRecordTeacher() {
 
@@ -514,7 +523,7 @@ void menuRecordTeacher() {
 
 	} while (menu <= 0 || menu > 3);
 
-}*/
+}
 
 //function for making the student record and calling the structure
 void createSR(vector <newSR>& records) {
@@ -551,13 +560,14 @@ void createSR(vector <newSR>& records) {
 
 	//creating a string to make file names of the first + last names of the student and makign it a record of the .txt
 	string childrecord = newrecord.firstname + "-" + newrecord.middlename + "-" + newrecord.lastname + "-record.txt";
+	newrecord.classNo = activeuser.classNo;
 
 	ofstream filecreate;
 
 	filecreate.open("Students/" + childrecord, ios::app); // change to check if any other files exist with same name rather than append
 
 	if (filecreate.is_open()) {
-		filecreate << newrecord.password << endl << newrecord.firstname << endl << newrecord.middlename << endl << newrecord.lastname << endl << newrecord.gender << endl << newrecord.parentname1 << endl << newrecord.parentname2 << endl;
+		filecreate /*<< newrecord.password << endl*/ << newrecord.firstname << endl << newrecord.middlename << endl << newrecord.lastname << endl << newrecord.gender << endl << newrecord.classNo << endl << newrecord.parentname1 << endl << newrecord.parentname2 << endl;
 
 		filecreate.close(); // function is complete close the file
 
@@ -719,6 +729,21 @@ void login() {
 								{
 
 									// Opens the Teacher menu if the user type is "Teacher"
+									while (getline(userFile, line))
+									{
+
+										currentLine++;
+
+										if (currentLine == 9)
+										{
+
+											activeuser.classNo = stoi(line);
+											break;
+
+										}
+
+									}
+
 									menuTeacher();
 									break;
 
@@ -893,6 +918,36 @@ void createChild() {
 
 }
 
+void classView() {
+
+	ifstream classFile;
+	classFile.open("Classes/class" + to_string(activeuser.classNo) + "Students.txt");
+
+	string line;
+
+
+
+	if (classFile)
+	{
+
+		while (getline(classFile, line))
+		{
+
+			cout << line << endl;
+
+		}
+
+		classFile.close();
+
+	}
+	else
+	{
+
+
+
+	}
+
+}
 
 //function definition for making stars for menus
 void stars() {
