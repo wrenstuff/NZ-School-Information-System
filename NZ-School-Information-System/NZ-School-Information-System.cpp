@@ -21,7 +21,7 @@ struct newSR {
 		learning,
 		other;
 	char gender;
-}newrecord;
+}newrecord,viewsr;
 
 struct NewParent
 {
@@ -65,6 +65,7 @@ struct ActiveUser
 }activeuser;
 
 // ----- Function decleration ----- //
+void viewSR();
 void deleteSR();
 void createSR(vector <newSR>& records);
 void stars();
@@ -84,9 +85,7 @@ void menuMain();
 void menuTeacher();
 void menuAdmin();
 void menuParent();
-void menuRecord();
 void menuRecordAdmin();
-void menuRecordTeacher();
 void menuRecordParent();
 void menuEvents();
 
@@ -129,6 +128,7 @@ int main()
 	cout << "Address: 123 Oak Street, Readmore 1234" << endl;
 	
 	menuMain();
+	
 
 }
 
@@ -384,7 +384,8 @@ void menuTeacher() {
 		{
 		case 2: createSR(records);
 			return menuTeacher();
-
+		case 4:viewSR();
+			return menuTeacher();
 		case 5:  deleteSR();
 			return menuTeacher();
 		case 6:
@@ -632,9 +633,58 @@ void createSR(vector <newSR>& records) {
 		cout << "cannot open the file" << endl;
 	}
 
-
-
 }
+
+
+void viewSR()
+{
+	string filename;
+
+	stars();
+	cout << "viewing student record" << endl;
+	stars();
+	// user entry to open the student record via inputs
+	cin.ignore();
+	cout << "enter the students first name:\n> ";
+	getline(cin, viewsr.firstname);
+
+
+	cout << "Enter the Students Middle name:\n> ";
+	getline(cin, viewsr.middlename);
+	
+
+	cout << "Enter the Students Last name:\n> ";
+	getline(cin, viewsr.lastname);
+	
+
+
+	filename = "Students/" + viewsr.firstname + "-" + viewsr.middlename + "-" + viewsr.lastname +"-" +  "record.txt";// string so we can use it to find the file by this name
+
+
+	ifstream recordFile(filename);
+
+	if (recordFile.is_open())
+	{
+		stars();
+		cout << "This is the student record for " << viewsr.firstname << " " << viewsr.middlename << " " << viewsr.lastname << endl; // feedback for on which file they are in
+		stars();
+		string information; // printing student record while the file is open
+		while (getline(recordFile, information))
+		{
+			cout << information << endl;
+		}
+
+		recordFile.close();
+
+	}
+	else
+	{
+
+		cout << "\nSorry we couldnt find that file." << endl;
+	}
+	stars();
+}
+
 void deleteSR() {
 	int deletefile;
 
@@ -653,6 +703,7 @@ void deleteSR() {
 	deletefile = remove(("Students/" + childrecord).c_str());
 
 	if (deletefile == 0) {
+		stars();
 		cout << "File '" << childrecord << "' successfully deleted.\n";
 	}
 	else {
@@ -693,17 +744,17 @@ void menuRecordAdmin() {
 			//Records is using the create SR function to make student records
 			createSR(records);
 
-			break;
+			return menuRecordAdmin();
 
 		case 2:
-			cout << "Which student would you like to view? Enter the name: " << endl;
+			viewSR();
 
-			break;
+			return menuRecordAdmin();
 
 		case 3:
-			cout << "Which student record would you like to delete?" << endl;
+			deleteSR();
 
-			break;
+			return menuRecordAdmin();
 		case 4:
 			exit(0);
 			break;

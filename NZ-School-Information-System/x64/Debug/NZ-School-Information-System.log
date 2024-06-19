@@ -1,1 +1,3 @@
-﻿  NZ-School-Information-System.vcxproj -> D:\Users\270099678\source\repos\github\NZ-School-Information-System\x64\Debug\NZ-School-Information-System.exe
+﻿  NZ-School-Information-System.cpp
+C:\Users\GGPC\Pictures\GROUP  PROJECT 2\NZ-School-Information-System\NZ-School-Information-System\NZ-School-Information-System.cpp(1093,16): warning C4244: 'initializing': conversion from 'time_t' to 'int', possible loss of data
+  NZ-School-Information-System.vcxproj -> C:\Users\GGPC\Pictures\GROUP  PROJECT 2\NZ-School-Information-System\x64\Debug\NZ-School-Information-System.exe
