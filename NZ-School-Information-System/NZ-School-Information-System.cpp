@@ -3,24 +3,28 @@
 #include <string>
 #include <ctime>
 #include <vector>
+#include <cstdio>
 using namespace std;
 
 // ----- structure definition ----- //
 
 struct newSR {
 
-	string password,
+	string
 		firstname,
 		middlename,
 		lastname,
-		parentname1,
-		parentname2;
+		maths,
+		science,
+		reading,
+		writing,
+		learning,
+		other;
 	char gender;
 	int classNo;
 
-	// Add different classes (look at blackboard. I'm not gonna list them out because of my sanity
+}newrecord, viewsr;
 
-}newrecord;
 
 struct NewParent
 {
@@ -65,7 +69,8 @@ struct ActiveUser
 }activeuser;
 
 // ----- Function decleration ----- //
-
+void viewSR();
+void deleteSR();
 void createSR(vector <newSR>& records);
 void stars();
 void login();
@@ -84,9 +89,8 @@ void menuMain();
 void menuTeacher();
 void menuAdmin();
 void menuParent();
-void menuRecord();
 void menuRecordAdmin();
-void menuRecordTeacher();
+void menuRecordParent();
 void menuEvents();
 
 // ----- Class Records ----- //
@@ -104,9 +108,9 @@ int main()
 
 	// ----- Introduction Screen ----- //
 	// Add events/notices
-	
 
-    cout << "NZ School Information System" << endl;
+
+	cout << "NZ School Information System" << endl;
 
 
 
@@ -125,13 +129,14 @@ int main()
 	cout << "|__/  |    |  |  \\/  |    /----\\    |      \\/      \\___   |      |   \\ |     ||     | |" << endl;
 	cout << "|     |    |  |      |   /      \\   |      ||          \\  |      |   | |     ||     | |" << endl;
 	cout << "|     |    |  |      |  /        \\  |      ||       ___/   \\____ |   |  \\___/  \\___/  |____" << endl;
-	cout << endl; 
-    stars();
+	cout << endl;
+	stars();
 	cout << "Phone number: 03 123 4567" << endl;
 	cout << "email: office@readmoreprimary.school.nz" << endl;
 	cout << "Address: 123 Oak Street, Readmore 1234" << endl;
-	
+
 	menuMain();
+
 
 }
 
@@ -181,11 +186,12 @@ void menuTerms() {
 
 	} while (menu <= 0 || menu > 6 );
 
+
 	// Prints out whichever term dates that have been selected
 	switch (menu)
 	{
 		cout << "Term Dates & Holidays\n";
-	
+
 	case 1:
 		cout << "Term 1\n\n\n";
 		cout << "Number of weeks: 10\n\n\n";
@@ -195,10 +201,10 @@ void menuTerms() {
 		cout << "Easter: Good Friday 29 March, Easter Monday 1 April, Easter Tuesday 2 April (a school holiday)\n\n\n";
 		cout << "School Holidays: Saturday 13 April to Sunday 28 April\n";
 		cout << "Includes: ANZAC Day - Thursday 25 April\n";
-		
+
 		break;
 
-	case 2: 
+	case 2:
 		cout << "Term 2\n\n\n";
 		cout << "Number of weeks: 10\n\n\n";
 		cout << "Start & end dates: Starts Monday 29 April to Friday 5 July\n\n\n";
@@ -370,7 +376,7 @@ void menuMain() {
 void menuTeacher() {
 
 	// Create student records
-
+	vector<newSR> records;
 	int menu = 0;
 
 	do
@@ -387,7 +393,8 @@ void menuTeacher() {
 		cin >> menu;
 		cout << endl;
 
-	} while (menu <= 0 || menu > 5);
+	} while (menu <= 0 || menu > 3);
+
 
 	switch (menu)
 	{
@@ -433,6 +440,9 @@ void menuAdmin() {
 
 		switch (menu)
 		{
+		case 2:
+			menuRecordParent();
+			break;
 		case 3:
 			menuRecordAdmin();
 			break;
@@ -491,7 +501,7 @@ void menuParent() {
 }
 /*
 void menuRecord() {
-	
+
 	int menu = 0;
 
 	do
@@ -536,17 +546,60 @@ void menuRecordTeacher() {
 
 }
 
+void menuRecordParent() {
+
+	int menu = 0;
+
+	string parentSelect;
+
+	do
+	{
+
+		stars();
+
+		cout << endl;
+		cout << "1 - view parent record" << endl;
+		cout << endl;
+		cout << "> ";
+		cin >> menu;
+		cout << endl;
+
+		if (menu == 1) {
+			//This function will allow the user to select a parent record to view`
+			cout << "Select a parent" << endl;
+			cin >> parentSelect;
+			ifstream parentFile;
+			parentFile.open("Users/" + parentSelect + ".txt");
+
+			if (parentFile.fail()) {
+				cout << "Error opening the file." << endl;
+				exit(0);
+			}
+			else
+			{
+				string line;
+				int currentLine = 0;
+				while (!parentFile.eof()) {
+					currentLine++;
+					if (currentLine != 1) {
+						getline(parentFile, line);
+						cout << line << endl;
+					}
+				}
+			}
+		}
+	} while (menu <= 0 || menu > 3);
+}
+
 //function for making the student record and calling the structure
 void createSR(vector <newSR>& records) {
-	
+
 
 
 	//user inputs.
 	stars();
 	cout << "Create The student record." << endl;
 	stars();
-	cout << "Enter the students Password:\n> ";
-	cin >> newrecord.password;
 	cout << "Enter the Students First name:\n> ";
 	cin.ignore();
 	getline(cin, newrecord.firstname);
@@ -557,13 +610,19 @@ void createSR(vector <newSR>& records) {
 	cout << "Enter the Students Gender M/F/X:\n> ";
 	cin >> newrecord.gender;
 
-	cout << "Enter the Parents Full name:\n> ";
-	cin.ignore();
-	getline(cin, newrecord.parentname1);
-	
-	cout << "Enter the Parents Full name:\n> ";
-	
-	getline(cin, newrecord.parentname2);
+	cin.ignore(); // have to add this because of the change of data type
+	cout << "Enter maths level:\n> ";
+	getline(cin, newrecord.maths);
+	cout << "Enter the Science level:\n> ";
+	getline(cin, newrecord.science);
+	cout << "Enter the Reading level:\n> ";
+	getline(cin, newrecord.reading);
+	cout << "Enter the Writing level:\n> ";
+	getline(cin, newrecord.writing);
+	cout << "Learning Progress state:\n> ";
+	getline(cin, newrecord.learning);
+	cout << "Other activities / notes?\n";
+	getline(cin, newrecord.other);
 
 	// adding newrecord to vector
 	records.push_back(newrecord);
@@ -578,20 +637,98 @@ void createSR(vector <newSR>& records) {
 	filecreate.open("Students/" + childrecord, ios::app); // change to check if any other files exist with same name rather than append
 
 	if (filecreate.is_open()) {
-		filecreate /*<< newrecord.password << endl*/ << newrecord.firstname << endl << newrecord.middlename << endl << newrecord.lastname << endl << newrecord.gender << endl << newrecord.classNo << endl << newrecord.parentname1 << endl << newrecord.parentname2 << endl;
+		filecreate << newrecord.firstname << endl << newrecord.middlename << endl << newrecord.lastname << endl << newrecord.gender << endl;
+		filecreate << "Subjects\n";
+		filecreate << "Maths: " << newrecord.maths << endl << "Science: " << newrecord.science << endl << "Writing: " << newrecord.writing << endl << "Reading: " << newrecord.maths << endl;
+		filecreate << "Other: " << newrecord.other << endl;
 
 		filecreate.close(); // function is complete close the file
 
 		cout << "You have created the record sucessfully" << endl;//feed back to user
-		stars();
 	}
 	else {
 		cout << "cannot open the file" << endl;
 	}
 
-	return menuAdmin();
-
 }
+
+
+void viewSR()
+{
+	string filename;
+
+	stars();
+	cout << "viewing student record" << endl;
+	stars();
+	// user entry to open the student record via inputs
+	cin.ignore();
+	cout << "enter the students first name:\n> ";
+	getline(cin, viewsr.firstname);
+
+
+	cout << "Enter the Students Middle name:\n> ";
+	getline(cin, viewsr.middlename);
+
+
+	cout << "Enter the Students Last name:\n> ";
+	getline(cin, viewsr.lastname);
+
+
+
+	filename = "Students/" + viewsr.firstname + "-" + viewsr.middlename + "-" + viewsr.lastname + "-" + "record.txt";// string so we can use it to find the file by this name
+
+
+	ifstream recordFile(filename);
+
+	if (recordFile.is_open())
+	{
+		stars();
+		cout << "This is the student record for " << viewsr.firstname << " " << viewsr.middlename << " " << viewsr.lastname << endl; // feedback for on which file they are in
+		stars();
+		string information; // printing student record while the file is open
+		while (getline(recordFile, information))
+		{
+			cout << information << endl;
+		}
+
+		recordFile.close();
+
+	}
+	else
+	{
+
+		cout << "\nSorry we couldnt find that file." << endl;
+	}
+	stars();
+}
+
+void deleteSR() {
+	int deletefile;
+
+
+	cout << "Enter the child's full name you wish to delete\n";
+	cout << "Enter the Students First name:\n> ";
+	cin.ignore();
+	getline(cin, newrecord.firstname);
+	cout << "Enter the Students Middle name:\n> ";
+	getline(cin, newrecord.middlename);
+	cout << "Enter the Students Last name:\n> ";
+	getline(cin, newrecord.lastname);
+
+	string childrecord = newrecord.firstname + "-" + newrecord.middlename + "-" + newrecord.lastname + "-record.txt";
+
+	deletefile = remove(("Students/" + childrecord).c_str());
+
+	if (deletefile == 0) {
+		stars();
+		cout << "File '" << childrecord << "' successfully deleted.\n";
+	}
+	else {
+		cout << "Error deleting file '" << childrecord << "'.\n";
+	}
+	return menuTeacher();
+}
+
 void menuRecordAdmin() {
 
 	// Add edit record
@@ -624,17 +761,17 @@ void menuRecordAdmin() {
 			//Records is using the create SR function to make student records
 			createSR(records);
 
-			break;
+			return menuRecordAdmin();
 
 		case 2:
-			cout << "Which student would you like to view? Enter the name: " << endl;
+			viewSR();
 
-			break;
+			return menuRecordAdmin();
 
 		case 3:
-			cout << "Which student record would you like to delete?" << endl;
+			deleteSR();
 
-			break;
+			return menuRecordAdmin();
 		case 4:
 			exit(0);
 			break;
@@ -664,7 +801,7 @@ void login() {
 	ifstream userFile;
 	userFile.open("Users/" + userLogin + ".txt");
 
-	if (userFile) 
+	if (userFile)
 	{
 
 		string line;
@@ -708,13 +845,13 @@ void login() {
 
 							switch (currentLine)
 							{
-							// User's first name
+								// User's first name
 							case 2:
 
 								userName += line;
 								break;
 
-							// User's last name
+								// User's last name
 							case 3:
 
 								activeuser.lastname = line;
@@ -722,7 +859,7 @@ void login() {
 								cout << "Welcome, " << userName << endl;
 								break;
 
-							// User's type
+								// User's type
 							case 4:
 
 								activeuser.username = userLogin;
@@ -808,7 +945,7 @@ void login() {
 		}
 
 	}
-	else 
+	else
 	{
 		cout << "User does not exist." << endl;
 	}
@@ -1027,7 +1164,7 @@ void menuEvents() {
 	cout << "1 - Return to Parents Menu" << endl;
 	cout << "2 - Exit program" << endl;
 	cout << "> ";
-	
+
 	cin >> menu;
 
 	switch (menu)
