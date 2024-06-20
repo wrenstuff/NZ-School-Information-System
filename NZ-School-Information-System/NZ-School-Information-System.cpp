@@ -387,6 +387,8 @@ void menuTeacher() {
 		{
 		case 2: createSR(records);
 			return menuTeacher();
+		case 3: editSR();
+			return menuTeacher();
 		case 4:viewSR();
 			return menuTeacher();
 		case 5:  deleteSR();
@@ -718,48 +720,110 @@ void deleteSR() {
 	return menuTeacher();
 }
 void editSR() {
+	// 
+	
+	string	oldfile, tempfile = "Students/temprec.txt";// Student record file and new file being created called temprec
+	string oldinfo, newinfo;//line user wishes to replace and what they wish to replace it with
+	string newFileName;
+	char changeFileName;
 
-	string oldfile,temprec="temprec.txt"; //string for holding file name
-	int deletefile;
-	cout << "Enter the child's full name you wish to edit\n";
+	
+
+	//user input to find the file they wish to edit
+	cout << "Enter the child's (Full name) you wish to edit (if no middle name type N/A)\n";
+
 	cout << "Enter the Students First name:\n> ";
 	cin.ignore();
 	getline(cin, editsr.firstname);
+
 	cout << "Enter the Students Middle name:\n> ";
 	getline(cin, editsr.middlename);
+
 	cout << "Enter the Students Last name:\n> ";
 	getline(cin, editsr.lastname);
 	
  oldfile = "Students/"+editsr.firstname + "-" + editsr.middlename + "-" + editsr.lastname + "-record.txt";
 
- ifstream(oldfile);// reading file name based on user input
- ofstream(temprec);//creating a new file for holding the information up to a certain line
+ ifstream readfile(oldfile);// reading file name based on user input
 
- string oldinfo, newinfo;
+ if (!readfile.is_open())// if the file is not open then error handle
+ {
+	 cout << "The file: " << oldfile << " has not opened properly please try again" << endl;
 
- cout << "Enter the information you wish to replace:\n>";
+	 return menuTeacher();
+
+ }
+ ofstream writefile(tempfile);//creating a new file for holding the information up to a certain line
+
+ if (!writefile.is_open())// if the file is not open then error handle
+ {
+	 cout << "The file: " << tempfile << " has not created properly please try again" << endl;
+	 return menuTeacher();
+ }
+
+ cout << "Enter the information you wish to replace:\n>"; //user inputs for what line they wish to update and with relevent text
  getline(cin, oldinfo);
 
  cout << "Enter the updated information:\n>";
  getline(cin, newinfo);
 
- string output;
+
+ 
+ string line;
+
+ //readfile is reading eachline from the oldfile and repeating that loop into lines 
+ while (getline(readfile, line)) {
+	 size_t info = line.find(oldinfo);// finding user input poisiton in file for old info
+	 
+	 if (info != line.npos) {
+		 line.replace(info, oldinfo.length(), newinfo);
+	 }
+	 writefile << line << endl;
+ }
+ readfile.close(); 
+ writefile.close();
 
 
+ //changing the file name to newfile name based on user choice
+ //  if / else if ladder for multiple errors that may accour during this process
+ 
+ cout << "Do you want to change the filename? (Y/N): ";
+ cin >> changeFileName;
+ cin.ignore(); 
 
-
- /*
- deletefile = remove(("Students/"+temprec).c_str());// deleting the file in the student folder  with the user imput for the file they wish to del
-
- if (deletefile == 0) {
-	 stars();
-	 cout << "File '" << temprec << "' successfully deleted.\n";
+ if (toupper(changeFileName) == 'Y') {
+	 cout << "Enter the new file name (without extension and - symbol for spaces): ";
+	 getline(cin, newFileName);
+	 newFileName = "Students/" + newFileName + "-.txt";
  }
  else {
-	 cout << "Error deleting file '" << temprec << "'.\n";
+	 newFileName = oldfile; // Keep the original filename
  }
- return menuTeacher();
- */
+
+ if (remove(oldfile.c_str()) != 0) {
+	 cout << "Unable to delete the file: " << oldfile << endl;
+ }
+ else {
+	 if (rename(tempfile.c_str(), newFileName.c_str()) != 0) // if an error occours renaming rhw tempfile
+	 { 
+		 cout << "Unable to rename file: " << tempfile << endl;
+	 }
+	 // checks if the new file name does not = the old one if you chose to rename it
+	 else {
+		 cout << oldfile << " was updated successfully and ";
+		 if (newFileName != oldfile) {
+			 cout << "renamed to " << newFileName << endl;
+		 }
+		 else {
+			 cout << "kept the same filename." << endl;
+		 }
+	 }
+ }
+
+  
+ 
+
+
 }
 
 void menuRecordAdmin() {

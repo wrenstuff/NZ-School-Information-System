@@ -14,8 +14,12 @@
       "DocumentGroups": [
         {
           "DockedWidth": 200,
-          "SelectedChildIndex": 0,
+          "SelectedChildIndex": 1,
           "Children": [
+            {
+              "$type": "Bookmark",
+              "Name": "ST:0:0:{cce594b6-0c39-4442-ba28-10c64ac7e89f}"
+            },
             {
               "$type": "Document",
               "DocumentIndex": 0,
@@ -24,14 +28,10 @@
               "RelativeDocumentMoniker": "NZ-School-Information-System\\NZ-School-Information-System.cpp",
               "ToolTip": "C:\\Users\\GGPC\\Pictures\\GROUP  PROJECT 2\\NZ-School-Information-System\\NZ-School-Information-System\\NZ-School-Information-System.cpp",
               "RelativeToolTip": "NZ-School-Information-System\\NZ-School-Information-System.cpp",
-              "ViewState": "AQIAAK0CAAAAAAAAAAApwMQCAAAHAAAA",
+              "ViewState": "AQIAAK8CAAAAAAAAAAAAAN8CAAAOAAAA",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000677|",
               "WhenOpened": "2024-05-31T06:29:25.524Z",
               "EditorCaption": ""
-            },
-            {
-              "$type": "Bookmark",
-              "Name": "ST:0:0:{cce594b6-0c39-4442-ba28-10c64ac7e89f}"
             }
           ]
         }
