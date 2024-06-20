@@ -8,7 +8,7 @@ using namespace std;
 
 // ----- structure definition ----- //
 
-struct newSR {
+struct Records {
 
 	string
 		firstname,
@@ -19,9 +19,11 @@ struct newSR {
 		reading,
 		writing,
 		learning,
-		other;
+		other,
+		notes;
 	char gender;
-}newrecord,viewsr;
+	int classnum;
+}newrecord,viewsr,editsr;
 
 struct NewParent
 {
@@ -67,7 +69,8 @@ struct ActiveUser
 // ----- Function decleration ----- //
 void viewSR();
 void deleteSR();
-void createSR(vector <newSR>& records);
+void editSR();
+void createSR(vector <Records>& records);
 void stars();
 void login();
 
@@ -359,7 +362,7 @@ void menuMain() {
 void menuTeacher() {
 
 	// Create student records
-	vector<newSR> records;
+	vector<Records> records;
 	int menu = 0;
 
 	do
@@ -576,7 +579,7 @@ void menuRecordParent() {
 }
 
 //function for making the student record and calling the structure
-void createSR(vector <newSR>& records) {
+void createSR(vector <Records>& records) {
 
 
 
@@ -594,8 +597,9 @@ void createSR(vector <newSR>& records) {
 	cout << "Enter the Students Gender M/F/X:\n> ";
 	cin >> newrecord.gender;
 
+
 	cin.ignore(); // have to add this because of the change of data type
-	cout << "Enter maths level:\n> ";
+	cout << "Enter Maths level:\n> ";
 	getline(cin, newrecord.maths);
 	cout << "Enter the Science level:\n> ";
 	getline(cin, newrecord.science);
@@ -605,8 +609,10 @@ void createSR(vector <newSR>& records) {
 	getline(cin, newrecord.writing);
 	cout << "Learning Progress state:\n> ";
 	getline(cin, newrecord.learning);
-	cout << "Other activities / notes?\n";
+	cout << "Other activities:\n>";
 	getline(cin, newrecord.other);
+	cout << "Additional notes:\n>";
+	getline(cin, newrecord.notes);
 
 	// adding newrecord to vector
 	records.push_back(newrecord);
@@ -623,7 +629,7 @@ void createSR(vector <newSR>& records) {
 		filecreate << newrecord.firstname << endl << newrecord.middlename << endl << newrecord.lastname << endl << newrecord.gender << endl;
 		filecreate << "Subjects\n";
 		filecreate << "Maths: " << newrecord.maths << endl << "Science: " << newrecord.science << endl << "Writing: " << newrecord.writing << endl << "Reading: " << newrecord.maths << endl;
-		filecreate << "Other: " << newrecord.other << endl;
+		filecreate << "Other Acivities: " << newrecord.other << endl << "Notes: " << newrecord.notes;
 
 		filecreate.close(); // function is complete close the file
 
@@ -700,7 +706,7 @@ void deleteSR() {
 
 	string childrecord = newrecord.firstname + "-" + newrecord.middlename + "-" + newrecord.lastname + "-record.txt";
 
-	deletefile = remove(("Students/" + childrecord).c_str());
+	deletefile = remove(("Students/" + childrecord).c_str());// deteling the file in the student folder  with the user imput for the file they wish to del
 
 	if (deletefile == 0) {
 		stars();
@@ -711,6 +717,50 @@ void deleteSR() {
 	}
 	return menuTeacher();
 }
+void editSR() {
+
+	string oldfile,temprec="temprec.txt"; //string for holding file name
+	int deletefile;
+	cout << "Enter the child's full name you wish to edit\n";
+	cout << "Enter the Students First name:\n> ";
+	cin.ignore();
+	getline(cin, editsr.firstname);
+	cout << "Enter the Students Middle name:\n> ";
+	getline(cin, editsr.middlename);
+	cout << "Enter the Students Last name:\n> ";
+	getline(cin, editsr.lastname);
+	
+ oldfile = "Students/"+editsr.firstname + "-" + editsr.middlename + "-" + editsr.lastname + "-record.txt";
+
+ ifstream(oldfile);// reading file name based on user input
+ ofstream(temprec);//creating a new file for holding the information up to a certain line
+
+ string oldinfo, newinfo;
+
+ cout << "Enter the information you wish to replace:\n>";
+ getline(cin, oldinfo);
+
+ cout << "Enter the updated information:\n>";
+ getline(cin, newinfo);
+
+ string output;
+
+
+
+
+ /*
+ deletefile = remove(("Students/"+temprec).c_str());// deleting the file in the student folder  with the user imput for the file they wish to del
+
+ if (deletefile == 0) {
+	 stars();
+	 cout << "File '" << temprec << "' successfully deleted.\n";
+ }
+ else {
+	 cout << "Error deleting file '" << temprec << "'.\n";
+ }
+ return menuTeacher();
+ */
+}
 
 void menuRecordAdmin() {
 
@@ -718,7 +768,7 @@ void menuRecordAdmin() {
 
 	// Update records (different to edit) - Teacher
 
-	vector<newSR> records;
+	vector<Records> records;
 	int menu = 0;
 
 	do

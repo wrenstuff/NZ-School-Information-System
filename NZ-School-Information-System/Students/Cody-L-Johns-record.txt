@@ -1,0 +1,12 @@
+Cody
+L
+Johns
+M
+12
+Subjects
+Maths: A
+Science: B
+Writing: D
+Reading: A
+Other Acivities: Sports,Kindness,leader
+Notes: Good student
