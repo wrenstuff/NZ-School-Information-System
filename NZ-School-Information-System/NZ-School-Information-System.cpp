@@ -172,12 +172,14 @@ void menuTerms() {
 		cout << "2 - Term 2" << endl;
 		cout << "3 - Term 3" << endl;
 		cout << "4 - Term 4" << endl;
+		cout << "5 - Back" << endl;
+		cout << "6 - Exit" << endl;
 		cout << endl;
 		cout << "> ";
 		cin >> menu;
 		cout << endl;
 
-	} while (menu <= 0 || menu > 4 );
+	} while (menu <= 0 || menu > 6 );
 
 	// Prints out whichever term dates that have been selected
 	switch (menu)
@@ -228,6 +230,12 @@ void menuTerms() {
 		cout << "Day after New Year's Day - Thursday 2 January 2025\n";
 
 		break;
+
+	case 5:
+		return menuParent();
+		break;
+	case 6:
+		exit(0);
 
 	}
 
@@ -372,28 +380,29 @@ void menuTeacher() {
 
 		cout << endl;
 		cout << "1 - List Class" << endl;
-		cout << "2 - View Student" << endl;
-		cout << "3 - Add Student" << endl;
-		cout << "4 - Delete Student" << endl;
-		cout << "5 - Exit Program" << endl;
+		cout << "2 - Student Records" << endl;
+		cout << "3 - Exit" << endl;
 		cout << endl;
 		cout << "> ";
 		cin >> menu;
 		cout << endl;
 
-		switch (menu)
-		{
-		case 1:
-			classView();
-			break;
-		case 5:
-			exit(0);
-			break;
-		default:
-			break;
-		}
-
 	} while (menu <= 0 || menu > 5);
+
+	switch (menu)
+	{
+	case 1:
+		classView();
+		break;
+	case 2:
+		menuRecordTeacher();
+		break;
+	case 3:
+		exit(0);
+		break;
+	default:
+		break;
+	}
 
 }
 
@@ -477,7 +486,7 @@ void menuParent() {
 			break;
 		}
 
-	} while (menu <= 0 || menu > 4);
+	} while (menu <= 0 || menu > 5);
 
 }
 /*
@@ -516,12 +525,14 @@ void menuRecordTeacher() {
 		cout << "1 - create student record" << endl;
 		cout << "2 - view student record" << endl;
 		cout << "3 - delete student record" << endl;
+		cout << "4 - Back" << endl;
+		cout << "5 - Exit" << endl;
 		cout << endl;
 		cout << "> ";
 		cin >> menu;
 		cout << endl;
 
-	} while (menu <= 0 || menu > 3);
+	} while (menu <= 0 || menu > 5);
 
 }
 
@@ -839,18 +850,48 @@ void checkChild() {
 						}
 					}
 
+					int menu;
+
 					if (getline(userFile, line)) {
 						if (!line.empty()) {
-							cout << "You have child" << endl;
+
+							do
+							{
+
+								cout << endl;
+								cout << "A child is already linked to your account. Would you like to add a new child?" << endl;
+								cout << "1 - Yes" << endl;
+								cout << "2 - No" << endl;
+								cout << endl;
+								cout << "> ";
+								cin >> menu;
+								cout << endl;
+
+								switch (menu)
+								{
+								case 1:
+									createChild();
+									break;
+								case 2:
+									menuParent();
+									break;
+								default:
+									break;
+								}
+
+							} while (menu <= 0 || menu > 2);
+
 						}
 						else {
+
 							cout << "You have no child" << endl;
+							createChild();
+
 						}
 					}
 					else {
-						userFile.close();
 
-						createChild();
+						userFile.close();
 
 					}
 
@@ -903,6 +944,9 @@ void createChild() {
 		ofstream userFile;
 		userFile.open("Users/" + activeuser.username + ".txt", ios::app);
 		userFile << firstName << " " << middleName << " " << lastName << endl;
+		userFile.close();
+
+		return menuParent();
 
 	}
 	else
@@ -913,6 +957,8 @@ void createChild() {
 		errorDesc = "When creating a new child, the user has entered the name of a student that does not exist.";
 		string childNameForError = firstName + middleName + lastName;
 		errorFileCreate(errorType, errorDesc, childNameForError);
+
+		return menuParent();
 
 	}
 
