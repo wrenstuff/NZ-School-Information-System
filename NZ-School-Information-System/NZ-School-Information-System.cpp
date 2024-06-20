@@ -21,7 +21,7 @@ struct newSR {
 		learning,
 		other;
 	char gender;
-}newrecord,viewsr;
+}newrecord, viewsr;
 
 struct NewParent
 {
@@ -100,9 +100,9 @@ int main()
 
 	// ----- Introduction Screen ----- //
 	// Add events/notices
-	
 
-    cout << "NZ School Information System" << endl;
+
+	cout << "NZ School Information System" << endl;
 
 
 
@@ -121,14 +121,14 @@ int main()
 	cout << "|__/  |    |  |  \\/  |    /----\\    |      \\/      \\___   |      |   \\ |     ||     | |" << endl;
 	cout << "|     |    |  |      |   /      \\   |      ||          \\  |      |   | |     ||     | |" << endl;
 	cout << "|     |    |  |      |  /        \\  |      ||       ___/   \\____ |   |  \\___/  \\___/  |____" << endl;
-	cout << endl; 
-    stars();
+	cout << endl;
+	stars();
 	cout << "Phone number: 03 123 4567" << endl;
 	cout << "email: office@readmoreprimary.school.nz" << endl;
 	cout << "Address: 123 Oak Street, Readmore 1234" << endl;
-	
+
 	menuMain();
-	
+
 
 }
 
@@ -174,13 +174,13 @@ void menuTerms() {
 		cin >> menu;
 		cout << endl;
 
-	} while (menu <= 0 || menu > 4 );
+	} while (menu <= 0 || menu > 4);
 
 	// Prints out whichever term dates that have been selected
 	switch (menu)
 	{
 		cout << "Term Dates & Holidays\n";
-	
+
 	case 1:
 		cout << "Term 1\n\n\n";
 		cout << "Number of weeks: 10\n\n\n";
@@ -190,10 +190,10 @@ void menuTerms() {
 		cout << "Easter: Good Friday 29 March, Easter Monday 1 April, Easter Tuesday 2 April (a school holiday)\n\n\n";
 		cout << "School Holidays: Saturday 13 April to Sunday 28 April\n";
 		cout << "Includes: ANZAC Day - Thursday 25 April\n";
-		
+
 		break;
 
-	case 2: 
+	case 2:
 		cout << "Term 2\n\n\n";
 		cout << "Number of weeks: 10\n\n\n";
 		cout << "Start & end dates: Starts Monday 29 April to Friday 5 July\n\n\n";
@@ -487,7 +487,7 @@ void menuParent() {
 }
 /*
 void menuRecord() {
-	
+
 	int menu = 0;
 
 	do
@@ -651,14 +651,14 @@ void viewSR()
 
 	cout << "Enter the Students Middle name:\n> ";
 	getline(cin, viewsr.middlename);
-	
+
 
 	cout << "Enter the Students Last name:\n> ";
 	getline(cin, viewsr.lastname);
-	
 
 
-	filename = "Students/" + viewsr.firstname + "-" + viewsr.middlename + "-" + viewsr.lastname +"-" +  "record.txt";// string so we can use it to find the file by this name
+
+	filename = "Students/" + viewsr.firstname + "-" + viewsr.middlename + "-" + viewsr.lastname + "-" + "record.txt";// string so we can use it to find the file by this name
 
 
 	ifstream recordFile(filename);
@@ -784,7 +784,7 @@ void login() {
 	ifstream userFile;
 	userFile.open("Users/" + userLogin + ".txt");
 
-	if (userFile) 
+	if (userFile)
 	{
 
 		string line;
@@ -828,13 +828,13 @@ void login() {
 
 							switch (currentLine)
 							{
-							// User's first name
+								// User's first name
 							case 2:
 
 								userName += line;
 								break;
 
-							// User's last name
+								// User's last name
 							case 3:
 
 								activeuser.lastname = line;
@@ -842,7 +842,7 @@ void login() {
 								cout << "Welcome, " << userName << endl;
 								break;
 
-							// User's type
+								// User's type
 							case 4:
 
 								activeuser.username = userLogin;
@@ -913,7 +913,7 @@ void login() {
 		}
 
 	}
-	else 
+	else
 	{
 		cout << "User does not exist." << endl;
 	}
@@ -1067,7 +1067,7 @@ void menuEvents() {
 	cout << "1 - Return to Parents Menu" << endl;
 	cout << "2 - Exit program" << endl;
 	cout << "> ";
-	
+
 	cin >> menu;
 
 	switch (menu)
