@@ -1365,10 +1365,28 @@ void viewClass() {
 				ifstream studentFile("Students/" + fileName);
 
 				if (studentFile) {
-					for (int i = 0; i < 5; ++i) {
+					bool hasNotes = false;     // Flag to track if notes indicator is found
+
+					for (int i = 0; i < 12; ++i) {  // Read up to line 12
 						getline(studentFile, line);
+
+						if (i == 4) {  // Check line 5 for progress indicator
+							cout << "\t" << line;  // Output line 5 after printing the student's name
+						}
+
+						if (i == 11 && !line.empty()) {  // Check line 12 for notes indicator
+							hasNotes = true;
+						}
 					}
-					cout << "\t" << line << endl;
+
+					cout << "\t";
+
+					if (hasNotes) {
+						cout << "[Notes]";
+					}
+
+					cout << endl;
+
 					studentFile.close();
 				}
 				else {
