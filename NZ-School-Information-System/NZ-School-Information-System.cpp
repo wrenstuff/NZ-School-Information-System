@@ -8,7 +8,7 @@ using namespace std;
 
 // ----- structure definition ----- //
 
-struct newSR {
+struct Records {
 
 	string
 		firstname,
@@ -19,11 +19,11 @@ struct newSR {
 		reading,
 		writing,
 		learning,
-		other;
+		other,
+		notes;
 	char gender;
-	int classNo;
-
-}newrecord, viewsr;
+	int classnum;
+}newrecord, viewsr, editsr;
 
 
 struct NewParent
@@ -71,7 +71,8 @@ struct ActiveUser
 // ----- Function decleration ----- //
 void viewSR();
 void deleteSR();
-void createSR(vector <newSR>& records);
+void createSR(vector <Records>& records);
+void editSR();
 void stars();
 void login();
 
@@ -91,6 +92,7 @@ void menuAdmin();
 void menuParent();
 void menuRecordAdmin();
 void menuRecordParent();
+void menuRecordTeacher();
 void menuEvents();
 
 // ----- Class Records ----- //
@@ -184,7 +186,7 @@ void menuTerms() {
 		cin >> menu;
 		cout << endl;
 
-	} while (menu <= 0 || menu > 6 );
+	} while (menu <= 0 || menu > 6);
 
 
 	// Prints out whichever term dates that have been selected
@@ -376,7 +378,7 @@ void menuMain() {
 void menuTeacher() {
 
 	// Create student records
-	vector<newSR> records;
+	vector<Records> records;
 	int menu = 0;
 
 	do
@@ -525,7 +527,7 @@ void menuRecord() {
 void menuRecordTeacher() {
 
 	int menu = 0;
-
+	vector<Records> records;
 	do
 	{
 
@@ -534,15 +536,30 @@ void menuRecordTeacher() {
 		cout << endl;
 		cout << "1 - create student record" << endl;
 		cout << "2 - view student record" << endl;
-		cout << "3 - delete student record" << endl;
-		cout << "4 - Back" << endl;
-		cout << "5 - Exit" << endl;
+		cout << "3 - edit student record" << endl;
+		cout << "4 - delete student record" << endl;
+		cout << "5 - Back" << endl;
+		cout << "6 - Exit" << endl;
 		cout << endl;
 		cout << "> ";
 		cin >> menu;
 		cout << endl;
-
-	} while (menu <= 0 || menu > 5);
+		if (menu == 1) {
+			createSR(records);
+		}
+		if (menu == 2) {
+			viewSR();
+			return menuRecordTeacher();
+		}
+		if (menu == 3) {
+			editSR();
+			return menuRecordTeacher();
+		}
+		if (menu == 4) {
+			deleteSR();
+			return menuRecordTeacher();
+		}
+	} while (menu <= 0 || menu > 6);
 
 }
 
@@ -592,7 +609,7 @@ void menuRecordParent() {
 }
 
 //function for making the student record and calling the structure
-void createSR(vector <newSR>& records) {
+void createSR(vector <Records>& records) {
 
 
 
@@ -630,7 +647,7 @@ void createSR(vector <newSR>& records) {
 
 	//creating a string to make file names of the first + last names of the student and makign it a record of the .txt
 	string childrecord = newrecord.firstname + "-" + newrecord.middlename + "-" + newrecord.lastname + "-record.txt";
-	newrecord.classNo = activeuser.classNo;
+	newrecord.classnum = activeuser.classNo;
 
 	ofstream filecreate;
 
@@ -701,6 +718,116 @@ void viewSR()
 	}
 	stars();
 }
+void editSR() {
+
+
+	string	oldfile, tempfile = "Students/temprec.txt";// Student record file and new file being created called temprec
+	string oldinfo, newinfo;//line user wishes to replace and what they wish to replace it with
+	string newFileName;
+	char changeFileName;
+
+
+
+	//user input to find the file they wish to edit
+	cout << "Enter the child's (Full name) you wish to edit (if no middle name type N/A)\n";
+
+	cout << "Enter the Students First name:\n> ";
+	cin.ignore();
+	getline(cin, editsr.firstname);
+
+	cout << "Enter the Students Middle name:\n> ";
+	getline(cin, editsr.middlename);
+
+	cout << "Enter the Students Last name:\n> ";
+	getline(cin, editsr.lastname);
+
+	oldfile = "Students/" + editsr.firstname + "-" + editsr.middlename + "-" + editsr.lastname + "-record.txt";
+
+	ifstream readfile(oldfile);// reading file name based on user input
+
+	if (!readfile.is_open())// if the file is not open then error handle
+	{
+		cout << "The file: " << oldfile << " has not opened properly please try again" << endl;
+
+		return menuTeacher();
+
+	}
+	ofstream writefile(tempfile);//creating a new file for holding the information up to a certain line
+
+	if (!writefile.is_open())// if the file is not open then error handle
+	{
+		stars();
+		cout << "The file: " << tempfile << " has not created properly please try again" << endl;
+
+		return menuTeacher();
+	}
+	stars();
+	cout << "Enter the information you wish to replace:\n>"; //user inputs for what line they wish to update and with relevent text
+	getline(cin, oldinfo);
+
+	cout << "Enter the updated information:\n>";
+	getline(cin, newinfo);
+	stars();
+
+
+	string line;
+
+	//readfile is reading eachline from the oldfile and repeating that loop into lines 
+	while (getline(readfile, line)) {
+		size_t info = line.find(oldinfo);// finding user input poisiton in file for old info
+
+		if (info != line.npos) {
+			line.replace(info, oldinfo.length(), newinfo);
+		}
+		writefile << line << endl;
+	}
+	readfile.close();
+	writefile.close();
+
+
+	//changing the file name to newfile name based on user choice
+	//  if / else if ladder for multiple errors that may accour during this process
+	stars();
+	cout << "Do you want to change the filename? (Y/N): ";
+	stars();
+	cin >> changeFileName;
+
+	cin.ignore();
+
+	if (toupper(changeFileName) == 'Y') {
+		cout << "Enter the new file name (without extension and - symbol for spaces): ";
+		getline(cin, newFileName);
+		newFileName = "Students/" + newFileName + "-record.txt";
+	}
+	else {
+		newFileName = oldfile; // Keep the original filename
+	}
+
+	if (remove(oldfile.c_str()) != 0) {
+		cout << "Unable to delete the file: " << oldfile << endl;
+	}
+	else {
+		if (rename(tempfile.c_str(), newFileName.c_str()) != 0) // if an error occours renaming rhw tempfile
+		{
+			cout << "Unable to rename file: " << tempfile << endl;
+		}
+		// checks if the new file name does not = the old one if you chose to rename it
+		else {
+			cout << oldfile << " was updated successfully and ";
+			if (newFileName != oldfile) {
+				cout << "renamed to " << newFileName << endl;
+			}
+			else {
+				cout << "kept the same filename." << endl;
+			}
+		}
+	}
+
+
+
+
+
+}
 
 void deleteSR() {
 	int deletefile;
@@ -735,7 +862,7 @@ void menuRecordAdmin() {
 
 	// Update records (different to edit) - Teacher
 
-	vector<newSR> records;
+	vector<Records> records;
 	int menu = 0;
 
 	do
