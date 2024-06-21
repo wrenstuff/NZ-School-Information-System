@@ -73,6 +73,7 @@ struct ActiveUser
 
 void viewSR();
 void deleteSR();
+void deleteStudentFromClass(string);
 void viewProgress(int x);
 void createSR(vector <Records>& records);
 void editSR();
@@ -852,11 +853,6 @@ void editSR() {
 			}
 		}
 	}
-
-
-
-
-
 }
 
 void deleteSR() {
@@ -872,9 +868,15 @@ void deleteSR() {
 	cout << "Enter the Students Last name:\n> ";
 	getline(cin, newrecord.lastname);
 
-	string childrecord = newrecord.firstname + "-" + newrecord.middlename + "-" + newrecord.lastname + "-record.txt";
+	string childrecord = newrecord.firstname + "-" + newrecord.middlename + "-" + newrecord.lastname;
+	string nameToSend;
+	nameToSend = childrecord;
+	replace(nameToSend.begin(), nameToSend.end(), '-', ' ');
+	childrecord += "-record.txt";
 
 	deletefile = remove(("Students/" + childrecord).c_str());
+
+	deleteStudentFromClass(nameToSend);
 
 	if (deletefile == 0) {
 		stars();
@@ -884,6 +886,68 @@ void deleteSR() {
 		cout << "Error deleting file '" << childrecord << "'.\n";
 	}
 	return menuTeacher();
+}
+
+void deleteStudentFromClass(string name) {
+	int classIndex = 0;
+	while (true) {
+		// Open each class file
+		ifstream findStudent;
+		string classFileName = "Classes/class" + to_string(classIndex) + "Students.txt";
+		findStudent.open(classFileName);
+
+		if (!findStudent) {
+			// If class file does not exist, break the loop
+			break;
+		}
+
+		bool found = false;
+		string studentName;
+		while (getline(findStudent, studentName)) {
+			if (studentName == name) {
+				found = true;
+				break;
+			}
+		}
+		findStudent.close();
+
+		if (found) {
+			cout << "Found Student" << endl;
+
+			// Open the original file and a temporary file
+			ifstream oldFile("Classes/class" + to_string(classIndex) + "Students.txt");
+			ofstream newFile("temp.txt");
+
+			string line;
+			while (getline(oldFile, line)) {
+				if (line != name) {
+					newFile << line << endl;
+				}
+			}
+
+			newFile.close();
+			oldFile.close();
+
+			// Replace the original file with the temporary file
+			ifstream tempFile("temp.txt");
+			ofstream classFile("Classes/class" + to_string(classIndex) + "Students.txt");
+
+			while (getline(tempFile, line)) {
+				classFile << line << endl;
+			}
+
+			tempFile.close();
+			classFile.close();
+
+			// Remove the temporary file
+			remove("temp.txt");
+
+			// Since the student is found and deleted, we can exit the function
+			return;
+		}
+
+		classIndex++;
+	}
 }
 
 void viewProgress(int x) {
