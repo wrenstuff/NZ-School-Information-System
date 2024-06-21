@@ -538,7 +538,6 @@ void menuRecord() {
 
 void menuRecordTeacher() {
 
-	vector<newSR> records;
 	int menu = 0;
 	vector<Records> records;
 	do
