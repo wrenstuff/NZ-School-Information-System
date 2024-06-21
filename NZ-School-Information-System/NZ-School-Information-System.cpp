@@ -4,6 +4,7 @@
 #include <ctime>
 #include <vector>
 #include <cstdio>
+#include <algorithm>
 using namespace std;
 
 // ----- structure definition ----- //
@@ -98,7 +99,7 @@ void menuEvents();
 
 // ----- Class Records ----- //
 
-void classView();
+void viewClass();
 
 // ----- Error File Creation ----- //
 
@@ -402,7 +403,7 @@ void menuTeacher() {
 	switch (menu)
 	{
 	case 1:
-		classView();
+		viewClass();
 		break;
 	case 2:
 		menuRecordTeacher();
@@ -443,6 +444,8 @@ void menuAdmin() {
 
 		switch (menu)
 		{
+		case 1:
+			viewClass();
 		case 2:
 			menuRecordParent();
 			break;
@@ -572,6 +575,9 @@ void menuRecordTeacher() {
 
 			return menuRecordTeacher();
 		case 4:
+			return menuTeacher();
+			break;
+		case 5:
 			exit(0);
 			break;
 		}
@@ -698,7 +704,6 @@ void createSR(vector <newSR>& records) {
 
 }
 
-
 void viewSR()
 {
 	string filename;
@@ -791,7 +796,7 @@ void viewProgress(int x) {
 		return; // Exit function if progress type is invalid
 	}
 
-	cout << "Progress type: " << progressType << endl;
+	cout << endl << endl;
 
 	int classIndex = 0;
 	while (true) {
@@ -802,9 +807,10 @@ void viewProgress(int x) {
 
 		if (!findProgress) {
 			// If class file does not exist, break the loop
-			cout << "Unable to open class file: " << classFileName << endl;
 			break;
 		}
+
+		cout << "Class " << classIndex << endl;
 
 		string studentName;
 		while (getline(findProgress, studentName)) {
@@ -842,8 +848,11 @@ void viewProgress(int x) {
 		findProgress.close();
 		classIndex++;
 	}
-}
 
+	cout << endl;
+	return menuAdmin();
+
+}
 
 void menuRecordAdmin() {
 
@@ -1217,52 +1226,69 @@ void createChild() {
 
 }
 
-void classView() {
-	ifstream classFile;
-	classFile.open("Classes/class" + to_string(activeuser.classNo) + "Students.txt");
+void viewClass() {
+	auto classFileExists = [](int classNo) {
+		ifstream classFile("Classes/class" + to_string(classNo) + "Students.txt");
+		return classFile.good();
+	};
 
-	string line;
+	int classNo;
 
-	if (classFile) {
-		while (getline(classFile, line)) {
-			cout << line;  // Print student's name
+	if (activeuser.usertype == "Teacher") {
+		classNo = activeuser.classNo;
+	}
+	else if (activeuser.usertype == "Admin") {
+		classNo = 0; // Change to 1 later
+	}
 
-			string fileName = line;
+	while (classFileExists(classNo)) {
+		cout << "Class " << classNo << ":" << endl;
 
-			// Replace spaces with dashes in fileName
-			for (char& x : fileName) {
-				if (x == ' ') {
-					x = '-';
+		ifstream classFile("Classes/class" + to_string(classNo) + "Students.txt");
+		string line;
+
+		if (classFile) {
+			while (getline(classFile, line)) {
+				cout << line;  // Print student's name
+
+				string fileName = line;
+				// Replace spaces with dashes in fileName
+				replace(fileName.begin(), fileName.end(), ' ', '-');
+				fileName += "-record.txt";
+
+				ifstream studentFile("Students/" + fileName);
+
+				if (studentFile) {
+					for (int i = 0; i < 5; ++i) {
+						getline(studentFile, line);
+					}
+					cout << "\t" << line << endl;
+					studentFile.close();
+				}
+				else {
+					cout << "\tError: Unable to open file for student: " << line << endl;
 				}
 			}
 
-			// Append "-record.txt" to fileName
-			fileName += "-record.txt";
-
-			ifstream studentFile;
-			studentFile.open("Students/" + fileName);
-
-			// Check if studentFile opened successfully
-			if (studentFile) {
-				// Read and discard the first 4 lines (assuming you need to skip them)
-				for (int i = 0; i < 5; i++) {
-					getline(studentFile, line);
-				}
-
-				// Print the 5th line from the student's record
-				cout << "\t" << line << endl;
-
-				studentFile.close();  // Close studentFile
-			}
-			else {
-				cout << "\tError: Unable to open file for student: " << line << endl;
-			}
+			classFile.close();
+			cout << endl;
+		}
+		else {
+			cout << "Error: Unable to open class file." << endl;
 		}
 
-		classFile.close();  // Close classFile
+		if (activeuser.usertype == "Teacher") {
+			break;
+		}
+
+		++classNo;
+	}
+
+	if (activeuser.usertype == "Teacher") {
+		menuTeacher();
 	}
 	else {
-		cout << "Error: Unable to open class file." << endl;
+		menuAdmin();
 	}
 }
 
