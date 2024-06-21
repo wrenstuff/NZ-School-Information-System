@@ -9,7 +9,7 @@ using namespace std;
 
 // ----- structure definition ----- //
 
-struct newSR {
+struct Records {
 
 	string
 		firstname,
@@ -20,11 +20,11 @@ struct newSR {
 		reading,
 		writing,
 		learning,
-		other;
+		other,
+		notes;
 	char gender;
-	int classNo;
-
-}newrecord, viewsr;
+	int classnum;
+}newrecord, viewsr, editsr;
 
 
 struct NewParent
@@ -53,7 +53,7 @@ struct NewTeacher
 	char gender;
 	int DOB,
 		yearTeach,
-		classNo;
+		classnum;
 	long int PH;
 
 }newteacher;
@@ -65,7 +65,7 @@ struct ActiveUser
 		lastname,
 		username,
 		usertype;
-	int classNo;
+	int classnum;
 
 }activeuser;
 
@@ -73,8 +73,9 @@ struct ActiveUser
 
 void viewSR();
 void deleteSR();
-void createSR(vector <newSR>& records);
 void viewProgress(int x);
+void createSR(vector <Records>& records);
+void editSR();
 void stars();
 void login();
 
@@ -95,6 +96,7 @@ void menuParent();
 void menuRecordAdmin();
 void menuRecordTeacher();
 void menuRecordParent();
+void menuRecordTeacher();
 void menuEvents();
 
 // ----- Class Records ----- //
@@ -188,7 +190,7 @@ void menuTerms() {
 		cin >> menu;
 		cout << endl;
 
-	} while (menu <= 0 || menu > 6 );
+	} while (menu <= 0 || menu > 6);
 
 
 	// Prints out whichever term dates that have been selected
@@ -285,7 +287,7 @@ void createTeacher() {
 	cin >> newteacher.password;
 
 	cout << "Class Number:\n> ";
-	cin >> newteacher.classNo;
+	cin >> newteacher.classnum;
 
 	cout << "Year Level Teaching:\n> ";
 	cin >> newteacher.yearTeach;
@@ -293,7 +295,7 @@ void createTeacher() {
 	//Saves the new created account
 
 	newTeacher.open("Users/" + newteacher.username + ".txt");
-	newTeacher << newteacher.password << endl << newteacher.firstname << endl << newteacher.lastname << endl << "Teacher" << endl << newteacher.PH << endl << newteacher.email << endl << newteacher.gender << endl << newteacher.DOB << endl << newteacher.classNo << endl << newteacher.yearTeach << endl;
+	newTeacher << newteacher.password << endl << newteacher.firstname << endl << newteacher.lastname << endl << "Teacher" << endl << newteacher.PH << endl << newteacher.email << endl << newteacher.gender << endl << newteacher.DOB << endl << newteacher.classnum << endl << newteacher.yearTeach << endl;
 	newTeacher.close();
 
 	return menuAdmin();
@@ -380,7 +382,7 @@ void menuMain() {
 void menuTeacher() {
 
 	// Create student records
-	vector<newSR> records;
+	vector<Records> records;
 	int menu = 0;
 
 	do
@@ -538,7 +540,7 @@ void menuRecordTeacher() {
 
 	vector<newSR> records;
 	int menu = 0;
-
+	vector<Records> records;
 	do
 	{
 
@@ -547,9 +549,10 @@ void menuRecordTeacher() {
 		cout << endl;
 		cout << "1 - create student record" << endl;
 		cout << "2 - view student record" << endl;
-		cout << "3 - delete student record" << endl;
-		cout << "4 - Back" << endl;
-		cout << "5 - Exit" << endl;
+		cout << "3 - edit student record" << endl;
+		cout << "4 - delete student record" << endl;
+		cout << "5 - Back" << endl;
+		cout << "6 - Exit" << endl;
 		cout << endl;
 		cout << "> ";
 		cin >> menu;
@@ -557,29 +560,23 @@ void menuRecordTeacher() {
 
 		switch (menu)
 		{
-		case 1:
-			cout << endl;
-
-			//Records is using the create SR function to make student records
+    case 1:
 			createSR(records);
-
 			return menuRecordTeacher();
-
 		case 2:
 			viewSR();
-
 			return menuRecordTeacher();
-
 		case 3:
-			deleteSR();
-
+			editSR();
 			return menuRecordTeacher();
 		case 4:
-			return menuTeacher();
-			break;
+			deleteSR();
+			return menuRecordTeacher();
 		case 5:
-			exit(0);
-			break;
+			return menuTeacher();
+    case 6:
+      exit(0);
+      break;
 		}
 
 	} while (menu <= 0 || menu > 5);
@@ -632,7 +629,7 @@ void menuRecordParent() {
 }
 
 //function for making the student record and calling the structure
-void createSR(vector <newSR>& records) {
+void createSR(vector <Records>& records) {
 
 
 
@@ -673,12 +670,12 @@ void createSR(vector <newSR>& records) {
 	
 	if (activeuser.usertype == "Teacher")
 	{
-		newrecord.classNo = activeuser.classNo;
+		newrecord.classnum = activeuser.classnum;
 	}
 	else
 	{
 		cout << "Enter the class number:\n> ";
-		cin >> newrecord.classNo;
+		cin >> newrecord.classnum;
 	}
 
 	ofstream filecreate;
@@ -692,7 +689,7 @@ void createSR(vector <newSR>& records) {
 		filecreate << "Other: " << newrecord.other << endl;
 
 		filecreate.close(); // function is complete close the file
-		filecreate.open("Classes/class" + to_string(newrecord.classNo) + "Students.txt", ios::app);
+		filecreate.open("Classes/class" + to_string(newrecord.classnum) + "Students.txt", ios::app);
 		filecreate << newrecord.firstname << " " << newrecord.middlename << " " << newrecord.lastname << endl;
 		filecreate.close();
 
@@ -751,6 +748,116 @@ void viewSR()
 		cout << "\nSorry we couldnt find that file." << endl;
 	}
 	stars();
+}
+void editSR() {
+
+
+	string	oldfile, tempfile = "Students/temprec.txt";// Student record file and new file being created called temprec
+	string oldinfo, newinfo;//line user wishes to replace and what they wish to replace it with
+	string newFileName;
+	char changeFileName;
+
+
+
+	//user input to find the file they wish to edit
+	cout << "Enter the child's (Full name) you wish to edit (if no middle name type N/A)\n";
+
+	cout << "Enter the Students First name:\n> ";
+	cin.ignore();
+	getline(cin, editsr.firstname);
+
+	cout << "Enter the Students Middle name:\n> ";
+	getline(cin, editsr.middlename);
+
+	cout << "Enter the Students Last name:\n> ";
+	getline(cin, editsr.lastname);
+
+	oldfile = "Students/" + editsr.firstname + "-" + editsr.middlename + "-" + editsr.lastname + "-record.txt";
+
+	ifstream readfile(oldfile);// reading file name based on user input
+
+	if (!readfile.is_open())// if the file is not open then error handle
+	{
+		cout << "The file: " << oldfile << " has not opened properly please try again" << endl;
+
+		return menuTeacher();
+
+	}
+	ofstream writefile(tempfile);//creating a new file for holding the information up to a certain line
+
+	if (!writefile.is_open())// if the file is not open then error handle
+	{
+		stars();
+		cout << "The file: " << tempfile << " has not created properly please try again" << endl;
+
+		return menuTeacher();
+	}
+	stars();
+	cout << "Enter the information you wish to replace:\n>"; //user inputs for what line they wish to update and with relevent text
+	getline(cin, oldinfo);
+
+	cout << "Enter the updated information:\n>";
+	getline(cin, newinfo);
+	stars();
+
+
+	string line;
+
+	//readfile is reading eachline from the oldfile and repeating that loop into lines 
+	while (getline(readfile, line)) {
+		size_t info = line.find(oldinfo);// finding user input poisiton in file for old info
+
+		if (info != line.npos) {
+			line.replace(info, oldinfo.length(), newinfo);
+		}
+		writefile << line << endl;
+	}
+	readfile.close();
+	writefile.close();
+
+
+	//changing the file name to newfile name based on user choice
+	//  if / else if ladder for multiple errors that may accour during this process
+	stars();
+	cout << "Do you want to change the filename? (Y/N): ";
+	stars();
+	cin >> changeFileName;
+
+	cin.ignore();
+
+	if (toupper(changeFileName) == 'Y') {
+		cout << "Enter the new file name (without extension and - symbol for spaces): ";
+		getline(cin, newFileName);
+		newFileName = "Students/" + newFileName + "-record.txt";
+	}
+	else {
+		newFileName = oldfile; // Keep the original filename
+	}
+
+	if (remove(oldfile.c_str()) != 0) {
+		cout << "Unable to delete the file: " << oldfile << endl;
+	}
+	else {
+		if (rename(tempfile.c_str(), newFileName.c_str()) != 0) // if an error occours renaming rhw tempfile
+		{
+			cout << "Unable to rename file: " << tempfile << endl;
+		}
+		// checks if the new file name does not = the old one if you chose to rename it
+		else {
+			cout << oldfile << " was updated successfully and ";
+			if (newFileName != oldfile) {
+				cout << "renamed to " << newFileName << endl;
+			}
+			else {
+				cout << "kept the same filename." << endl;
+			}
+		}
+	}
+
+
+
+
+
 }
 
 void deleteSR() {
@@ -860,7 +967,7 @@ void menuRecordAdmin() {
 
 	// Update records (different to edit) - Teacher
 
-	vector<newSR> records;
+	vector<Records> records;
 	int menu = 0;
 
 	do
@@ -1010,7 +1117,7 @@ void login() {
 										if (currentLine == 9)
 										{
 
-											activeuser.classNo = stoi(line);
+											activeuser.classnum = stoi(line);
 											break;
 
 										}
@@ -1227,24 +1334,24 @@ void createChild() {
 }
 
 void viewClass() {
-	auto classFileExists = [](int classNo) {
-		ifstream classFile("Classes/class" + to_string(classNo) + "Students.txt");
+	auto classFileExists = [](int classnum) {
+		ifstream classFile("Classes/class" + to_string(classnum) + "Students.txt");
 		return classFile.good();
 	};
 
-	int classNo;
+	int classnum;
 
 	if (activeuser.usertype == "Teacher") {
-		classNo = activeuser.classNo;
+		classnum = activeuser.classnum;
 	}
 	else if (activeuser.usertype == "Admin") {
-		classNo = 0; // Change to 1 later
+		classnum = 0; // Change to 1 later
 	}
 
-	while (classFileExists(classNo)) {
-		cout << "Class " << classNo << ":" << endl;
+	while (classFileExists(classnum)) {
+		cout << "Class " << classnum << ":" << endl;
 
-		ifstream classFile("Classes/class" + to_string(classNo) + "Students.txt");
+		ifstream classFile("Classes/class" + to_string(classnum) + "Students.txt");
 		string line;
 
 		if (classFile) {
@@ -1281,7 +1388,7 @@ void viewClass() {
 			break;
 		}
 
-		++classNo;
+		++classnum;
 	}
 
 	if (activeuser.usertype == "Teacher") {
