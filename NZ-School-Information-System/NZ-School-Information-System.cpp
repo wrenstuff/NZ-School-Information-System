@@ -69,9 +69,11 @@ struct ActiveUser
 }activeuser;
 
 // ----- Function decleration ----- //
+
 void viewSR();
 void deleteSR();
 void createSR(vector <newSR>& records);
+void viewProgress(int x);
 void stars();
 void login();
 
@@ -90,6 +92,7 @@ void menuTeacher();
 void menuAdmin();
 void menuParent();
 void menuRecordAdmin();
+void menuRecordTeacher();
 void menuRecordParent();
 void menuEvents();
 
@@ -446,6 +449,12 @@ void menuAdmin() {
 		case 3:
 			menuRecordAdmin();
 			break;
+		case 4:
+			viewProgress(2);
+			break;
+		case 5:
+			viewProgress(1);
+			break;
 		case 6:
 			exit(0);
 			break;
@@ -524,6 +533,7 @@ void menuRecord() {
 
 void menuRecordTeacher() {
 
+	vector<newSR> records;
 	int menu = 0;
 
 	do
@@ -541,6 +551,30 @@ void menuRecordTeacher() {
 		cout << "> ";
 		cin >> menu;
 		cout << endl;
+
+		switch (menu)
+		{
+		case 1:
+			cout << endl;
+
+			//Records is using the create SR function to make student records
+			createSR(records);
+
+			return menuRecordTeacher();
+
+		case 2:
+			viewSR();
+
+			return menuRecordTeacher();
+
+		case 3:
+			deleteSR();
+
+			return menuRecordTeacher();
+		case 4:
+			exit(0);
+			break;
+		}
 
 	} while (menu <= 0 || menu > 5);
 
@@ -630,19 +664,31 @@ void createSR(vector <newSR>& records) {
 
 	//creating a string to make file names of the first + last names of the student and makign it a record of the .txt
 	string childrecord = newrecord.firstname + "-" + newrecord.middlename + "-" + newrecord.lastname + "-record.txt";
-	newrecord.classNo = activeuser.classNo;
+	
+	if (activeuser.usertype == "Teacher")
+	{
+		newrecord.classNo = activeuser.classNo;
+	}
+	else
+	{
+		cout << "Enter the class number:\n> ";
+		cin >> newrecord.classNo;
+	}
 
 	ofstream filecreate;
 
 	filecreate.open("Students/" + childrecord, ios::app); // change to check if any other files exist with same name rather than append
 
 	if (filecreate.is_open()) {
-		filecreate << newrecord.firstname << endl << newrecord.middlename << endl << newrecord.lastname << endl << newrecord.gender << endl;
+		filecreate << newrecord.firstname << endl << newrecord.middlename << endl << newrecord.lastname << endl << newrecord.gender << endl << newrecord.learning << endl;
 		filecreate << "Subjects\n";
 		filecreate << "Maths: " << newrecord.maths << endl << "Science: " << newrecord.science << endl << "Writing: " << newrecord.writing << endl << "Reading: " << newrecord.maths << endl;
 		filecreate << "Other: " << newrecord.other << endl;
 
 		filecreate.close(); // function is complete close the file
+		filecreate.open("Classes/class" + to_string(newrecord.classNo) + "Students.txt", ios::app);
+		filecreate << newrecord.firstname << " " << newrecord.middlename << " " << newrecord.lastname << endl;
+		filecreate.close();
 
 		cout << "You have created the record sucessfully" << endl;//feed back to user
 	}
@@ -728,6 +774,76 @@ void deleteSR() {
 	}
 	return menuTeacher();
 }
+
+void viewProgress(int x) {
+	char progressType;
+
+	if (x == 1) {
+		cout << "Progressing Students" << endl;
+		progressType = '*';
+	}
+	else if (x == 2) {
+		cout << "Need Help Students" << endl;
+		progressType = '!';
+	}
+	else {
+		cout << "Invalid progress type." << endl;
+		return; // Exit function if progress type is invalid
+	}
+
+	cout << "Progress type: " << progressType << endl;
+
+	int classIndex = 0;
+	while (true) {
+		// Open each class file
+		ifstream findProgress;
+		string classFileName = "Classes/class" + to_string(classIndex) + "Students.txt";
+		findProgress.open(classFileName);
+
+		if (!findProgress) {
+			// If class file does not exist, break the loop
+			cout << "Unable to open class file: " << classFileName << endl;
+			break;
+		}
+
+		string studentName;
+		while (getline(findProgress, studentName)) {
+			// Read each student file
+			string studentFileName = studentName;
+			for (char& ch : studentFileName) {
+				if (ch == ' ') {
+					ch = '-';
+				}
+			}
+			studentFileName += "-record.txt";
+
+			ifstream student;
+			student.open("Students/" + studentFileName);
+
+			if (student.is_open()) {
+				// Read up to line 5
+				string line;
+				for (int i = 1; i <= 5; ++i) {
+					getline(student, line);
+				}
+
+				// Check if line 5 contains the progressType character
+				if (line.find(progressType) != string::npos) {
+					cout << studentName << endl; // Output the line (or process it as needed)
+				}
+
+				student.close();
+			}
+			else {
+				cout << "Unable to open student file: " << studentFileName << endl;
+			}
+		}
+
+		findProgress.close();
+		classIndex++;
+	}
+}
+
 
 void menuRecordAdmin() {
 
@@ -1102,34 +1218,52 @@ void createChild() {
 }
 
 void classView() {
-
 	ifstream classFile;
 	classFile.open("Classes/class" + to_string(activeuser.classNo) + "Students.txt");
 
 	string line;
 
+	if (classFile) {
+		while (getline(classFile, line)) {
+			cout << line;  // Print student's name
 
+			string fileName = line;
 
-	if (classFile)
-	{
+			// Replace spaces with dashes in fileName
+			for (char& x : fileName) {
+				if (x == ' ') {
+					x = '-';
+				}
+			}
 
-		while (getline(classFile, line))
-		{
+			// Append "-record.txt" to fileName
+			fileName += "-record.txt";
 
-			cout << line << endl;
+			ifstream studentFile;
+			studentFile.open("Students/" + fileName);
 
+			// Check if studentFile opened successfully
+			if (studentFile) {
+				// Read and discard the first 4 lines (assuming you need to skip them)
+				for (int i = 0; i < 5; i++) {
+					getline(studentFile, line);
+				}
+
+				// Print the 5th line from the student's record
+				cout << "\t" << line << endl;
+
+				studentFile.close();  // Close studentFile
+			}
+			else {
+				cout << "\tError: Unable to open file for student: " << line << endl;
+			}
 		}
 
-		classFile.close();
-
+		classFile.close();  // Close classFile
 	}
-	else
-	{
-
-
-
+	else {
+		cout << "Error: Unable to open class file." << endl;
 	}
-
 }
 
 //function definition for making stars for menus
