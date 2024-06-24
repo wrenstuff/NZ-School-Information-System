@@ -79,6 +79,8 @@ void createSR(vector <Records>& records);
 void editSR();
 void stars();
 void login();
+void viewParent();
+void viewChild();
 
 // ----- Creation Functions ----- //
 
@@ -500,6 +502,9 @@ void menuParent() {
 		case 2:
 			menuTerms();
 			break;
+		case 3:
+			viewChild();
+			break;
 		case 4:
 			checkChild();
 			break;
@@ -560,7 +565,7 @@ void menuRecordTeacher() {
 
 		switch (menu)
 		{
-    case 1:
+		case 1:
 			createSR(records);
 			return menuRecordTeacher();
 		case 2:
@@ -574,9 +579,9 @@ void menuRecordTeacher() {
 			return menuRecordTeacher();
 		case 5:
 			return menuTeacher();
-    case 6:
-      exit(0);
-      break;
+		case 6:
+			exit(0);
+			break;
 		}
 
 	} while (menu <= 0 || menu > 5);
@@ -587,8 +592,6 @@ void menuRecordParent() {
 
 	int menu = 0;
 
-	string parentSelect;
-
 	do
 	{
 
@@ -596,36 +599,61 @@ void menuRecordParent() {
 
 		cout << endl;
 		cout << "1 - view parent record" << endl;
+		cout << "2 - Edit Parent Record" << endl;
+		cout << "3 - Delete Parent Record" << endl;
+		cout << "4 - Back" << endl;
+		cout << "5 - Exit" << endl;
 		cout << endl;
 		cout << "> ";
 		cin >> menu;
 		cout << endl;
 
-		if (menu == 1) {
-			//This function will allow the user to select a parent record to view`
-			cout << "Select a parent" << endl;
-			cin >> parentSelect;
-			ifstream parentFile;
-			parentFile.open("Users/" + parentSelect + ".txt");
+	} while (menu <= 0 || menu > 5);
 
-			if (parentFile.fail()) {
-				cout << "Error opening the file." << endl;
-				exit(0);
-			}
-			else
-			{
-				string line;
-				int currentLine = 0;
-				while (!parentFile.eof()) {
-					currentLine++;
-					if (currentLine != 1) {
-						getline(parentFile, line);
-						cout << line << endl;
-					}
-				}
+	switch (menu)
+	{
+	case 1:
+		return viewParent();
+		break;
+	case 4:
+		return menuAdmin();
+		break;
+	case 5:
+		exit(0);
+		break;
+	default:
+		break;
+	}
+
+}
+
+void viewParent() {
+
+	string parentSelect;
+
+	//This function will allow the user to select a parent record to view`
+	cout << "Select a parent" << endl;
+	cin >> parentSelect;
+	ifstream parentFile;
+	parentFile.open("Users/" + parentSelect + ".txt");
+
+	if (parentFile.fail()) {
+		cout << "Error opening the file." << endl;
+		exit(0);
+	}
+	else
+	{
+		string line;
+		int currentLine = 0;
+		while (!parentFile.eof()) {
+			currentLine++;
+			if (currentLine != 1) {
+				getline(parentFile, line);
+				cout << line << endl;
 			}
 		}
-	} while (menu <= 0 || menu > 3);
+	}
+
 }
 
 //function for making the student record and calling the structure
@@ -667,7 +695,7 @@ void createSR(vector <Records>& records) {
 
 	//creating a string to make file names of the first + last names of the student and makign it a record of the .txt
 	string childrecord = newrecord.firstname + "-" + newrecord.middlename + "-" + newrecord.lastname + "-record.txt";
-	
+
 	if (activeuser.usertype == "Teacher")
 	{
 		newrecord.classnum = activeuser.classnum;
@@ -1042,7 +1070,8 @@ void menuRecordAdmin() {
 		cout << "1 - create student record" << endl;
 		cout << "2 - view student record" << endl;
 		cout << "3 - delete student record" << endl;
-		cout << "4 - Exit" << endl;
+		cout << "4 - Back" << endl;
+		cout << "5 - Exit" << endl;
 		cout << endl;
 		cout << "> ";
 		cin >> menu;
@@ -1068,11 +1097,13 @@ void menuRecordAdmin() {
 
 			return menuRecordAdmin();
 		case 4:
+			return menuAdmin();
+		case 5:
 			exit(0);
 			break;
 		}
 
-	} while (menu <= 0 || menu > 3);
+	} while (menu <= 0 || menu > 5);
 
 }
 
@@ -1249,107 +1280,85 @@ void login() {
 
 // Child creation
 void checkChild() {
+	// Opens the active user's file
+	ifstream userFile("Users/" + activeuser.username + ".txt");
 
-	// Opens the active user's file --- done
-	// Check to see if usertype is parent
-	// See if they have a child
-	// If no child, create child
-	// Repeat
-	// If child, ask to create new child
-	// If yes, create child
-	ifstream userFile;
-	userFile.open("Users/" + activeuser.username + ".txt");
+	if (!userFile.is_open()) {
+		cout << "File doesn't exist" << endl;
+		return;
+	}
 
-	if (userFile)
-	{
+	string line;
+	vector<string> lines;
 
-		string line;
-		int currentline = 0;
-		while (getline(userFile, line))
-		{
+	// Read all lines into a vector
+	while (getline(userFile, line)) {
+		lines.push_back(line);
+	}
 
-			currentline++;
-			if (currentline == 4)
-			{
+	userFile.close();
 
-				if (line == "Parent")
-				{
+	// Check if the file has at least 4 lines to check the user type
+	if (lines.size() < 4) {
+		cout << "File too short" << endl;
+		return;
+	}
 
-					for (int i = 5; i < 9; i++) {
-						if (!getline(userFile, line)) {
-							cout << "File too short" << endl;
-							break;
-						}
-					}
+	bool isParent = false;
 
-					int menu;
+	// Check to see if user type is parent (4th line in the file)
+	if (lines[3] == "Parent") {
+		isParent = true;
+	}
+	else {
+		cout << "Incorrect user type" << endl;
+		return;
+	}
 
-					if (getline(userFile, line)) {
-						if (!line.empty()) {
+	if (!isParent) {
+		cout << "User type not found" << endl;
+		return;
+	}
 
-							do
-							{
-
-								cout << endl;
-								cout << "A child is already linked to your account. Would you like to add a new child?" << endl;
-								cout << "1 - Yes" << endl;
-								cout << "2 - No" << endl;
-								cout << endl;
-								cout << "> ";
-								cin >> menu;
-								cout << endl;
-
-								switch (menu)
-								{
-								case 1:
-									createChild();
-									break;
-								case 2:
-									menuParent();
-									break;
-								default:
-									break;
-								}
-
-							} while (menu <= 0 || menu > 2);
-
-						}
-						else {
-
-							cout << "You have no child" << endl;
-							createChild();
-
-						}
-					}
-					else {
-
-						userFile.close();
-
-					}
-
-					break;
-
-				}
-				else
-				{
-
-					cout << "Incorrect user type";
-					break;
-
-				}
-
+	// Check if they have a child
+	bool hasChild = false;
+	// Ensure there are enough lines for child check (next 5 lines after the 4th line)
+	if (lines.size() >= 9) {
+		for (int i = 4; i < 9; i++) {
+			if (!lines[i].empty()) {
+				hasChild = true;
+				break;
 			}
-
 		}
-
-	}
-	else
-	{
-
-		cout << "File doesn't exist";
-
 	}
 
+	if (hasChild) {
+		int menu;
+		do {
+			cout << endl;
+			cout << "A child is already linked to your account. Would you like to add a new child?" << endl;
+			cout << "1 - Yes" << endl;
+			cout << "2 - No" << endl;
+			cout << "> ";
+			cin >> menu;
+			cout << endl;
+
+			switch (menu) {
+			case 1:
+				createChild();
+				break;
+			case 2:
+				menuParent();
+				break;
+			default:
+				cout << "Invalid option. Please try again." << endl;
+			}
+		} while (menu < 1 || menu > 2);
+	}
+	else {
+		cout << "You have no child" << endl;
+		createChild();
+	}
 }
 
 void createChild() {
@@ -1371,7 +1380,6 @@ void createChild() {
 	if (file.is_open())
 	{
 
-		cout << "Student exists";
 		file.close();
 		ofstream userFile;
 		userFile.open("Users/" + activeuser.username + ".txt", ios::app);
@@ -1525,6 +1533,49 @@ void menuEvents() {
 	default:
 		break;
 	}
+
+}
+
+void viewChild() {
+	string line, childName;
+
+	ifstream parentFile("Users/" + activeuser.username + ".txt");
+	if (!parentFile.is_open()) {
+		cerr << "Unable to open parent file" << endl;
+		return;
+	}
+
+	// Skip the first 8 lines
+	for (int i = 0; i < 8 && getline(parentFile, line); i++);
+
+	while (getline(parentFile, line)) {
+		if (!line.empty()) {
+			childName = line;
+			cout << childName << endl;
+			replace(childName.begin(), childName.end(), ' ', '-');
+
+			ifstream childFile("Students/" + childName + "-record.txt");
+			if (!childFile.is_open()) {
+				cerr << "Unable to open child file for " << childName << endl;
+				continue;
+			}
+
+			// Skip the first 6 lines in the child's file
+			for (int i = 0; i < 6 && getline(childFile, line); i++);
+
+			// Read and print the next 4 lines
+			for (int i = 0; i < 4 && getline(childFile, line); i++) {
+				cout << line << endl;
+			}
+
+			childFile.close();
+			cout << endl << endl;
+		}
+	}
+
+	parentFile.close();
+
+	return menuParent();
 
 }
 
