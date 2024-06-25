@@ -245,15 +245,35 @@ void menuTerms() {
 		break;
 
 	case 5:
-		return menuParent();
-		break;
+		if (activeuser.usertype == "Admin") {
+			return menuAdmin();
+		}
+		else if (activeuser.usertype == "Teacher") {
+			return menuTeacher();
+		}
+		else if (activeuser.usertype == "Parent") {
+			return menuParent();
+		}
+		else {
+			return menuMain();
+		}
 	case 6:
 		exit(0);
 
 	}
 
-	return menuParent();
-
+	if (activeuser.usertype == "Admin") {
+		return menuAdmin();
+	}
+	else if (activeuser.usertype == "Teacher") {
+		return menuTeacher();
+	}
+	else if (activeuser.usertype == "Parent") {
+		return menuParent();
+	}
+	else {
+		return menuMain();
+	}
 }
 
 void createTeacher() {
@@ -358,13 +378,15 @@ void menuMain() {
 
 		cout << endl;
 		cout << "1 - Login" << endl;
-		cout << "2 - Exit" << endl;
+		cout << "2 - View Term Dates" << endl;
+		cout << "3 - View events / Notices" << endl;
+		cout << "4 - Exit" << endl;
 		cout << endl;
 		cout << "> ";
 		cin >> menu;
 		cout << endl;
 
-	} while (menu <= 0 || menu > 2);
+	} while (menu <= 0 || menu > 4);
 
 	switch (menu)
 	{
@@ -372,6 +394,12 @@ void menuMain() {
 		login();
 		break;
 	case 2:
+		menuTerms();
+		break;
+	case 3:
+		menuEvents();
+		break;
+	case 4:
 		exit(0);
 		break;
 	default:
@@ -437,7 +465,8 @@ void menuAdmin() {
 		cout << "3 - Student Records" << endl;
 		cout << "4 - view 'help needed' students" << endl; //Can be renamed. Couldn't think of anything else at the time of writing
 		cout << "5 - view 'progressing' students" << endl;
-		cout << "6 - Exit Program" << endl;
+		cout << "6 - New Teacher registration" << endl;
+		cout << "7 - Exit Program" << endl;
 		cout << endl;
 		cout << "> ";
 		cin >> menu;
@@ -445,7 +474,11 @@ void menuAdmin() {
 
 		// The report should include, classroom number, student full name, learning progress of each subject, teacher name and their parents contact number.
 
-		switch (menu)
+		
+
+	} while (menu <= 0 || menu > 7);
+	
+	switch (menu)
 		{
 		case 1:
 			viewClass();
@@ -462,14 +495,14 @@ void menuAdmin() {
 			viewProgress(1);
 			break;
 		case 6:
+			createTeacher();
+			break;
+		case 7:
 			exit(0);
 			break;
 		default:
 			break;
 		}
-
-	} while (menu <= 0 || menu > 7);
-
 }
 
 void menuParent() {
@@ -846,18 +879,13 @@ void deleteSR() {
 	cout << "Enter the child's full name you wish to delete (if no middle name, type N/A):\n> ";
 	getline(cin, childsName);
 
-	
-	
-
-	childsName += "-record.txt";
 	replace(childsName.begin(), childsName.end(), ' ', '-');
 	
-
-	filename = "Students/" + childsName;
+	filename = "Students/" + childsName + "-record.txt";
 
 	deletefile = remove(filename.c_str());
 
-	deleteStudentFromClass(childsName);
+	deleteStudentFromClass(filename);
 
 	if (deletefile == 0) {
 		stars();
@@ -1490,7 +1518,7 @@ void menuEvents() {
 	eventsfile.close();
 
 
-	cout << "1 - Return to Parents Menu" << endl;
+	cout << "1 - Go back" << endl;
 	cout << "2 - Exit program" << endl;
 	cout << "> ";
 
@@ -1499,14 +1527,25 @@ void menuEvents() {
 	switch (menu)
 	{
 	case 1:
-		return menuParent();
-		break;
+		if (activeuser.usertype == "Admin") {
+			return menuAdmin();
+		}
+		else if (activeuser.usertype == "Teacher") {
+			return menuTeacher();
+		}
+		else if (activeuser.usertype == "Parent") {
+			return menuParent();
+		}
+		else {
+			return menuMain();
+		}
 	case 2:
 		exit(0);
 	default:
 		break;
 	}
 
+	
 }
 
 void errorFileCreate(string x, string y, string extra) {
