@@ -70,7 +70,6 @@ struct ActiveUser
 }activeuser;
 
 // ----- Function decleration ----- //
-
 void viewSR();
 void deleteSR();
 void deleteStudentFromClass(string);
@@ -81,6 +80,11 @@ void stars();
 void login();
 void viewParent();
 void viewChild();
+void viewEvents();
+void addEvents();
+void editEvents();
+void listEvents();
+void deleteEvents();
 
 // ----- Creation Functions ----- //
 
@@ -352,6 +356,8 @@ void createParent() {
 void menuMain() {
 
 	int menu = 0;
+	stars();
+	cout << "Welcome to the Readmore Primary" << endl;
 
 	do
 	{
@@ -360,7 +366,8 @@ void menuMain() {
 
 		cout << endl;
 		cout << "1 - Login" << endl;
-		cout << "2 - Exit" << endl;
+		cout << "2 - Events" << endl;
+		cout << "3 - Exit" << endl;
 		cout << endl;
 		cout << "> ";
 		cin >> menu;
@@ -374,8 +381,10 @@ void menuMain() {
 		login();
 		break;
 	case 2:
-		exit(0);
+		listEvents();
 		break;
+	case 3:
+		exit(0);
 	default:
 		break;
 	}
@@ -396,13 +405,14 @@ void menuTeacher() {
 		cout << endl;
 		cout << "1 - List Class" << endl;
 		cout << "2 - Student Records" << endl;
-		cout << "3 - Exit" << endl;
+		cout << "3 - View Events" << endl;
+		cout << "4 - Exit" << endl;
 		cout << endl;
 		cout << "> ";
 		cin >> menu;
 		cout << endl;
 
-	} while (menu <= 0 || menu > 3);
+	} while (menu <= 0 || menu > 4);
 
 
 	switch (menu)
@@ -414,6 +424,9 @@ void menuTeacher() {
 		menuRecordTeacher();
 		break;
 	case 3:
+		listEvents();
+		return menuTeacher();
+	case 4:
 		exit(0);
 		break;
 	default:
@@ -439,7 +452,8 @@ void menuAdmin() {
 		cout << "3 - Student Records" << endl;
 		cout << "4 - view 'help needed' students" << endl; //Can be renamed. Couldn't think of anything else at the time of writing
 		cout << "5 - view 'progressing' students" << endl;
-		cout << "6 - Exit Program" << endl;
+		cout << "6 - Event Menu" << endl;
+		cout << "7 - Exit Program" << endl;
 		cout << endl;
 		cout << "> ";
 		cin >> menu;
@@ -463,14 +477,17 @@ void menuAdmin() {
 		case 5:
 			viewProgress(1);
 			break;
-		case 6:
+		case 6: 
+			menuEvents();
+			break;
+		case 7:
 			exit(0);
 			break;
 		default:
 			break;
 		}
 
-	} while (menu <= 0 || menu > 7);
+	} while (menu <= 0 || menu > 8);
 
 }
 
@@ -1496,46 +1513,349 @@ void stars() {
 	cout << endl;
 }
 void menuEvents() {
-	string lines;
+	
 	int menu;
+	
+	
+	// menu options based on user type signed in as
+	if (activeuser.usertype == "Admin")
+	{
+		cout << "1 - Return to Admin Menu" << endl;
+		cout << "2 - List of Events" << endl;
+		cout << "3 - Edit Events" << endl;
+		cout << "4 - Add events" << endl;
+		cout << "5 - Exit program" << endl;
+		cout << "> ";
+
+		cin >> menu;
+
+		switch (menu)
+		{
+		case 1:
+			return menuAdmin();
+			break;
+		case 2:
+			listEvents();
+			break;
+		case 3:
+			editEvents();
+			break;
+		case 4:
+			addEvents();
+			break;
+		case 5:
+			exit(0);
+
+		default:
+			break;
+		}
+	}
+	if (activeuser.usertype == "Parent")
+	{
+
+		cout << "1 - List of events" << endl;
+		cout << "2 - Return to Parent Menu" << endl;
+		cout << "3 - Exit program" << endl;
+		cout << "> ";
+
+		cin >> menu;
+
+		switch (menu)
+		{
+		case 1:
+			listEvents();
+			break;
+		case 2:
+			return menuParent();
+		case 3:
+			exit(0);
+		default:
+			break;
+		}
+	}
+	if (activeuser.usertype == "Teacher")
+	{
+		cout << "1 - Return to Parent Menu" << endl;
+		cout << "2 - View Events" << endl;
+		cout << "3 - Exit program" << endl;
+		cout << "> ";
+
+		cin >> menu;
+
+		switch (menu)
+		{
+		case 1:
+			return menuParent();
+			break;
+		case 2:
+			listEvents();
+			break;
+		case 3:
+			exit(0);
+		default:
+			break;
+		}
+	}
+	
+	
+}
+//This function is called by List events for when you want to view en event from that list based on your user type
+void viewEvents() {
+	string lines;
+	string fileselect;
 
 
 
-	ifstream eventsfile("Events.txt"); // reading Events file
-	if (!eventsfile.is_open()) {
-		cout << "Error in opening the file" << endl;//error message for user if it cant read.
+	cout << "Which event would you like to view?\n> ";
+	cin.ignore();
+	getline(cin, fileselect);
+	// replace inpute to include - instead of spaces for the file name
+	replace(fileselect.begin(), fileselect.end(), ' ', '-');
+
+	string eventsfile = ("Events/" + fileselect + ".txt"); // reading Events file
+
+
+	ifstream selectevent(eventsfile);
+
+	if (!selectevent.is_open()) {
+		cout << "Error: This file doesnt exist" << endl;//error message for user if it cant find this file.
 		return;
 	}
 
 
 	stars();
-	while (getline(eventsfile, lines)) {
+	while (getline(selectevent, lines)) {
 		cout << lines << endl;//displaying text fromm the file
 	}
 	stars();//printing top stars
 
-	eventsfile.close();
+	selectevent.close();
+}
+void addEvents() {
+	string eventname, eventloc, eventdetail, eventdate,filename;
+		
+	//user inputs
+	cout << "Creating an Event:" << endl;
+	cin.ignore();
+	cout << "Enter a name for the Event:\n>";
+	getline(cin, eventname);
 
+	cout << "Enter The Date of the Event Day/Month/Year\n>";
+	getline(cin, eventdate);
 
-	cout << "1 - Return to Parents Menu" << endl;
-	cout << "2 - Exit program" << endl;
-	cout << "> ";
+	cout << "Enter the Location of the Event\n>";
+	getline(cin, eventloc);
 
-	cin >> menu;
-
-	switch (menu)
-	{
-	case 1:
-		return menuParent();
-		break;
-	case 2:
-		exit(0);
-	default:
-		break;
+	cout << "Enter details of the Event\n>";
+	getline(cin, eventdetail);
+	// creating another string to hold the file name with spaces replaced with -
+	filename = eventname;
+	
+	replace(filename.begin(), filename.end(), ' ', '-');
+	
+	ofstream createEvent("Events/" + filename + ".txt");
+	
+	//error handling for creating event
+	if (!createEvent.is_open()) {
+		cout << "Error creating The file for the event: " << filename << ".txt" << endl;
+		return menuAdmin();
 	}
+	//information goes into file
+	createEvent<< eventname << endl << "Event Date: " << eventdate << endl << "Event Location: " << eventloc << endl << "Event Details: " << eventdetail << endl;
+	
+	ofstream addtolist("Events/EventsList.txt", ios_base::app); // Appending the list instead of creating a new file as we want a list of all events
+	addtolist << eventname << endl;
+	
+	//error handling for list
+	if (!addtolist.is_open()) {
+		cout << "Error creating The file for the event: " << filename << ".txt" << endl;
+		return menuAdmin();
+		
+	}
+	createEvent.close();
+	addtolist.close();
+}
+void editEvents() {
 
 }
+// this provdides a list of the events in the Eventslist.txt file and then based on your user type gives you different menus 
+void listEvents() {
+	string eventinfo;
+	int menu = 0;
 
+	//opening the events list 
+	ifstream eventlist("Events/EventsList.txt");
+
+	//error management for if it cant find the file
+	if (!eventlist.is_open()) {
+		cout << "Error opening EventsList.txt" << endl;
+		return;
+	}
+
+	stars();
+	cout << "List of events:" << endl;
+	stars();
+
+	//Make a list of the events for the user from the eventslist file
+	while (getline(eventlist, eventinfo)) {
+		cout << eventinfo << endl;
+	}
+	stars();
+
+	//Menus for this are based off of the user type.
+	
+	if (activeuser.usertype == "Admin") {
+		do {
+			stars();
+			cout << endl;
+			cout << "1 - View event" << endl;
+			cout << "2 - Delete event" << endl;
+			cout << "3 - Add event" << endl;
+			cout << "4 - Exit" << endl;
+			cout << endl;
+			cout << "> ";
+			cin >> menu;
+			cout << endl;
+		} while (menu <= 0 || menu > 4);
+
+		switch (menu) {
+		case 1:
+			viewEvents();
+			break;
+		case 2:
+			deleteEvents();
+			break;
+		case 3:
+			addEvents();
+			break;
+		case 4:
+			exit(0);
+		}
+	}
+	else if (activeuser.usertype == "Teacher") 
+	{
+		do {
+			stars();
+			cout << endl;
+			cout << "1 - View event" << endl;
+			cout << "2 - Exit" << endl;
+			cout << endl;
+			cout << "> ";
+			cin >> menu;
+			cout << endl;
+		} while (menu <= 0 || menu > 2);
+
+		switch (menu) {
+		case 1:
+			viewEvents();
+			break;
+		case 2:
+			exit(0);
+		}
+	}
+	else if (activeuser.usertype == "Parent") 
+	{
+		do {
+			stars();
+			cout << endl;
+			cout << "1 - View event" << endl;
+			cout << "2 - Exit" << endl;
+			cout << endl;
+			cout << "> ";
+			cin >> menu;
+			cout << endl;
+		} while (menu <= 0 || menu > 2);
+
+		switch (menu) {
+		case 1:
+			viewEvents();
+			return menuParent();
+		case 2:
+			exit(0);
+		}
+	}
+	else {
+		do {
+			stars();
+			cout << endl;
+			cout << "1 - View event" << endl;
+			cout << "2 - Exit" << endl;
+			cout << endl;
+			cout << "> ";
+			cin >> menu;
+			cout << endl;
+		} while (menu <= 0 || menu > 2);
+
+		switch (menu) {
+		case 1:
+			viewEvents();
+			return menuMain();
+		case 2:
+			exit(0);
+		}
+	}
+}
+
+void deleteEvents()
+{
+
+	string lines, fileselect;
+
+	int deletefile;
+
+	//Delete the event file segment
+	cout << "Which event would you like to Delete?\n> ";
+	cin.ignore();
+	getline(cin, fileselect);
+
+	string replacespaces = fileselect;//keeping fileselect input for later purposes
+
+	// replace input to include - instead of spaces for the file name
+	replace(replacespaces.begin(), replacespaces.end(), ' ', '-');
+
+	deletefile = remove(("Events/" + replacespaces + ".txt").c_str());
+
+	if (deletefile == 0) {
+		stars();
+		cout << "File '" << fileselect << "' successfully deleted.\n";
+		stars();
+	}
+	else {
+		cout << "Error deleting file '" << fileselect << "'.\n";
+	}
+	//*************************************************************************************************************************************************************************
+	//delete the line in the vents list segment
+	string path = "Events/Eventslist.txt";
+	ifstream readfile(path);
+	ofstream tempfile("Events/temp.txt");
+
+	bool located = false;
+
+	if (readfile.is_open()) {
+		string line;
+		while (getline(readfile, line)) {
+			if (line.find(fileselect) == string::npos) {
+				tempfile << line << endl;
+			}
+			else {
+				located = true;
+			}
+		}
+		readfile.close();
+		tempfile.close();
+
+		ifstream tempFile("Events/temp.txt");
+		ofstream eventslist("Events/Eventslist.txt");
+
+		while (getline(tempFile, line)) {
+			eventslist << line << endl;
+		}
+
+	}
+	tempfile.close();
+	deletefile = remove(("Events/temp.txt"));
+	
+}
 void viewChild() {
 	string line, childName;
 
@@ -1578,6 +1898,7 @@ void viewChild() {
 	return menuParent();
 
 }
+
 
 void errorFileCreate(string x, string y, string extra) {
 
