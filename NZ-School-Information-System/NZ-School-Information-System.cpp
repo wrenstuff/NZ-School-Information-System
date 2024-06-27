@@ -705,9 +705,9 @@ void createSR(vector <Records>& records) {
 	getline(cin, newrecord.writing);
 	cout << "Learning Progress state:\n> ";
 	getline(cin, newrecord.learning);
-	cout << "Other activities?\n>";
+	cout << "Other activities?\n> ";
 	getline(cin, newrecord.other);
-	cout << "Notes on student:\n>";
+	cout << "Notes on student:\n> ";
 	getline(cin, newrecord.other);
 
 
@@ -771,6 +771,7 @@ void viewSR() {
 
 	if (recordFile.is_open()) {
 		stars();
+		replace(fullname.begin(), fullname.end(), '-', ' ');
 		cout << "This is the student record for " << fullname << endl;
 		stars();
 		// loop for pulling information from file
@@ -788,10 +789,10 @@ void viewSR() {
 
 	stars();
 }
-void editSR() {
 
+void editSR() {
 	string oldfile, tempfile = "Students/temprec.txt"; // Student record file and temporary file being created
-	string oldinfo, newinfo; // line user wishes to replace and what they wish to replace it with
+	string newinfo; // What the user wishes to replace the line with
 	string newFileName;
 	char changeFileName;
 
@@ -814,6 +815,21 @@ void editSR() {
 		return;
 	}
 
+	stars();
+	cout << "Current contents of the file:\n";
+
+	// Display the full record with line numbers
+	string line;
+	int lineNumber = 1;
+	while (getline(readfile, line)) {
+		cout << lineNumber << ": " << line << endl;
+		lineNumber++;
+	}
+	readfile.clear();  // Clear any error flags that may have been set
+	readfile.seekg(0); // Rewind to the beginning of the file
+
+	stars();
+
 	ofstream writefile(tempfile); // creating a new file to hold the updated information
 
 	if (!writefile.is_open()) {
@@ -823,22 +839,24 @@ void editSR() {
 	}
 
 	stars();
-	cout << "Enter the information you wish to replace:\n>";
-	getline(cin, oldinfo);
+	cout << "Enter the line number you wish to replace:\n> ";
+	int lineToEdit;
+	cin >> lineToEdit;
+	cin.ignore(); // clear the newline character from the input buffer
 
-	cout << "Enter the updated information:\n>";
+	cout << "Enter the updated information:\n> ";
 	getline(cin, newinfo);
 	stars();
 
-	string line;
+	int currentLine = 1;
 
-	// Read each line from the old file, replace information if found, and write to the temporary file
+	// Read each line from the old file, replace information if line number matches, and write to the temporary file
 	while (getline(readfile, line)) {
-		size_t pos = line.find(oldinfo);
-		if (pos != string::npos) {
-			line.replace(pos, oldinfo.length(), newinfo);
+		if (currentLine == lineToEdit) {
+			line = newinfo;
 		}
 		writefile << line << endl;
+		currentLine++;
 	}
 
 	readfile.close();
@@ -849,7 +867,7 @@ void editSR() {
 	cout << "Do you want to change the filename (if Full name has changed)? (Y/N):\n> ";
 	cin >> changeFileName;
 
-	cin.ignore();
+	cin.ignore(); // clear the newline character from the input buffer
 
 	if (toupper(changeFileName) == 'Y') {
 		cout << "Enter the new file name (without extension and spaces will be replaced by -):\n> ";
@@ -869,6 +887,13 @@ void editSR() {
 		cout << "Unable to delete the file: " << oldfile << endl;
 	}
 	else {
+		// Check if the new file already exists and delete it if it does
+		if (newFileName != oldfile && ifstream(newFileName)) {
+			if (remove(newFileName.c_str()) != 0) {
+				cout << "Unable to delete the existing file: " << newFileName << endl;
+			}
+		}
+
 		if (rename(tempfile.c_str(), newFileName.c_str()) != 0) {
 			cout << "Unable to rename file: " << tempfile << endl;
 		}
@@ -883,7 +908,11 @@ void editSR() {
 			}
 		}
 	}
+
+	// Ensure the temporary file is deleted if it still exists
+	remove(tempfile.c_str());
 }
+
 void deleteSR() {
 	int deletefile;
 	string childsName;
@@ -1563,16 +1592,16 @@ void addEvents() {
 	//user inputs
 	cout << "Creating an Event:" << endl;
 	cin.ignore();
-	cout << "Enter a name for the Event:\n>";
+	cout << "Enter a name for the Event:\n> ";
 	getline(cin, eventname);
 
-	cout << "Enter The Date of the Event Day/Month/Year\n>";
+	cout << "Enter The Date of the Event Day/Month/Year\n> ";
 	getline(cin, eventdate);
 
-	cout << "Enter the Location of the Event\n>";
+	cout << "Enter the Location of the Event\n> ";
 	getline(cin, eventloc);
 
-	cout << "Enter details of the Event\n>";
+	cout << "Enter details of the Event\n> ";
 	getline(cin, eventdetail);
 	// creating another string to hold the file name with spaces replaced with -
 	filename = eventname;
