@@ -74,17 +74,17 @@ struct ActiveUser
 void viewSR();
 void deleteSR();
 void deleteStudentFromClass(string);
-void viewProgress(int x);
-void createSR(vector <Records>& records);
+void viewProgress(int);
+void createSR(vector <Records>&);
 void editSR();
 void stars();
 void login();
 void viewParent();
 void viewChild();
-void viewEvents();
+void viewEvents(int);
 void addEvents();
-void editEvents();
-void listEvents();
+void editEvents(int);
+
 void deleteEvents();
 
 // ----- Creation Functions ----- //
@@ -95,17 +95,16 @@ void checkChild();
 void createChild();
 
 // ----- Menu Functions ----- //
-
-void menuTerms();
 void menuMain();
+void menuTerms();
 void menuTeacher();
+void menuEvents();
 void menuAdmin();
 void menuParent();
 void menuRecordAdmin();
 void menuRecordTeacher();
 void menuRecordParent();
 void menuRecordTeacher();
-void menuEvents();
 
 // ----- Class Records ----- //
 
@@ -403,7 +402,7 @@ void menuMain() {
 		login();
 		break;
 	case 2:
-		listEvents();
+		menuEvents();
 		break;
 	case 3:
 		menuTerms();
@@ -431,7 +430,7 @@ void menuTeacher() {
 		cout << endl;
 		cout << "1 - List Class" << endl;
 		cout << "2 - Student Records" << endl;
-		cout << "3 - View Events" << endl;
+		cout << "3 - Events" << endl;
 		cout << "4 - Exit" << endl;
 		cout << endl;
 		cout << "> ";
@@ -450,7 +449,7 @@ void menuTeacher() {
 		menuRecordTeacher();
 		break;
 	case 3:
-		listEvents();
+		menuEvents();
 		return menuTeacher();
 	case 4:
 		exit(0);
@@ -509,9 +508,9 @@ void menuAdmin() {
 		case 6: 
 			menuEvents();
 			break;
-    case 7:
-      createTeacher();
-      break;
+		case 7:
+		  createTeacher();
+		  break;
 		case 8:
 			exit(0);
 			break;
@@ -530,7 +529,7 @@ void menuParent() {
 		stars();
 
 		cout << endl;
-		cout << "1 - school news/notices" << endl;
+		cout << "1 - Events" << endl;
 		cout << "2 - term dates" << endl;
 		cout << "3 - view child report" << endl; // access info from record
 		cout << "4 - Add Child" << endl;
@@ -1511,103 +1510,31 @@ void stars() {
 	}
 	cout << endl;
 }
-void menuEvents() {
-	
-	int menu;
-	
-	
-	// menu options based on user type signed in as
-	if (activeuser.usertype == "Admin")
-	{
-		cout << "1 - Return to Admin Menu" << endl;
-		cout << "2 - List of Events" << endl;
-		cout << "3 - Edit Events" << endl;
-		cout << "4 - Add events" << endl;
-		cout << "5 - Exit program" << endl;
-		cout << "> ";
 
-		cin >> menu;
-
-		switch (menu)
-		{
-		case 1:
-			return menuAdmin();
-			break;
-		case 2:
-			listEvents();
-			break;
-		case 3:
-			editEvents();
-			break;
-		case 4:
-			addEvents();
-			break;
-		case 5:
-			exit(0);
-
-		default:
-			break;
-		}
-	}
-	if (activeuser.usertype == "Parent")
-	{
-
-		cout << "1 - List of events" << endl;
-		cout << "2 - Return to Parent Menu" << endl;
-		cout << "3 - Exit program" << endl;
-		cout << "> ";
-
-		cin >> menu;
-
-		switch (menu)
-		{
-		case 1:
-			listEvents();
-			break;
-		case 2:
-			return menuParent();
-		case 3:
-			exit(0);
-		default:
-			break;
-		}
-	}
-	if (activeuser.usertype == "Teacher")
-	{
-		cout << "1 - Return to Parent Menu" << endl;
-		cout << "2 - View Events" << endl;
-		cout << "3 - Exit program" << endl;
-		cout << "> ";
-
-		cin >> menu;
-
-		switch (menu)
-		{
-		case 1:
-			return menuParent();
-			break;
-		case 2:
-			listEvents();
-			break;
-		case 3:
-			exit(0);
-		default:
-			break;
-		}
-	}
-	
-	
-}
 //This function is called by List events for when you want to view en event from that list based on your user type
-void viewEvents() {
-	string lines;
+void viewEvents(int eventNum) {
+	string line;
 	string fileselect;
-
-
+	int num;
 
 	cout << "Which event would you like to view?\n> ";
-	cin.ignore();
-	getline(cin, fileselect);
+	cin >> num;
+
+	ifstream eventList;
+	eventList.open("Events/EventsList.txt");
+
+	for (int i = 1; i <= eventNum; i++)
+	{
+		getline(eventList, line);
+		if (i == num)
+		{
+			fileselect = line;
+			break;
+		}
+	}
+
+	eventList.close();
+
 	// replace inpute to include - instead of spaces for the file name
 	replace(fileselect.begin(), fileselect.end(), ' ', '-');
 
@@ -1617,14 +1544,14 @@ void viewEvents() {
 	ifstream selectevent(eventsfile);
 
 	if (!selectevent.is_open()) {
-		cout << "Error: This file doesnt exist" << endl;//error message for user if it cant find this file.
+		cout << "Error: This file doesnt exist - " << fileselect << endl;//error message for user if it cant find this file.
 		return;
 	}
 
 
 	stars();
-	while (getline(selectevent, lines)) {
-		cout << lines << endl;//displaying text fromm the file
+	while (getline(selectevent, line)) {
+		cout << line << endl;//displaying text fromm the file
 	}
 	stars();//printing top stars
 
@@ -1674,11 +1601,101 @@ void addEvents() {
 	createEvent.close();
 	addtolist.close();
 }
-void editEvents() {
+
+void editEvents(int eventNum) {
+	string line, fileselect;
+	int num;
+
+	cout << "Which event would you like to edit?\n> ";
+	cin >> num;
+	cin.ignore();
+
+	ifstream eventList("Events/EventsList.txt");
+	if (!eventList.is_open()) {
+		cout << "Error: Unable to open EventsList.txt" << endl;
+		return;
+	}
+
+	for (int i = 1; i <= eventNum; ++i) {
+		getline(eventList, line);
+		if (i == num) {
+			fileselect = line;
+			break;
+		}
+	}
+	eventList.close();
+
+	// Replace spaces with dashes in the filename
+	replace(fileselect.begin(), fileselect.end(), ' ', '-');
+	string eventsfile = "Events/" + fileselect + ".txt";
+
+	ifstream selectevent(eventsfile);
+	if (!selectevent.is_open()) {
+		cout << "Error: This file doesn't exist - " << fileselect << endl;
+		return;
+	}
+
+	vector<string> eventLines;
+	while (getline(selectevent, line)) {
+		eventLines.push_back(line);
+	}
+	selectevent.close();
+
+	cout << "Select the field you want to edit:" << endl;
+	cout << "1 - Event Name: " << eventLines[0] << endl;
+	cout << "2 - " << eventLines[1] << endl;
+	cout << "3 - " << eventLines[2] << endl;
+	cout << "4 - " << eventLines[3] << endl;
+
+	int lineNum;
+	cout << "> ";
+	cin >> lineNum;
+	cin.ignore();
+
+	if (lineNum < 1 || lineNum > 4) {
+		cout << "Invalid selection." << endl;
+		return;
+	}
+
+	string newContent;
+	cout << "Enter the new content for this field:\n> ";
+	getline(cin, newContent);
+
+	// Update the specific field
+	switch (lineNum) {
+	case 1:
+		eventLines[0] = newContent;
+		break;
+	case 2:
+		eventLines[1] = "Event Date: " + newContent;
+		break;
+	case 3:
+		eventLines[2] = "Event Location: " + newContent;
+		break;
+	case 4:
+		eventLines[3] = "Event Details: " + newContent;
+		break;
+	}
+
+	ofstream updatedEvent(eventsfile);
+	if (!updatedEvent.is_open()) {
+		cout << "Error: Unable to open file for writing - " << fileselect << endl;
+		return;
+	}
+
+	for (const auto& eventLine : eventLines) {
+		updatedEvent << eventLine << endl;
+	}
+
+	updatedEvent.close();
+
+	cout << "Event updated successfully!" << endl;
+	return menuAdmin();
 
 }
+
 // this provdides a list of the events in the Eventslist.txt file and then based on your user type gives you different menus 
-void listEvents() {
+void menuEvents() {
 	string eventinfo;
 	int menu = 0;
 
@@ -1695,8 +1712,10 @@ void listEvents() {
 	cout << "List of events:" << endl;
 	stars();
 
-	//Make a list of the events for the user from the eventslist file
+	//Make a list of the events for the user from the eventslist file+
+	int x = 0;
 	while (getline(eventlist, eventinfo)) {
+		cout << ++x << " - ";
 		cout << eventinfo << endl;
 	}
 	stars();
@@ -1710,24 +1729,27 @@ void listEvents() {
 			cout << "1 - View event" << endl;
 			cout << "2 - Delete event" << endl;
 			cout << "3 - Add event" << endl;
-			cout << "4 - Exit" << endl;
+			cout << "4 - Edit event" << endl;
+			cout << "5 - Back" << endl;
+			cout << "6 - Exit" << endl;
 			cout << endl;
 			cout << "> ";
 			cin >> menu;
 			cout << endl;
-		} while (menu <= 0 || menu > 4);
+		} while (menu <= 0 || menu > 6);
 
 		switch (menu) {
 		case 1:
-			viewEvents();
-			break;
+			return viewEvents(x);
 		case 2:
-			deleteEvents();
-			break;
+			return deleteEvents();
 		case 3:
-			addEvents();
-			break;
+			return addEvents();
 		case 4:
+			return editEvents(x);
+		case 5:
+			return menuAdmin();
+		case 6:
 			exit(0);
 		}
 	}
@@ -1737,19 +1759,23 @@ void listEvents() {
 			stars();
 			cout << endl;
 			cout << "1 - View event" << endl;
-			cout << "2 - Exit" << endl;
+			cout << "2 - Back" << endl;
+			cout << "3 - Exit" << endl;
 			cout << endl;
 			cout << "> ";
 			cin >> menu;
 			cout << endl;
-		} while (menu <= 0 || menu > 2);
+		} while (menu <= 0 || menu > 3);
 
 		switch (menu) {
 		case 1:
-			viewEvents();
-			break;
+			return viewEvents(x);
 		case 2:
+			return menuTeacher();
+		case 3:
 			exit(0);
+		default:
+			return menuMain();
 		}
 	}
 	else if (activeuser.usertype == "Parent") 
@@ -1758,19 +1784,23 @@ void listEvents() {
 			stars();
 			cout << endl;
 			cout << "1 - View event" << endl;
+			cout << "2 - Back" << endl;
 			cout << "2 - Exit" << endl;
 			cout << endl;
 			cout << "> ";
 			cin >> menu;
 			cout << endl;
-		} while (menu <= 0 || menu > 2);
+		} while (menu <= 0 || menu > 3);
 
 		switch (menu) {
 		case 1:
-			viewEvents();
-			return menuParent();
+			return viewEvents(x);
 		case 2:
+			return menuParent();
+		case 3:
 			exit(0);
+		default:
+			return menuMain();
 		}
 	}
 	else {
@@ -1778,7 +1808,8 @@ void listEvents() {
 			stars();
 			cout << endl;
 			cout << "1 - View event" << endl;
-			cout << "2 - Exit" << endl;
+			cout << "2 - Back" << endl;
+			cout << "3 - Exit" << endl;
 			cout << endl;
 			cout << "> ";
 			cin >> menu;
@@ -1787,10 +1818,13 @@ void listEvents() {
 
 		switch (menu) {
 		case 1:
-			viewEvents();
-			return menuMain();
+			viewEvents(x);
 		case 2:
+			return menuMain();
+		case 3:
 			exit(0);
+		default:
+			return menuMain();
 		}
 	}
 }
@@ -1855,6 +1889,7 @@ void deleteEvents()
 	deletefile = remove(("Events/temp.txt"));
 	
 }
+
 void viewChild() {
 	string line, childName;
 
