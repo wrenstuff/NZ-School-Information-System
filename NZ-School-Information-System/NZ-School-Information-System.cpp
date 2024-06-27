@@ -24,7 +24,7 @@ struct Records {
 		notes;
 	char gender;
 	int classnum;
-}newrecord, viewsr, editsr;
+}newrecord;
 
 
 struct NewParent
@@ -70,6 +70,7 @@ struct ActiveUser
 }activeuser;
 
 // ----- Function decleration ----- //
+
 void viewSR();
 void deleteSR();
 void deleteStudentFromClass(string);
@@ -251,15 +252,35 @@ void menuTerms() {
 		break;
 
 	case 5:
-		return menuParent();
-		break;
+		if (activeuser.usertype == "Admin") {
+			return menuAdmin();
+		}
+		else if (activeuser.usertype == "Teacher") {
+			return menuTeacher();
+		}
+		else if (activeuser.usertype == "Parent") {
+			return menuParent();
+		}
+		else {
+			return menuMain();
+		}
 	case 6:
 		exit(0);
 
 	}
 
-	return menuParent();
-
+	if (activeuser.usertype == "Admin") {
+		return menuAdmin();
+	}
+	else if (activeuser.usertype == "Teacher") {
+		return menuTeacher();
+	}
+	else if (activeuser.usertype == "Parent") {
+		return menuParent();
+	}
+	else {
+		return menuMain();
+	}
 }
 
 void createTeacher() {
@@ -367,13 +388,14 @@ void menuMain() {
 		cout << endl;
 		cout << "1 - Login" << endl;
 		cout << "2 - Events" << endl;
-		cout << "3 - Exit" << endl;
+    cout << "3 - View Term Dates" << endl;
+		cout << "4 - Exit" << endl;
 		cout << endl;
 		cout << "> ";
 		cin >> menu;
 		cout << endl;
 
-	} while (menu <= 0 || menu > 2);
+	} while (menu <= 0 || menu > 4);
 
 	switch (menu)
 	{
@@ -384,7 +406,11 @@ void menuMain() {
 		listEvents();
 		break;
 	case 3:
+		menuTerms();
+		break;
+	case 4:
 		exit(0);
+		break;
 	default:
 		break;
 	}
@@ -453,7 +479,8 @@ void menuAdmin() {
 		cout << "4 - view 'help needed' students" << endl; //Can be renamed. Couldn't think of anything else at the time of writing
 		cout << "5 - view 'progressing' students" << endl;
 		cout << "6 - Event Menu" << endl;
-		cout << "7 - Exit Program" << endl;
+		cout << "7 - New Teacher registration" << endl;
+		cout << "8 - Exit Program" << endl;
 		cout << endl;
 		cout << "> ";
 		cin >> menu;
@@ -461,7 +488,9 @@ void menuAdmin() {
 
 		// The report should include, classroom number, student full name, learning progress of each subject, teacher name and their parents contact number.
 
-		switch (menu)
+	} while (menu <= 0 || menu > 8);
+  
+  switch (menu)
 		{
 		case 1:
 			viewClass();
@@ -480,15 +509,15 @@ void menuAdmin() {
 		case 6: 
 			menuEvents();
 			break;
-		case 7:
+    case 7:
+      createTeacher();
+      break;
+		case 8:
 			exit(0);
 			break;
 		default:
 			break;
 		}
-
-	} while (menu <= 0 || menu > 8);
-
 }
 
 void menuParent() {
@@ -518,9 +547,6 @@ void menuParent() {
 			break;
 		case 2:
 			menuTerms();
-			break;
-		case 3:
-			viewChild();
 			break;
 		case 4:
 			checkChild();
@@ -609,6 +635,8 @@ void menuRecordParent() {
 
 	int menu = 0;
 
+	string parentSelect;
+
 	do
 	{
 
@@ -616,61 +644,36 @@ void menuRecordParent() {
 
 		cout << endl;
 		cout << "1 - view parent record" << endl;
-		cout << "2 - Edit Parent Record" << endl;
-		cout << "3 - Delete Parent Record" << endl;
-		cout << "4 - Back" << endl;
-		cout << "5 - Exit" << endl;
 		cout << endl;
 		cout << "> ";
 		cin >> menu;
 		cout << endl;
 
-	} while (menu <= 0 || menu > 5);
+		if (menu == 1) {
+			//This function will allow the user to select a parent record to view`
+			cout << "Select a parent" << endl;
+			cin >> parentSelect;
+			ifstream parentFile;
+			parentFile.open("Users/" + parentSelect + ".txt");
 
-	switch (menu)
-	{
-	case 1:
-		return viewParent();
-		break;
-	case 4:
-		return menuAdmin();
-		break;
-	case 5:
-		exit(0);
-		break;
-	default:
-		break;
-	}
-
-}
-
-void viewParent() {
-
-	string parentSelect;
-
-	//This function will allow the user to select a parent record to view`
-	cout << "Select a parent" << endl;
-	cin >> parentSelect;
-	ifstream parentFile;
-	parentFile.open("Users/" + parentSelect + ".txt");
-
-	if (parentFile.fail()) {
-		cout << "Error opening the file." << endl;
-		exit(0);
-	}
-	else
-	{
-		string line;
-		int currentLine = 0;
-		while (!parentFile.eof()) {
-			currentLine++;
-			if (currentLine != 1) {
-				getline(parentFile, line);
-				cout << line << endl;
+			if (parentFile.fail()) {
+				cout << "Error opening the file." << endl;
+				exit(0);
+			}
+			else
+			{
+				string line;
+				int currentLine = 0;
+				while (!parentFile.eof()) {
+					currentLine++;
+					if (currentLine != 1) {
+						getline(parentFile, line);
+						cout << line << endl;
+					}
+				}
 			}
 		}
-	}
-
+	} while (menu <= 0 || menu > 3);
 }
 
 //function for making the student record and calling the structure
@@ -703,8 +706,11 @@ void createSR(vector <Records>& records) {
 	getline(cin, newrecord.writing);
 	cout << "Learning Progress state:\n> ";
 	getline(cin, newrecord.learning);
-	cout << "Other activities / notes?\n";
+	cout << "Other activities?\n>";
 	getline(cin, newrecord.other);
+	cout << "Notes on student:\n>";
+	getline(cin, newrecord.other);
+
 
 	// adding newrecord to vector
 	records.push_back(newrecord);
@@ -731,7 +737,7 @@ void createSR(vector <Records>& records) {
 		filecreate << newrecord.firstname << endl << newrecord.middlename << endl << newrecord.lastname << endl << newrecord.gender << endl << newrecord.learning << endl;
 		filecreate << "Subjects\n";
 		filecreate << "Maths: " << newrecord.maths << endl << "Science: " << newrecord.science << endl << "Writing: " << newrecord.writing << endl << "Reading: " << newrecord.maths << endl;
-		filecreate << "Other: " << newrecord.other << endl;
+		filecreate << "Other: " << newrecord.other << endl << "Notes: " << newrecord.notes << endl;
 
 		filecreate.close(); // function is complete close the file
 		filecreate.open("Classes/class" + to_string(newrecord.classnum) + "Students.txt", ios::app);
@@ -746,150 +752,130 @@ void createSR(vector <Records>& records) {
 
 }
 
-void viewSR()
-{
+void viewSR() {
+	string fullname;
 	string filename;
 
 	stars();
-	cout << "viewing student record" << endl;
+	cout << "Viewing student record" << endl;
 	stars();
-	// user entry to open the student record via inputs
 	cin.ignore();
-	cout << "enter the students first name:\n> ";
-	getline(cin, viewsr.firstname);
+	cout << "Enter the student's full name (if no middle name, type N/A): ";
+	getline(cin, fullname);
 
-
-	cout << "Enter the Students Middle name:\n> ";
-	getline(cin, viewsr.middlename);
-
-
-	cout << "Enter the Students Last name:\n> ";
-	getline(cin, viewsr.lastname);
-
-
-
-	filename = "Students/" + viewsr.firstname + "-" + viewsr.middlename + "-" + viewsr.lastname + "-" + "record.txt";// string so we can use it to find the file by this name
-
+	// Replace spaces  with dashes to find the file name based on our file struct
+	replace(fullname.begin(), fullname.end(), ' ', '-');
+	//file pathing 
+	filename = "Students/" + fullname + "-record.txt";
 
 	ifstream recordFile(filename);
 
-	if (recordFile.is_open())
-	{
+	if (recordFile.is_open()) {
 		stars();
-		cout << "This is the student record for " << viewsr.firstname << " " << viewsr.middlename << " " << viewsr.lastname << endl; // feedback for on which file they are in
+		cout << "This is the student record for " << fullname << endl;
 		stars();
-		string information; // printing student record while the file is open
-		while (getline(recordFile, information))
-		{
+		// loop for pulling information from file
+		string information;
+		while (getline(recordFile, information)) {
 			cout << information << endl;
 		}
 
 		recordFile.close();
-
 	}
-	else
-	{
-
-		cout << "\nSorry we couldnt find that file." << endl;
+	// error handling for file not found
+	else {
+		cout << "\nSorry, we couldn't find that file." << endl;
 	}
+
 	stars();
 }
 void editSR() {
 
-
-	string	oldfile, tempfile = "Students/temprec.txt";// Student record file and new file being created called temprec
-	string oldinfo, newinfo;//line user wishes to replace and what they wish to replace it with
+	string oldfile, tempfile = "Students/temprec.txt"; // Student record file and temporary file being created
+	string oldinfo, newinfo; // line user wishes to replace and what they wish to replace it with
 	string newFileName;
 	char changeFileName;
 
-
-
-	//user input to find the file they wish to edit
-	cout << "Enter the child's (Full name) you wish to edit (if no middle name type N/A)\n";
-
-	cout << "Enter the Students First name:\n> ";
+	// User input to find the file they wish to edit
 	cin.ignore();
-	getline(cin, editsr.firstname);
+	cout << "Enter the child's full name you wish to edit (if no middle name type N/A):\n";
+	string fullname;
+	getline(cin, fullname);
 
-	cout << "Enter the Students Middle name:\n> ";
-	getline(cin, editsr.middlename);
+	// Replace spaces with dashes in full name for file handling
+	replace(fullname.begin(), fullname.end(), ' ', '-');
 
-	cout << "Enter the Students Last name:\n> ";
-	getline(cin, editsr.lastname);
+	oldfile = "Students/" + fullname + "-record.txt";
 
-	oldfile = "Students/" + editsr.firstname + "-" + editsr.middlename + "-" + editsr.lastname + "-record.txt";
+	ifstream readfile(oldfile); // reading file based on user input
 
-	ifstream readfile(oldfile);// reading file name based on user input
-
-	if (!readfile.is_open())// if the file is not open then error handle
-	{
-		cout << "The file: " << oldfile << " has not opened properly please try again" << endl;
-
-		return menuTeacher();
-
-	}
-	ofstream writefile(tempfile);//creating a new file for holding the information up to a certain line
-
-	if (!writefile.is_open())// if the file is not open then error handle
-	{
+	if (!readfile.is_open()) {
+		cout << "The file: " << oldfile << " has not opened properly. Please try again." << endl;
 		stars();
-		cout << "The file: " << tempfile << " has not created properly please try again" << endl;
-
-		return menuTeacher();
+		return;
 	}
+
+	ofstream writefile(tempfile); // creating a new file to hold the updated information
+
+	if (!writefile.is_open()) {
+		cout << "The file: " << tempfile << " has not been created properly. Please try again." << endl;
+		stars();
+		return;
+	}
+
 	stars();
-	cout << "Enter the information you wish to replace:\n>"; //user inputs for what line they wish to update and with relevent text
+	cout << "Enter the information you wish to replace:\n>";
 	getline(cin, oldinfo);
 
 	cout << "Enter the updated information:\n>";
 	getline(cin, newinfo);
 	stars();
 
-
 	string line;
 
-	//readfile is reading eachline from the oldfile and repeating that loop into lines 
+	// Read each line from the old file, replace information if found, and write to the temporary file
 	while (getline(readfile, line)) {
-		size_t info = line.find(oldinfo);// finding user input poisiton in file for old info
-
-		if (info != line.npos) {
-			line.replace(info, oldinfo.length(), newinfo);
+		size_t pos = line.find(oldinfo);
+		if (pos != string::npos) {
+			line.replace(pos, oldinfo.length(), newinfo);
 		}
 		writefile << line << endl;
 	}
+
 	readfile.close();
 	writefile.close();
 
-
-	//changing the file name to newfile name based on user choice
-	//  if / else if ladder for multiple errors that may accour during this process
+	// Changing the file name to a new file name based on user choice
 	stars();
-	cout << "Do you want to change the filename? (Y/N): ";
-	stars();
+	cout << "Do you want to change the filename (if Full name has changed)? (Y/N):\n> ";
 	cin >> changeFileName;
 
 	cin.ignore();
 
 	if (toupper(changeFileName) == 'Y') {
-		cout << "Enter the new file name (without extension and - symbol for spaces): ";
+		cout << "Enter the new file name (without extension and spaces will be replaced by -):\n> ";
 		getline(cin, newFileName);
+
+		// Replace spaces with dashes in new file name
+		replace(newFileName.begin(), newFileName.end(), ' ', '-');
+
 		newFileName = "Students/" + newFileName + "-record.txt";
 	}
 	else {
 		newFileName = oldfile; // Keep the original filename
 	}
 
+	// Remove old file and rename temporary file to new file name
 	if (remove(oldfile.c_str()) != 0) {
 		cout << "Unable to delete the file: " << oldfile << endl;
 	}
 	else {
-		if (rename(tempfile.c_str(), newFileName.c_str()) != 0) // if an error occours renaming rhw tempfile
-		{
+		if (rename(tempfile.c_str(), newFileName.c_str()) != 0) {
 			cout << "Unable to rename file: " << tempfile << endl;
 		}
-		// checks if the new file name does not = the old one if you chose to rename it
 		else {
 			cout << oldfile << " was updated successfully and ";
+
 			if (newFileName != oldfile) {
 				cout << "renamed to " << newFileName << endl;
 			}
@@ -899,36 +885,29 @@ void editSR() {
 		}
 	}
 }
-
 void deleteSR() {
 	int deletefile;
+	string childsName;
+	string filename;
 
-
-	cout << "Enter the child's full name you wish to delete\n";
-	cout << "Enter the Students First name:\n> ";
 	cin.ignore();
-	getline(cin, newrecord.firstname);
-	cout << "Enter the Students Middle name:\n> ";
-	getline(cin, newrecord.middlename);
-	cout << "Enter the Students Last name:\n> ";
-	getline(cin, newrecord.lastname);
+	cout << "Enter the child's full name you wish to delete (if no middle name, type N/A):\n> ";
+	getline(cin, childsName);
 
-	string childrecord = newrecord.firstname + "-" + newrecord.middlename + "-" + newrecord.lastname;
-	string nameToSend;
-	nameToSend = childrecord;
-	replace(nameToSend.begin(), nameToSend.end(), '-', ' ');
-	childrecord += "-record.txt";
+	replace(childsName.begin(), childsName.end(), ' ', '-');
 
-	deletefile = remove(("Students/" + childrecord).c_str());
+	filename = "Students/" + childsName + "-record.txt";
 
-	deleteStudentFromClass(nameToSend);
+	deletefile = remove(filename.c_str());
+
+	deleteStudentFromClass(filename);
 
 	if (deletefile == 0) {
 		stars();
-		cout << "File '" << childrecord << "' successfully deleted.\n";
+		cout << "File '" << filename << "' successfully deleted.\n";
 	}
 	else {
-		cout << "Error deleting file '" << childrecord << "'.\n";
+		cout << "Error deleting file '" << filename << "'.\n";
 	}
 	return menuTeacher();
 }
@@ -1087,8 +1066,7 @@ void menuRecordAdmin() {
 		cout << "1 - create student record" << endl;
 		cout << "2 - view student record" << endl;
 		cout << "3 - delete student record" << endl;
-		cout << "4 - Back" << endl;
-		cout << "5 - Exit" << endl;
+		cout << "4 - Exit" << endl;
 		cout << endl;
 		cout << "> ";
 		cin >> menu;
@@ -1114,13 +1092,11 @@ void menuRecordAdmin() {
 
 			return menuRecordAdmin();
 		case 4:
-			return menuAdmin();
-		case 5:
 			exit(0);
 			break;
 		}
 
-	} while (menu <= 0 || menu > 5);
+	} while (menu <= 0 || menu > 3);
 
 }
 
@@ -1297,85 +1273,107 @@ void login() {
 
 // Child creation
 void checkChild() {
-	// Opens the active user's file
-	ifstream userFile("Users/" + activeuser.username + ".txt");
 
-	if (!userFile.is_open()) {
-		cout << "File doesn't exist" << endl;
-		return;
-	}
+	// Opens the active user's file --- done
+	// Check to see if usertype is parent
+	// See if they have a child
+	// If no child, create child
+	// Repeat
+	// If child, ask to create new child
+	// If yes, create child
+	ifstream userFile;
+	userFile.open("Users/" + activeuser.username + ".txt");
 
-	string line;
-	vector<string> lines;
+	if (userFile)
+	{
 
-	// Read all lines into a vector
-	while (getline(userFile, line)) {
-		lines.push_back(line);
-	}
+		string line;
+		int currentline = 0;
+		while (getline(userFile, line))
+		{
 
-	userFile.close();
+			currentline++;
+			if (currentline == 4)
+			{
 
-	// Check if the file has at least 4 lines to check the user type
-	if (lines.size() < 4) {
-		cout << "File too short" << endl;
-		return;
-	}
+				if (line == "Parent")
+				{
 
-	bool isParent = false;
+					for (int i = 5; i < 9; i++) {
+						if (!getline(userFile, line)) {
+							cout << "File too short" << endl;
+							break;
+						}
+					}
 
-	// Check to see if user type is parent (4th line in the file)
-	if (lines[3] == "Parent") {
-		isParent = true;
-	}
-	else {
-		cout << "Incorrect user type" << endl;
-		return;
-	}
+					int menu;
 
-	if (!isParent) {
-		cout << "User type not found" << endl;
-		return;
-	}
+					if (getline(userFile, line)) {
+						if (!line.empty()) {
 
-	// Check if they have a child
-	bool hasChild = false;
-	// Ensure there are enough lines for child check (next 5 lines after the 4th line)
-	if (lines.size() >= 9) {
-		for (int i = 4; i < 9; i++) {
-			if (!lines[i].empty()) {
-				hasChild = true;
-				break;
+							do
+							{
+
+								cout << endl;
+								cout << "A child is already linked to your account. Would you like to add a new child?" << endl;
+								cout << "1 - Yes" << endl;
+								cout << "2 - No" << endl;
+								cout << endl;
+								cout << "> ";
+								cin >> menu;
+								cout << endl;
+
+								switch (menu)
+								{
+								case 1:
+									createChild();
+									break;
+								case 2:
+									menuParent();
+									break;
+								default:
+									break;
+								}
+
+							} while (menu <= 0 || menu > 2);
+
+						}
+						else {
+
+							cout << "You have no child" << endl;
+							createChild();
+
+						}
+					}
+					else {
+
+						userFile.close();
+
+					}
+
+					break;
+
+				}
+				else
+				{
+
+					cout << "Incorrect user type";
+					break;
+
+				}
+
 			}
+
 		}
+
+	}
+	else
+	{
+
+		cout << "File doesn't exist";
+
 	}
 
-	if (hasChild) {
-		int menu;
-		do {
-			cout << endl;
-			cout << "A child is already linked to your account. Would you like to add a new child?" << endl;
-			cout << "1 - Yes" << endl;
-			cout << "2 - No" << endl;
-			cout << "> ";
-			cin >> menu;
-			cout << endl;
-
-			switch (menu) {
-			case 1:
-				createChild();
-				break;
-			case 2:
-				menuParent();
-				break;
-			default:
-				cout << "Invalid option. Please try again." << endl;
-			}
-		} while (menu < 1 || menu > 2);
-	}
-	else {
-		cout << "You have no child" << endl;
-		createChild();
-	}
 }
 
 void createChild() {
@@ -1397,6 +1395,7 @@ void createChild() {
 	if (file.is_open())
 	{
 
+		cout << "Student exists";
 		file.close();
 		ofstream userFile;
 		userFile.open("Users/" + activeuser.username + ".txt", ios::app);
