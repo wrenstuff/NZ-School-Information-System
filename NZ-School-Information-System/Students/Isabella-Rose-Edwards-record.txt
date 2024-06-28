@@ -4,8 +4,8 @@ Edwards
 F
 
 Subjects
-Maths: 
-Science: 
-Writing: 
-Reading: 
+62
+21
+72
+82
 Other: 

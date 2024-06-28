@@ -4,8 +4,8 @@ Carter
 M
 !
 Subjects
-Maths: 
-Science: 
-Writing: 
-Reading: 
+62
+82
+48
+3
 Other: 

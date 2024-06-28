@@ -4,8 +4,8 @@ Anderson
 F
 
 Subjects
-Maths: 
-Science: 
-Writing: 
-Reading: 
+62
+83
+27
+72
 Other: 

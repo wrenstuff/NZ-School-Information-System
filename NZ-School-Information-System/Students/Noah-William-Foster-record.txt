@@ -4,8 +4,8 @@ Foster
 M
 !
 Subjects
-Maths: 
-Science: 
-Writing: 
-Reading: 
+26
+82
+72
+74
 Other: 

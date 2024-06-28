@@ -4,8 +4,8 @@ Green
 F
 
 Subjects
-Maths: 
-Science: 
-Writing: 
-Reading: 
+100
+94
+38
+45
 Other: 

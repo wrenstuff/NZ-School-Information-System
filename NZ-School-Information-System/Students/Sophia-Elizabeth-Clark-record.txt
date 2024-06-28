@@ -4,9 +4,9 @@ Clark
 X
 *
 Subjects
-Maths: 
-Science: 
-Writing: 
-Reading: 
+83
+26
+72
+83
 Other: 
 This is a test note
