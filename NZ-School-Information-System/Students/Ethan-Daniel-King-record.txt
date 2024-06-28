@@ -4,9 +4,9 @@ King
 M
 !
 Subjects
-Maths: 
-Science: 
-Writing: 
-Reading: 
+82
+62
+37
+94
 Other: 
 Test note. Hopefully the whole note doesn't display

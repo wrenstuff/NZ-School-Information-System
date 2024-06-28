@@ -4,8 +4,8 @@ Harris
 M
 !
 Subjects
-Maths: 
-Science: 
-Writing: 
-Reading: 
+72
+100
+73
+82
 Other: 

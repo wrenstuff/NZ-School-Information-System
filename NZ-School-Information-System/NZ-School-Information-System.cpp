@@ -4,6 +4,7 @@
 #include <ctime>
 #include <vector>
 #include <cstdio>
+#include <iomanip>
 #include <algorithm>
 using namespace std;
 
@@ -19,7 +20,6 @@ struct Records {
 		science,
 		reading,
 		writing,
-		learning,
 		other,
 		notes;
 	char gender;
@@ -35,10 +35,10 @@ struct NewParent
 		email,
 		username,
 		password,
-		child;
-	char gender;
-	int DOB;
-	long int PH;
+		child,
+		DOB,
+		PH;
+	char gender; 
 
 }newparent;
 
@@ -49,12 +49,12 @@ struct NewTeacher
 		lastname,
 		email,
 		username,
-		password;
+		password,
+		DOB,
+		PH;
 	char gender;
-	int DOB,
-		yearTeach,
+	int yearTeach,
 		classnum;
-	long int PH;
 
 }newteacher;
 
@@ -78,6 +78,7 @@ void viewProgress(int);
 void createSR(vector <Records>&);
 void editSR();
 void stars();
+string formatWithDots(const string&, int);
 void login();
 void viewParent();
 void viewChild();
@@ -289,6 +290,7 @@ void createTeacher() {
 	cout << "Create New Account" << endl;
 	//Display to the user
 	//Details for user to enter
+	cin.ignore();
 	cout << "First Name:\n> ";
 	getline(cin, newteacher.firstname);
 
@@ -325,6 +327,11 @@ void createTeacher() {
 	newTeacher << newteacher.password << endl << newteacher.firstname << endl << newteacher.lastname << endl << "Teacher" << endl << newteacher.PH << endl << newteacher.email << endl << newteacher.gender << endl << newteacher.DOB << endl << newteacher.classnum << endl << newteacher.yearTeach << endl;
 	newTeacher.close();
 
+	ofstream teacherAdd;
+	teacherAdd.open("Users/UserLists/teachers.txt", ios::app);
+	teacherAdd << newteacher.username << endl;
+	teacherAdd.close();
+
 	return menuAdmin();
 
 }
@@ -336,6 +343,7 @@ void createParent() {
 	cout << "Create New Account" << endl;
 	//Display to the user
 	//Details for user to enter
+	cin.ignore();
 	cout << "First Name:\n> ";
 	getline(cin, newparent.firstname);
 
@@ -348,7 +356,7 @@ void createParent() {
 	cout << "Date Of Birth:\n> ";
 	cin >> newparent.DOB;
 
-	cout << "Phone Number:\n> ";
+	cout << "Phone Number/Emergency Contact:\n> ";
 	cin >> newparent.PH;
 
 	cout << "email:\n> ";
@@ -369,7 +377,7 @@ void createParent() {
 	newParent << newparent.password << endl << newparent.firstname << endl << newparent.lastname << endl << "Parent" << endl << newparent.PH << endl << newparent.email << endl << newparent.gender << endl << newparent.DOB << endl /*<< newparent.child << endl*/;
 	newParent.close();
 
-	return menuTeacher();
+	return menuMain();
 
 }
 
@@ -386,15 +394,16 @@ void menuMain() {
 
 		cout << endl;
 		cout << "1 - Login" << endl;
-		cout << "2 - Events" << endl;
-    cout << "3 - View Term Dates" << endl;
-		cout << "4 - Exit" << endl;
+		cout << "2 - Parent Register" << endl;
+		cout << "3 - Events" << endl;
+		cout << "4 - View Term Dates" << endl;
+		cout << "5 - Exit" << endl;
 		cout << endl;
 		cout << "> ";
 		cin >> menu;
 		cout << endl;
 
-	} while (menu <= 0 || menu > 4);
+	} while (menu <= 0 || menu > 5);
 
 	switch (menu)
 	{
@@ -402,12 +411,15 @@ void menuMain() {
 		login();
 		break;
 	case 2:
-		menuEvents();
+		createParent();
 		break;
 	case 3:
-		menuTerms();
+		menuEvents();
 		break;
 	case 4:
+		menuTerms();
+		break;
+	case 5:
 		exit(0);
 		break;
 	default:
@@ -461,8 +473,6 @@ void menuTeacher() {
 }
 
 void menuAdmin() {
-
-	// Add class records
 
 	int menu = 0;
 
@@ -547,6 +557,9 @@ void menuParent() {
 		case 2:
 			menuTerms();
 			break;
+		case 3:
+			viewChild();
+			break;
 		case 4:
 			checkChild();
 			break;
@@ -561,28 +574,6 @@ void menuParent() {
 	} while (menu <= 0 || menu > 5);
 
 }
-/*
-void menuRecord() {
-
-	int menu = 0;
-
-	do
-	{
-
-		stars();
-
-		cout << endl;
-		cout << "1 - create student record" << endl;
-		cout << "2 - view student record" << endl;
-		cout << "3 - delete student record" << endl;
-		cout << endl;
-		cout << "> ";
-		cin >> menu;
-		cout << endl;
-
-	} while (menu <= 0 || menu > 3);
-
-}*/
 
 void menuRecordTeacher() {
 
@@ -703,12 +694,12 @@ void createSR(vector <Records>& records) {
 	getline(cin, newrecord.reading);
 	cout << "Enter the Writing level:\n> ";
 	getline(cin, newrecord.writing);
-	cout << "Learning Progress state:\n> ";
-	getline(cin, newrecord.learning);
-	cout << "Other activities?\n>";
+	/*cout << "Learning Progress state:\n> ";
+	getline(cin, newrecord.learning);*/
+	cout << "Other activities?\n> ";
 	getline(cin, newrecord.other);
-	cout << "Notes on student:\n>";
-	getline(cin, newrecord.other);
+	cout << "Notes on student:\n> ";
+	getline(cin, newrecord.notes);
 
 
 	// adding newrecord to vector
@@ -733,12 +724,12 @@ void createSR(vector <Records>& records) {
 	filecreate.open("Students/" + childrecord, ios::app); // change to check if any other files exist with same name rather than append
 
 	if (filecreate.is_open()) {
-		filecreate << newrecord.firstname << endl << newrecord.middlename << endl << newrecord.lastname << endl << newrecord.gender << endl << newrecord.learning << endl;
+		filecreate << newrecord.firstname << endl << newrecord.middlename << endl << newrecord.lastname << endl << newrecord.gender << endl << /*newrecord.learning*/ endl << endl;
 		filecreate << "Subjects\n";
-		filecreate << "Maths: " << newrecord.maths << endl << "Science: " << newrecord.science << endl << "Writing: " << newrecord.writing << endl << "Reading: " << newrecord.maths << endl;
+		filecreate << newrecord.maths << endl << newrecord.science << endl << newrecord.writing << endl << newrecord.maths << endl;
 		filecreate << "Other: " << newrecord.other << endl << "Notes: " << newrecord.notes << endl;
 
-		filecreate.close(); // function is complete close the file
+		filecreate.close();
 		filecreate.open("Classes/class" + to_string(newrecord.classnum) + "Students.txt", ios::app);
 		filecreate << newrecord.firstname << " " << newrecord.middlename << " " << newrecord.lastname << endl;
 		filecreate.close();
@@ -762,21 +753,83 @@ void viewSR() {
 	cout << "Enter the student's full name (if no middle name, type N/A): ";
 	getline(cin, fullname);
 
-	// Replace spaces  with dashes to find the file name based on our file struct
 	replace(fullname.begin(), fullname.end(), ' ', '-');
-	//file pathing 
+
 	filename = "Students/" + fullname + "-record.txt";
 
 	ifstream recordFile(filename);
 
 	if (recordFile.is_open()) {
 		stars();
+		replace(fullname.begin(), fullname.end(), '-', ' ');
 		cout << "This is the student record for " << fullname << endl;
 		stars();
 		// loop for pulling information from file
-		string information;
-		while (getline(recordFile, information)) {
-			cout << information << endl;
+		string line;
+		int count = 0;
+		while (getline(recordFile, line)) {
+			count++;
+			char grade;
+			if (count >= 7 && count <= 10)
+			{
+				string strNum;
+				for (char& ch : line)
+				{
+					
+					if (isdigit(ch))
+					{
+						strNum += ch;
+					}
+
+				}
+
+				int num = stoi(strNum);
+
+				if (num <= 50)
+				{
+					grade = 'F';
+				}
+				else if (num <= 60)
+				{
+					grade = 'E';
+				}
+				else if (num <= 70)
+				{
+					grade = 'D';
+				}
+				else if (num <= 80)
+				{
+					grade = 'C';
+				}
+				else if (num <= 90)
+				{
+					grade = 'B';
+				}
+				else if (num <= 100)
+				{
+					grade = 'A';
+				}
+
+			}
+
+			switch (count)
+			{
+			case 7:
+				cout << "Maths: " << grade << endl;
+				break;
+			case 8:
+				cout << "Science: " << grade << endl;
+				break;
+			case 9:
+				cout << "Writing: " << grade << endl;
+				break;
+			case 10:
+				cout << "Reading: " << grade << endl;
+				break;
+			default:
+				cout << line << endl;
+				break;
+			}
 		}
 
 		recordFile.close();
@@ -788,10 +841,10 @@ void viewSR() {
 
 	stars();
 }
-void editSR() {
 
+void editSR() {
 	string oldfile, tempfile = "Students/temprec.txt"; // Student record file and temporary file being created
-	string oldinfo, newinfo; // line user wishes to replace and what they wish to replace it with
+	string newinfo; // What the user wishes to replace the line with
 	string newFileName;
 	char changeFileName;
 
@@ -814,6 +867,21 @@ void editSR() {
 		return;
 	}
 
+	stars();
+	cout << "Current contents of the file:\n";
+
+	// Display the full record with line numbers
+	string line;
+	int lineNumber = 1;
+	while (getline(readfile, line)) {
+		cout << lineNumber << ": " << line << endl;
+		lineNumber++;
+	}
+	readfile.clear();  // Clear any error flags that may have been set
+	readfile.seekg(0); // Rewind to the beginning of the file
+
+	stars();
+
 	ofstream writefile(tempfile); // creating a new file to hold the updated information
 
 	if (!writefile.is_open()) {
@@ -823,22 +891,24 @@ void editSR() {
 	}
 
 	stars();
-	cout << "Enter the information you wish to replace:\n>";
-	getline(cin, oldinfo);
+	cout << "Enter the line number you wish to replace:\n> ";
+	int lineToEdit;
+	cin >> lineToEdit;
+	cin.ignore(); // clear the newline character from the input buffer
 
-	cout << "Enter the updated information:\n>";
+	cout << "Enter the updated information:\n> ";
 	getline(cin, newinfo);
 	stars();
 
-	string line;
+	int currentLine = 1;
 
-	// Read each line from the old file, replace information if found, and write to the temporary file
+	// Read each line from the old file, replace information if line number matches, and write to the temporary file
 	while (getline(readfile, line)) {
-		size_t pos = line.find(oldinfo);
-		if (pos != string::npos) {
-			line.replace(pos, oldinfo.length(), newinfo);
+		if (currentLine == lineToEdit) {
+			line = newinfo;
 		}
 		writefile << line << endl;
+		currentLine++;
 	}
 
 	readfile.close();
@@ -849,7 +919,7 @@ void editSR() {
 	cout << "Do you want to change the filename (if Full name has changed)? (Y/N):\n> ";
 	cin >> changeFileName;
 
-	cin.ignore();
+	cin.ignore(); // clear the newline character from the input buffer
 
 	if (toupper(changeFileName) == 'Y') {
 		cout << "Enter the new file name (without extension and spaces will be replaced by -):\n> ";
@@ -869,6 +939,13 @@ void editSR() {
 		cout << "Unable to delete the file: " << oldfile << endl;
 	}
 	else {
+		// Check if the new file already exists and delete it if it does
+		if (newFileName != oldfile && ifstream(newFileName)) {
+			if (remove(newFileName.c_str()) != 0) {
+				cout << "Unable to delete the existing file: " << newFileName << endl;
+			}
+		}
+
 		if (rename(tempfile.c_str(), newFileName.c_str()) != 0) {
 			cout << "Unable to rename file: " << tempfile << endl;
 		}
@@ -883,7 +960,11 @@ void editSR() {
 			}
 		}
 	}
+
+	// Ensure the temporary file is deleted if it still exists
+	remove(tempfile.c_str());
 }
+
 void deleteSR() {
 	int deletefile;
 	string childsName;
@@ -965,7 +1046,6 @@ void deleteStudentFromClass(string name) {
 			// Remove the temporary file
 			remove("temp.txt");
 
-			// Since the student is found and deleted, we can exit the function
 			return;
 		}
 
@@ -991,6 +1071,14 @@ void viewProgress(int x) {
 
 	cout << endl << endl;
 
+	const int totalWidth = 40;
+
+	ifstream teachersFile("Users/UserLists/teachers.txt");
+	if (!teachersFile) {
+		cout << "Unable to open teachers list file." << endl;
+		return;
+	}
+
 	int classIndex = 0;
 	while (true) {
 		// Open each class file
@@ -1003,7 +1091,33 @@ void viewProgress(int x) {
 			break;
 		}
 
-		cout << "Class " << classIndex << endl;
+		string teacherInfo;
+		bool teacherFound = false;
+		string teacherUsername;
+		while (getline(teachersFile, teacherUsername)) {
+			ifstream teacherFile("Users/" + teacherUsername + ".txt");
+			if (teacherFile.is_open()) {
+				string line;
+				getline(teacherFile, line); // Read first line (username)
+				if (getline(teacherFile, line)) { // Read second line
+					teacherInfo += line;
+				}
+				if (getline(teacherFile, line)) { // Read third line
+					teacherInfo += " " + line;
+				}
+				teacherFound = true;
+				break;
+			}
+		}
+
+		teachersFile.clear();
+		teachersFile.seekg(0); // Rewind to the beginning
+
+		cout << "Class " << classIndex;
+		if (teacherFound) {
+			cout << " (Teacher Info: " << teacherInfo << ")";
+		}
+		cout << endl;
 
 		string studentName;
 		while (getline(findProgress, studentName)) {
@@ -1020,15 +1134,72 @@ void viewProgress(int x) {
 			student.open("Students/" + studentFileName);
 
 			if (student.is_open()) {
-				// Read up to line 5
+				// Read up to line 10
 				string line;
-				for (int i = 1; i <= 5; ++i) {
+				for (int i = 1; i <= 6; ++i) {
 					getline(student, line);
 				}
 
-				// Check if line 5 contains the progressType character
-				if (line.find(progressType) != string::npos) {
-					cout << studentName << endl; // Output the line (or process it as needed)
+				vector<string> foundGrades;
+				for (int count = 7; count <= 10; ++count) {
+					getline(student, line);
+
+					string strNum;
+					for (char& ch : line) {
+						if (isdigit(ch)) {
+							strNum += ch;
+						}
+					}
+
+					int num = stoi(strNum);
+					char grade;
+
+					if (num <= 50) {
+						grade = 'F';
+					}
+					else if (num <= 60) {
+						grade = 'E';
+					}
+					else if (num <= 70) {
+						grade = 'D';
+					}
+					else if (num <= 80) {
+						grade = 'C';
+					}
+					else if (num <= 90) {
+						grade = 'B';
+					}
+					else if (num <= 100) {
+						grade = 'A';
+					}
+
+					if ((progressType == '*' && num > 80) ||
+						(progressType == '!' && num < 50)) {
+						switch (count) {
+						case 7:
+							foundGrades.push_back("Maths: " + string(1, grade));
+							break;
+						case 8:
+							foundGrades.push_back("Science: " + string(1, grade));
+							break;
+						case 9:
+							foundGrades.push_back("Writing: " + string(1, grade));
+							break;
+						case 10:
+							foundGrades.push_back("Reading: " + string(1, grade));
+							break;
+						}
+					}
+				}
+
+				if (!foundGrades.empty()) {
+					string formattedName = formatWithDots(studentName, totalWidth);
+					cout << formattedName;
+					for (size_t i = 0; i < foundGrades.size(); ++i) {
+						if (i > 0) cout << ", ";
+						cout << foundGrades[i];
+					}
+					cout << "." << endl; // Output the student name and grades
 				}
 
 				student.close();
@@ -1042,16 +1213,12 @@ void viewProgress(int x) {
 		classIndex++;
 	}
 
+	teachersFile.close();
 	cout << endl;
 	return menuAdmin();
-
 }
 
 void menuRecordAdmin() {
-
-	// Add edit record
-
-	// Update records (different to edit) - Teacher
 
 	vector<Records> records;
 	int menu = 0;
@@ -1423,7 +1590,7 @@ void viewClass() {
 	auto classFileExists = [](int classnum) {
 		ifstream classFile("Classes/class" + to_string(classnum) + "Students.txt");
 		return classFile.good();
-	};
+		};
 
 	int classnum;
 
@@ -1452,28 +1619,65 @@ void viewClass() {
 				ifstream studentFile("Students/" + fileName);
 
 				if (studentFile) {
-					bool hasNotes = false;     // Flag to track if notes indicator is found
+					vector<string> foundProgress;
 
-					for (int i = 0; i < 12; ++i) {  // Read up to line 12
+					int count;
+					for (int i = 0; i < 6; i++) {
+						getline(studentFile, line);
+						count = i;
+					}
+
+					for (count = 7; count <= 10; ++count) {
 						getline(studentFile, line);
 
-						if (i == 4) {  // Check line 5 for progress indicator
-							cout << "\t" << line;  // Output line 5 after printing the student's name
+						string strNum;
+						for (char& ch : line) {
+							if (isdigit(ch)) {
+								strNum += ch;
+							}
 						}
 
-						if (i == 11 && !line.empty()) {  // Check line 12 for notes indicator
-							hasNotes = true;
+						int num = stoi(strNum); // Convert string to integer
+						char grade;
+
+						if (num <= 50) {
+							grade = 'F';
+						}
+						else if (num <= 60) {
+							grade = 'E';
+						}
+						else if (num <= 70) {
+							grade = 'D';
+						}
+						else if (num <= 80) {
+							grade = 'C';
+						}
+						else if (num <= 90) {
+							grade = 'B';
+						}
+						else if (num <= 100) {
+							grade = 'A';
+						}
+
+						if (num > 80) {
+							foundProgress.push_back("Maths: " + string(1, grade));
+						}
+						else if (num < 50) {
+							foundProgress.push_back("Science: " + string(1, grade));
+						}
+						else if (num > 80) {
+							foundProgress.push_back("Reading: " + string(1, grade));
+						}
+						else if (num < 50) {
+							foundProgress.push_back("Writing: " + string(1, grade));
 						}
 					}
 
-					cout << "\t";
-
-					if (hasNotes) {
-						cout << "[Notes]";
+					// Print found progress
+					for (const auto& progress : foundProgress) {
+						cout << "\t" << progress;
 					}
-
 					cout << endl;
-
 					studentFile.close();
 				}
 				else {
@@ -1511,6 +1715,11 @@ void stars() {
 	cout << endl;
 }
 
+string formatWithDots(const string& name, int totalWidth) {
+	string dots(totalWidth - name.size(), '.');
+	return name + dots;
+}
+
 //This function is called by List events for when you want to view en event from that list based on your user type
 void viewEvents(int eventNum) {
 	string line;
@@ -1535,7 +1744,7 @@ void viewEvents(int eventNum) {
 
 	eventList.close();
 
-	// replace inpute to include - instead of spaces for the file name
+	// replace input to include - instead of spaces for the file name
 	replace(fileselect.begin(), fileselect.end(), ' ', '-');
 
 	string eventsfile = ("Events/" + fileselect + ".txt"); // reading Events file
@@ -1563,16 +1772,16 @@ void addEvents() {
 	//user inputs
 	cout << "Creating an Event:" << endl;
 	cin.ignore();
-	cout << "Enter a name for the Event:\n>";
+	cout << "Enter a name for the Event:\n> ";
 	getline(cin, eventname);
 
-	cout << "Enter The Date of the Event Day/Month/Year\n>";
+	cout << "Enter The Date of the Event Day/Month/Year\n> ";
 	getline(cin, eventdate);
 
-	cout << "Enter the Location of the Event\n>";
+	cout << "Enter the Location of the Event\n> ";
 	getline(cin, eventloc);
 
-	cout << "Enter details of the Event\n>";
+	cout << "Enter details of the Event\n> ";
 	getline(cin, eventdetail);
 	// creating another string to hold the file name with spaces replaced with -
 	filename = eventname;
@@ -1694,7 +1903,7 @@ void editEvents(int eventNum) {
 
 }
 
-// this provdides a list of the events in the Eventslist.txt file and then based on your user type gives you different menus 
+// this provides a list of the events in the EventsList.txt file and then based on your user type gives you different menus 
 void menuEvents() {
 	string eventinfo;
 	int menu = 0;
@@ -1712,7 +1921,7 @@ void menuEvents() {
 	cout << "List of events:" << endl;
 	stars();
 
-	//Make a list of the events for the user from the eventslist file+
+	//Make a list of the events for the user from the eventslist file
 	int x = 0;
 	while (getline(eventlist, eventinfo)) {
 		cout << ++x << " - ";
@@ -1856,8 +2065,10 @@ void deleteEvents()
 	else {
 		cout << "Error deleting file '" << fileselect << "'.\n";
 	}
-	//*************************************************************************************************************************************************************************
-	//delete the line in the vents list segment
+ 
+	// ---------------------------------------------------------------
+
+	//delete the line in the events list segment
 	string path = "Events/Eventslist.txt";
 	ifstream readfile(path);
 	ofstream tempfile("Events/temp.txt");

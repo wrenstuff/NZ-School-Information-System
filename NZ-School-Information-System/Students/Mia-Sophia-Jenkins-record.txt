@@ -4,8 +4,8 @@ Jenkins
 F
 *
 Subjects
-Maths: 
-Science: 
-Writing: 
-Reading: 
+72
+72
+61
+83
 Other: 

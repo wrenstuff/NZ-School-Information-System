@@ -4,9 +4,9 @@ Davis
 M
 *
 Subjects
-Maths: 
-Science: 
-Writing: 
-Reading: 
+82
+73
+16
+61
 Other: 
 Test Note
