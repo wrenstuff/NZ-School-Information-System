@@ -289,6 +289,7 @@ void createTeacher() {
 	cout << "Create New Account" << endl;
 	//Display to the user
 	//Details for user to enter
+	cin.ignore();
 	cout << "First Name:\n> ";
 	getline(cin, newteacher.firstname);
 
@@ -1856,7 +1857,7 @@ void deleteEvents()
 	else {
 		cout << "Error deleting file '" << fileselect << "'.\n";
 	}
-	//*************************************************************************************************************************************************************************
+	//-------------------------------------------------------------------------------------------------------------------------------
 	//delete the line in the vents list segment
 	string path = "Events/Eventslist.txt";
 	ifstream readfile(path);
