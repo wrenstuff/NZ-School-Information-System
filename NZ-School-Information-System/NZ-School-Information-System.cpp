@@ -325,6 +325,11 @@ void createTeacher() {
 	newTeacher << newteacher.password << endl << newteacher.firstname << endl << newteacher.lastname << endl << "Teacher" << endl << newteacher.PH << endl << newteacher.email << endl << newteacher.gender << endl << newteacher.DOB << endl << newteacher.classnum << endl << newteacher.yearTeach << endl;
 	newTeacher.close();
 
+	ofstream teacherAdd;
+	teacherAdd.open("Users/UserLists/teachers.txt", ios::app);
+	teacherAdd << newteacher.username << endl;
+	teacherAdd.close();
+
 	return menuAdmin();
 
 }
@@ -369,7 +374,7 @@ void createParent() {
 	newParent << newparent.password << endl << newparent.firstname << endl << newparent.lastname << endl << "Parent" << endl << newparent.PH << endl << newparent.email << endl << newparent.gender << endl << newparent.DOB << endl /*<< newparent.child << endl*/;
 	newParent.close();
 
-	return menuTeacher();
+	return menuMain();
 
 }
 
@@ -386,15 +391,16 @@ void menuMain() {
 
 		cout << endl;
 		cout << "1 - Login" << endl;
-		cout << "2 - Events" << endl;
-    cout << "3 - View Term Dates" << endl;
-		cout << "4 - Exit" << endl;
+		cout << "2 - Parent Register" << endl;
+		cout << "3 - Events" << endl;
+		cout << "4 - View Term Dates" << endl;
+		cout << "5 - Exit" << endl;
 		cout << endl;
 		cout << "> ";
 		cin >> menu;
 		cout << endl;
 
-	} while (menu <= 0 || menu > 4);
+	} while (menu <= 0 || menu > 5);
 
 	switch (menu)
 	{
@@ -402,12 +408,15 @@ void menuMain() {
 		login();
 		break;
 	case 2:
-		menuEvents();
+		createParent();
 		break;
 	case 3:
-		menuTerms();
+		menuEvents();
 		break;
 	case 4:
+		menuTerms();
+		break;
+	case 5:
 		exit(0);
 		break;
 	default:
@@ -735,10 +744,10 @@ void createSR(vector <Records>& records) {
 	if (filecreate.is_open()) {
 		filecreate << newrecord.firstname << endl << newrecord.middlename << endl << newrecord.lastname << endl << newrecord.gender << endl << newrecord.learning << endl;
 		filecreate << "Subjects\n";
-		filecreate << "Maths: " << newrecord.maths << endl << "Science: " << newrecord.science << endl << "Writing: " << newrecord.writing << endl << "Reading: " << newrecord.maths << endl;
+		filecreate << newrecord.maths << endl << newrecord.science << endl << newrecord.writing << endl << newrecord.maths << endl;
 		filecreate << "Other: " << newrecord.other << endl << "Notes: " << newrecord.notes << endl;
 
-		filecreate.close(); // function is complete close the file
+		filecreate.close();
 		filecreate.open("Classes/class" + to_string(newrecord.classnum) + "Students.txt", ios::app);
 		filecreate << newrecord.firstname << " " << newrecord.middlename << " " << newrecord.lastname << endl;
 		filecreate.close();
@@ -775,9 +784,71 @@ void viewSR() {
 		cout << "This is the student record for " << fullname << endl;
 		stars();
 		// loop for pulling information from file
-		string information;
-		while (getline(recordFile, information)) {
-			cout << information << endl;
+		string line;
+		int count = 0;
+		while (getline(recordFile, line)) {
+			count++;
+			char grade;
+			if (count >= 7 && count <= 10)
+			{
+				string strNum;
+				for (char& ch : line)
+				{
+					
+					if (isdigit(ch))
+					{
+						strNum += ch;
+					}
+
+				}
+
+				int num = stoi(strNum);
+
+				if (num <= 50)
+				{
+					grade = 'F';
+				}
+				else if (num <= 60)
+				{
+					grade = 'E';
+				}
+				else if (num <= 70)
+				{
+					grade = 'D';
+				}
+				else if (num <= 80)
+				{
+					grade = 'C';
+				}
+				else if (num <= 90)
+				{
+					grade = 'B';
+				}
+				else if (num <= 100)
+				{
+					grade = 'A';
+				}
+
+			}
+
+			switch (count)
+			{
+			case 7:
+				cout << "Maths: " << grade << endl;
+				break;
+			case 8:
+				cout << "Science: " << grade << endl;
+				break;
+			case 9:
+				cout << "Writing: " << grade << endl;
+				break;
+			case 10:
+				cout << "Reading: " << grade << endl;
+				break;
+			default:
+				cout << line << endl;
+				break;
+			}
 		}
 
 		recordFile.close();

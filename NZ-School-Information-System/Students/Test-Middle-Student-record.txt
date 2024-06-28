@@ -4,8 +4,9 @@ Student
 X
 
 Subjects
-Maths: 
-Science: 
-Writing: 
-Reading: 
-Other: dfergaqer
+84
+37
+99
+84
+Other: Here's a note
+Notes: 
